@@ -1,5 +1,5 @@
 # summarize.py — Génère un unique dashboard Markdown/HTML dans docs/index.md
-# Ancien design (pas de nav, pas de multi-pages, pas de Jekyll requis)
+# Ancien design (une seule page) + tri/filtre/recherche/pagination côté client (Simple-DataTables)
 
 from pathlib import Path
 from datetime import datetime, timezone
@@ -15,7 +15,96 @@ RECENT_MONTHS = 24
 ALERT_PCT = float(os.getenv("ALERT_PCT", "0.10"))   # 10 %
 ALERT_EUR = float(os.getenv("ALERT_EUR", "150"))    # 150 €
 
-# ---------------- Utils rendu ----------------
+# ---------------- Helpers assets (DataTables + style anti-"rectangle") ----------------
+def tables_enhancer_assets() -> str:
+    """Assets + JS qui transforme toutes les tables .rp-table en tables interactives,
+    sans hauteur fixe ni "carte" (wrapper dés-stylé)."""
+    return """
+<!-- Simple-DataTables (CDN) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-datatables@9.0.3/dist/style.min.css">
+<script src="https://cdn.jsdelivr.net/npm/simple-datatables@9.0.3"></script>
+
+<style>
+/* --- Enlever le look "carte/rectangle" de Simple-DataTables --- */
+.dataTable-wrapper.rp-dt-unstyled {
+  background: transparent; border: none; box-shadow: none; padding: 0;
+}
+.dataTable-wrapper.rp-dt-unstyled .dataTable-container {
+  max-height: none !important; overflow: visible !important;
+  background: transparent; border: none; box-shadow: none;
+}
+.dataTable-wrapper.rp-dt-unstyled .dataTable-top,
+.dataTable-wrapper.rp-dt-unstyled .dataTable-bottom {
+  background: transparent; border: none; box-shadow: none; padding: .25rem 0;
+}
+.dataTable-wrapper.rp-dt-unstyled .dataTable-info,
+.dataTable-wrapper.rp-dt-unstyled .dataTable-pagination,
+.dataTable-wrapper.rp-dt-unstyled .dataTable-dropdown,
+.dataTable-wrapper.rp-dt-unstyled .dataTable-search {
+  margin: .35rem 0; font-size: 0.95rem;
+}
+.dataTable-wrapper.rp-dt-unstyled .dataTable-pagination a { border-radius: .4rem; }
+.dataTable-wrapper.rp-dt-unstyled table { background: transparent; border: none; box-shadow: none; }
+
+/* Conserver ton scroll horizontal via .table-wrapper */
+.table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0 0 1.25rem 0; }
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  // convertir "1 234,56 €" -> 1234.56 pour tri numérique
+  const euroToNumber = (txt) => {
+    if (!txt) return null;
+    const s = String(txt).replace(/\\s/g, "").replace("€","").replace(/\\u00A0/g,"").replace(",",".");
+    const v = parseFloat(s);
+    return isNaN(v) ? null : v;
+  };
+
+  document.querySelectorAll("table.rp-table").forEach((tbl) => {
+    const dt = new simpleDatatables.DataTable(tbl, {
+      searchable: true,
+      fixedHeight: false,            // important: pas de cadre/scroll interne
+      perPage: 25,
+      perPageSelect: [10,25,50,100],
+      labels: {
+        placeholder: "Rechercher…",
+        perPage: "{select} lignes par page",
+        noRows: "Aucune donnée",
+        info: "Affiche {start}–{end} sur {rows} lignes",
+      },
+    });
+
+    // déshabille le wrapper (évite le "rectangle")
+    const wrapper = tbl.closest(".dataTable-wrapper");
+    if (wrapper) wrapper.classList.add("rp-dt-unstyled");
+
+    // tri custom pour colonnes € et %
+    dt.columns().each((idx) => {
+      const header = tbl.tHead?.rows?.[0]?.cells?.[idx];
+      if (!header) return;
+      const htxt = header.textContent.toLowerCase();
+      const isMoney = /(€|price|prix|delta_abs)/.test(htxt);
+      const isPct   = /(pct|%)/.test(htxt);
+
+      if (isMoney || isPct) {
+        dt.columns().sort(idx, (a, b) => {
+          const ta = a.replace(/<[^>]*>/g, ""); // enlève HTML des cellules (badges/liens)
+          const tb = b.replace(/<[^>]*>/g, "");
+          const na = isPct ? parseFloat(ta.replace("%","").replace(",",".")) : euroToNumber(ta);
+          const nb = isPct ? parseFloat(tb.replace("%","").replace(",",".")) : euroToNumber(tb);
+          if (na == null && nb == null) return 0;
+          if (na == null) return -1;
+          if (nb == null) return 1;
+          return na - nb;
+        });
+      }
+    });
+  });
+});
+</script>
+"""
+
+# ---------------- Utils de rendu ----------------
 def ensure_docs():
     DOCS_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -231,21 +320,17 @@ def main():
         start_run = runs["run_date"].iloc[0]
         end_run   = last
 
-        # Snapshots
         df_curr = safe_sql(conn, "SELECT * FROM snapshots WHERE run_date = ?", (last,))
         df_prev = safe_sql(conn, "SELECT * FROM snapshots WHERE run_date = ?", (prev,)) if prev else pd.DataFrame()
 
-        # KPI last + histo
         kpi_last = safe_sql(conn, "SELECT * FROM weekly_kpis WHERE run_date = ?", (last,))
         kpi_hist = safe_sql(conn, "SELECT run_date, price_eur_min, price_eur_med, price_eur_avg, count_total, count_promos, promo_share_pct FROM weekly_kpis ORDER BY run_date")
 
-        # Weekly diff
         wd = safe_sql(conn, "SELECT * FROM weekly_diff WHERE run_date = ?", (last,))
         if not wd.empty:
             wd["url"] = choose_url_col(wd)
             wd = wd[[c for c in ["destination_label","title_curr","price_eur_prev","price_eur_curr","delta_abs","delta_pct","movement","url"] if c in wd.columns]]
 
-        # Mensuel
         mo_all = safe_sql(conn, "SELECT month, destination_label, prix_min, prix_avg, nb_depart FROM monthly_kpis ORDER BY month, destination_label")
         mo_recent = pd.DataFrame()
         if not mo_all.empty:
@@ -253,7 +338,6 @@ def main():
             keep = months[-RECENT_MONTHS:] if len(months) > RECENT_MONTHS else months
             mo_recent = mo_all[mo_all["month"].isin(keep)].copy()
 
-        # Analyses
         bd      = best_dates(df_curr)
         topm    = cheapest_by_month(df_curr, top_n=15)
         ctry    = country_summary(df_curr)
@@ -276,16 +360,12 @@ title: RoadPrice — Accueil
 ---
 
 # RoadPrice — synthèse
+{tables_enhancer_assets()}
 {badge_run} {badge_build}
 
 {coverage}
 
-**Accès rapide :**  
-- Analyse hebdo (KPIs, gros mouvements, nouvelles/disparues)  
-- Meilleures dates (prix mini par destination + top par mois)  
-- Watchlist (ALMOST / CONFIRMED / GUARANTEED)  
-- KPIs mensuels (toutes années + aperçu récent)  
-- Synthèse par pays
+**Astuce :** utilisez la **recherche** au-dessus de chaque tableau, et cliquez sur les **entêtes** pour trier.
 
 ---
 
