@@ -1,17 +1,7 @@
-title: RoadPrice — Évolutions tarifaires
+title: RoadPrice – Évolutions tarifaires
 description: Suivi hebdomadaire des prix WeRoad (KPIs, variations, alertes)
 
-remote_theme: pages-themes/cayman@v0.2.0
-
-plugins:
-  - jekyll-remote-theme
-  # Tu peux garder feed/sitemap si tu veux
-  # - jekyll-feed
-  # - jekyll-sitemap
-
-# 👇 Ajoute ceci
-repository: miniroles-boop/roadprice
-
+# Désactive Jekyll pour que GitHub Pages serve les fichiers bruts (index.md -> index.html)
 markdown: kramdown
 kramdown:
   input: GFM
