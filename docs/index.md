@@ -3,16 +3,95 @@ title: RoadPrice — Accueil
 ---
 
 # RoadPrice — synthèse
-![run](https://img.shields.io/badge/run-2025-08-26-blue) ![build](https://img.shields.io/badge/build-2025-08-26 19:54 UTC-success)
+
+<!-- Simple-DataTables (CDN) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-datatables@9.0.3/dist/style.min.css">
+<script src="https://cdn.jsdelivr.net/npm/simple-datatables@9.0.3"></script>
+
+<style>
+/* --- Enlever le look "carte/rectangle" de Simple-DataTables --- */
+.dataTable-wrapper.rp-dt-unstyled {
+  background: transparent; border: none; box-shadow: none; padding: 0;
+}
+.dataTable-wrapper.rp-dt-unstyled .dataTable-container {
+  max-height: none !important; overflow: visible !important;
+  background: transparent; border: none; box-shadow: none;
+}
+.dataTable-wrapper.rp-dt-unstyled .dataTable-top,
+.dataTable-wrapper.rp-dt-unstyled .dataTable-bottom {
+  background: transparent; border: none; box-shadow: none; padding: .25rem 0;
+}
+.dataTable-wrapper.rp-dt-unstyled .dataTable-info,
+.dataTable-wrapper.rp-dt-unstyled .dataTable-pagination,
+.dataTable-wrapper.rp-dt-unstyled .dataTable-dropdown,
+.dataTable-wrapper.rp-dt-unstyled .dataTable-search {
+  margin: .35rem 0; font-size: 0.95rem;
+}
+.dataTable-wrapper.rp-dt-unstyled .dataTable-pagination a { border-radius: .4rem; }
+.dataTable-wrapper.rp-dt-unstyled table { background: transparent; border: none; box-shadow: none; }
+
+/* Conserver ton scroll horizontal via .table-wrapper */
+.table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0 0 1.25rem 0; }
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  // convertir "1 234,56 €" -> 1234.56 pour tri numérique
+  const euroToNumber = (txt) => {
+    if (!txt) return null;
+    const s = String(txt).replace(/\s/g, "").replace("€","").replace(/\u00A0/g,"").replace(",",".");
+    const v = parseFloat(s);
+    return isNaN(v) ? null : v;
+  };
+
+  document.querySelectorAll("table.rp-table").forEach((tbl) => {
+    const dt = new simpleDatatables.DataTable(tbl, {
+      searchable: true,
+      fixedHeight: false,            // important: pas de cadre/scroll interne
+      perPage: 25,
+      perPageSelect: [10,25,50,100],
+      labels: {
+        placeholder: "Rechercher…",
+        perPage: "{select} lignes par page",
+        noRows: "Aucune donnée",
+        info: "Affiche {start}–{end} sur {rows} lignes",
+      },
+    });
+
+    // déshabille le wrapper (évite le "rectangle")
+    const wrapper = tbl.closest(".dataTable-wrapper");
+    if (wrapper) wrapper.classList.add("rp-dt-unstyled");
+
+    // tri custom pour colonnes € et %
+    dt.columns().each((idx) => {
+      const header = tbl.tHead?.rows?.[0]?.cells?.[idx];
+      if (!header) return;
+      const htxt = header.textContent.toLowerCase();
+      const isMoney = /(€|price|prix|delta_abs)/.test(htxt);
+      const isPct   = /(pct|%)/.test(htxt);
+
+      if (isMoney || isPct) {
+        dt.columns().sort(idx, (a, b) => {
+          const ta = a.replace(/<[^>]*>/g, ""); // enlève HTML des cellules (badges/liens)
+          const tb = b.replace(/<[^>]*>/g, "");
+          const na = isPct ? parseFloat(ta.replace("%","").replace(",",".")) : euroToNumber(ta);
+          const nb = isPct ? parseFloat(tb.replace("%","").replace(",",".")) : euroToNumber(tb);
+          if (na == null && nb == null) return 0;
+          if (na == null) return -1;
+          if (nb == null) return 1;
+          return na - nb;
+        });
+      }
+    });
+  });
+});
+</script>
+
+![run](https://img.shields.io/badge/run-2025-08-26-blue) ![build](https://img.shields.io/badge/build-2025-08-26 20:13 UTC-success)
 
 _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
 
-**Accès rapide :**  
-- Analyse hebdo (KPIs, gros mouvements, nouvelles/disparues)  
-- Meilleures dates (prix mini par destination + top par mois)  
-- Watchlist (ALMOST / CONFIRMED / GUARANTEED)  
-- KPIs mensuels (toutes années + aperçu récent)  
-- Synthèse par pays
+**Astuce :** utilisez la **recherche** au-dessus de chaque tableau, et cliquez sur les **entêtes** pour trier.
 
 ---
 
@@ -65,7 +144,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>11.7</td>
       <td>145</td>
       <td>51</td>
-      <td>3520.0%</td>
+      <td>35.2%</td>
       <td>{"2025-08": 2, "2025-09": 46, "2025-10": 26, "2025-11": 25, "2025-12": 10, "2026-01": 4, "2026-02": 8, "2026-03": 8, "2026-04": 1, "2026-05": 6, "2026-06": 3, "2026-07": 3, "2026-09": 1, "2026-10": 1, "2026-11": 1}</td>
     </tr>
   </tbody>
@@ -131,7 +210,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>649,00 €</td>
       <td>699,00 €</td>
       <td>50.0</td>
-      <td>720.0%</td>
+      <td>7.2%</td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-12-18</td>
       <td>2025-12-22</td>
@@ -170,7 +249,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>2 019,00 €</td>
       <td>2 299,00 €</td>
       <td>280.0</td>
-      <td>1220.0%</td>
+      <td>12.2%</td>
       <td><span class='rp-badge default'>SOLD&nbsp;OUT</span></td>
       <td>2025-09-21</td>
       <td>2025-10-04</td>
@@ -209,7 +288,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>1 499,00 €</td>
       <td>1 599,00 €</td>
       <td>100.0</td>
-      <td>630.0%</td>
+      <td>6.3%</td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-10-17</td>
       <td>2025-10-25</td>
@@ -235,7 +314,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>1 599,00 €</td>
       <td>1 699,00 €</td>
       <td>100.0</td>
-      <td>590.0%</td>
+      <td>5.9%</td>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
       <td>2025-10-17</td>
       <td>2025-10-26</td>
@@ -274,7 +353,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>1 389,00 €</td>
       <td>1 699,00 €</td>
       <td>310.0</td>
-      <td>1820.0%</td>
+      <td>18.2%</td>
       <td><span class='rp-badge default'>ALMOST_FULL</span></td>
       <td>2025-09-19</td>
       <td>2025-09-26</td>
@@ -287,7 +366,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>1 599,00 €</td>
       <td>1 699,00 €</td>
       <td>100.0</td>
-      <td>590.0%</td>
+      <td>5.9%</td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-10-19</td>
       <td>2025-10-28</td>
@@ -365,7 +444,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>969,00 €</td>
       <td>1 099,00 €</td>
       <td>130.0</td>
-      <td>1180.0%</td>
+      <td>11.8%</td>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
       <td>2025-09-20</td>
       <td>2025-10-01</td>
@@ -391,7 +470,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>999,00 €</td>
       <td>1 099,00 €</td>
       <td>100.0</td>
-      <td>910.0%</td>
+      <td>9.1%</td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2026-02-14</td>
       <td>2026-02-21</td>
@@ -482,7 +561,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>599,00 €</td>
       <td>649,00 €</td>
       <td>50.0</td>
-      <td>770.0%</td>
+      <td>7.7%</td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2025-11-19</td>
       <td>2025-11-23</td>
@@ -521,7 +600,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>739,00 €</td>
       <td>899,00 €</td>
       <td>160.0</td>
-      <td>1780.0%</td>
+      <td>17.8%</td>
       <td><span class='rp-badge default'>ALMOST_FULL</span></td>
       <td>2025-09-14</td>
       <td>2025-09-21</td>
@@ -599,7 +678,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>949,00 €</td>
       <td>999,00 €</td>
       <td>50.0</td>
-      <td>500.0%</td>
+      <td>5.0%</td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-12-13</td>
       <td>2025-12-19</td>
@@ -612,7 +691,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>949,00 €</td>
       <td>999,00 €</td>
       <td>50.0</td>
-      <td>500.0%</td>
+      <td>5.0%</td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-09-26</td>
       <td>2025-10-04</td>
@@ -638,7 +717,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>899,00 €</td>
       <td>1 099,00 €</td>
       <td>200.0</td>
-      <td>1820.0%</td>
+      <td>18.2%</td>
       <td><span class='rp-badge default'>WAITING</span></td>
       <td>2025-09-05</td>
       <td>2025-09-14</td>
@@ -651,7 +730,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>889,00 €</td>
       <td>949,00 €</td>
       <td>60.0</td>
-      <td>630.0%</td>
+      <td>6.3%</td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2025-11-21</td>
       <td>2025-11-29</td>
@@ -690,7 +769,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>919,00 €</td>
       <td>1 049,00 €</td>
       <td>130.0</td>
-      <td>1240.0%</td>
+      <td>12.4%</td>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
       <td>2025-09-27</td>
       <td>2025-10-04</td>
@@ -716,7 +795,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>489,00 €</td>
       <td>519,00 €</td>
       <td>30.0</td>
-      <td>580.0%</td>
+      <td>5.8%</td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-09-27</td>
       <td>2025-10-01</td>
@@ -729,7 +808,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>1 079,00 €</td>
       <td>1 349,00 €</td>
       <td>270.0</td>
-      <td>2000.0%</td>
+      <td>20.0%</td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-09-27</td>
       <td>2025-10-04</td>
@@ -742,7 +821,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>949,00 €</td>
       <td>999,00 €</td>
       <td>50.0</td>
-      <td>500.0%</td>
+      <td>5.0%</td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-09-26</td>
       <td>2025-10-03</td>
@@ -768,7 +847,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>1 499,00 €</td>
       <td>1 799,00 €</td>
       <td>300.0</td>
-      <td>1670.0%</td>
+      <td>16.7%</td>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
       <td>2025-09-26</td>
       <td>2025-10-06</td>
@@ -781,7 +860,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>899,00 €</td>
       <td>999,00 €</td>
       <td>100.0</td>
-      <td>1000.0%</td>
+      <td>10.0%</td>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
       <td>2025-09-06</td>
       <td>2025-09-13</td>
@@ -833,7 +912,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>1 105,00 €</td>
       <td>1 299,00 €</td>
       <td>194.0</td>
-      <td>1490.0%</td>
+      <td>14.9%</td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2026-03-29</td>
       <td>2026-04-09</td>
@@ -846,7 +925,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>1 179,00 €</td>
       <td>1 249,00 €</td>
       <td>70.0</td>
-      <td>560.0%</td>
+      <td>5.6%</td>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
       <td>2026-02-08</td>
       <td>2026-02-15</td>
@@ -859,7 +938,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>639,00 €</td>
       <td>799,00 €</td>
       <td>160.0</td>
-      <td>2000.0%</td>
+      <td>20.0%</td>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
       <td>2025-09-19</td>
       <td>2025-09-24</td>
@@ -872,7 +951,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>479,00 €</td>
       <td>599,00 €</td>
       <td>120.0</td>
-      <td>2000.0%</td>
+      <td>20.0%</td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-09-27</td>
       <td>2025-10-01</td>
@@ -885,7 +964,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>1 199,00 €</td>
       <td>1 329,00 €</td>
       <td>130.0</td>
-      <td>980.0%</td>
+      <td>9.8%</td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2026-02-22</td>
       <td>2026-03-01</td>
@@ -924,7 +1003,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>1 429,00 €</td>
       <td>1 649,00 €</td>
       <td>220.0</td>
-      <td>1330.0%</td>
+      <td>13.3%</td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2026-01-20</td>
       <td>2026-01-31</td>
@@ -989,7 +1068,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>899,00 €</td>
       <td>1 099,00 €</td>
       <td>200.0</td>
-      <td>1820.0%</td>
+      <td>18.2%</td>
       <td><span class='rp-badge default'>WAITING</span></td>
       <td>2025-09-21</td>
       <td>2025-09-29</td>
@@ -1002,7 +1081,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>1 566,00 €</td>
       <td>1 649,00 €</td>
       <td>83.0</td>
-      <td>500.0%</td>
+      <td>5.0%</td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-12-26</td>
       <td>2026-01-04</td>
@@ -1054,7 +1133,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>1 119,00 €</td>
       <td>1 399,00 €</td>
       <td>280.0</td>
-      <td>2000.0%</td>
+      <td>20.0%</td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-09-28</td>
       <td>2025-10-05</td>
@@ -1080,7 +1159,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>469,00 €</td>
       <td>499,00 €</td>
       <td>30.0</td>
-      <td>600.0%</td>
+      <td>6.0%</td>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
       <td>2025-09-17</td>
       <td>2025-09-21</td>
@@ -1093,7 +1172,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>849,00 €</td>
       <td>899,00 €</td>
       <td>50.0</td>
-      <td>560.0%</td>
+      <td>5.6%</td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-09-25</td>
       <td>2025-09-29</td>
@@ -1132,7 +1211,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>899,00 €</td>
       <td>999,00 €</td>
       <td>100.0</td>
-      <td>1000.0%</td>
+      <td>10.0%</td>
       <td><span class='rp-badge default'>SOLD&nbsp;OUT</span></td>
       <td>2025-09-01</td>
       <td>2025-09-12</td>
@@ -1197,7 +1276,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>849,00 €</td>
       <td>899,00 €</td>
       <td>50.0</td>
-      <td>560.0%</td>
+      <td>5.6%</td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-10-11</td>
       <td>2025-10-17</td>
@@ -1210,7 +1289,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>1 099,00 €</td>
       <td>1 249,00 €</td>
       <td>150.0</td>
-      <td>1200.0%</td>
+      <td>12.0%</td>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
       <td>2025-09-11</td>
       <td>2025-09-22</td>
@@ -1249,7 +1328,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>569,00 €</td>
       <td>599,00 €</td>
       <td>30.0</td>
-      <td>500.0%</td>
+      <td>5.0%</td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-09-17</td>
       <td>2025-09-21</td>
@@ -1262,7 +1341,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>949,00 €</td>
       <td>999,00 €</td>
       <td>50.0</td>
-      <td>500.0%</td>
+      <td>5.0%</td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-09-19</td>
       <td>2025-09-26</td>
@@ -1327,7 +1406,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>2 709,00 €</td>
       <td>3 299,00 €</td>
       <td>590.0</td>
-      <td>1790.0%</td>
+      <td>17.9%</td>
       <td><span class='rp-badge default'>WAITING</span></td>
       <td>2025-09-05</td>
       <td>2025-09-19</td>
@@ -1366,7 +1445,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>799,00 €</td>
       <td>999,00 €</td>
       <td>200.0</td>
-      <td>2000.0%</td>
+      <td>20.0%</td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-09-28</td>
       <td>2025-10-03</td>
@@ -1438,7 +1517,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Islande 360° :  à la découverte de l'île de glace et de feu</td>
       <td>Islande</td>
       <td>1 479,00 €</td>
-      <td>1780.0%</td>
+      <td>17.8%</td>
       <td><span class='rp-badge default'>SOLD&nbsp;OUT</span></td>
       <td>2025-08-29</td>
       <td><a target='_blank' href='https://www.weroad.fr/voyages/islande-360-ete'>🔗</a></td>
@@ -1449,7 +1528,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Transylvanie Express : Road Trip dans le pays du Comte Dracula</td>
       <td>Roumanie</td>
       <td>469,00 €</td>
-      <td>600.0%</td>
+      <td>6.0%</td>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
       <td>2025-09-17</td>
       <td><a target='_blank' href='https://www.weroad.fr/voyages/transylvanie-express-route-comte-dracula'>🔗</a></td>
@@ -1460,7 +1539,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Maroc : Trekking au Mont Toubkal</td>
       <td>Maroc</td>
       <td>479,00 €</td>
-      <td>2000.0%</td>
+      <td>20.0%</td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-09-27</td>
       <td><a target='_blank' href='https://www.weroad.fr/voyages/maroc-trekking-mount-toubkal'>🔗</a></td>
@@ -1471,7 +1550,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Naples et la côte Amalfitaine Express</td>
       <td>Italie</td>
       <td>489,00 €</td>
-      <td>580.0%</td>
+      <td>5.8%</td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-09-27</td>
       <td><a target='_blank' href='https://www.weroad.fr/voyages/naples-cote-amalfitaine'>🔗</a></td>
@@ -1482,7 +1561,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Maroc Express : Marrakech, Essaouira et le désert</td>
       <td>Maroc</td>
       <td>519,00 €</td>
-      <td>2000.0%</td>
+      <td>20.0%</td>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
       <td>2025-09-23</td>
       <td><a target='_blank' href='https://www.weroad.fr/voyages/maroc-marrakech-essaouira-desert'>🔗</a></td>
@@ -1493,7 +1572,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Istanbul Express</td>
       <td>Turquie</td>
       <td>569,00 €</td>
-      <td>500.0%</td>
+      <td>5.0%</td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-09-17</td>
       <td><a target='_blank' href='https://www.weroad.fr/voyages/istanbul-express'>🔗</a></td>
@@ -1504,7 +1583,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Albanie 360° : Tirana et les plages du sud</td>
       <td>Albanie</td>
       <td>639,00 €</td>
-      <td>2000.0%</td>
+      <td>20.0%</td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-09-23</td>
       <td><a target='_blank' href='https://www.weroad.fr/voyages/albanie-tirana-plages-sud'>🔗</a></td>
@@ -1515,7 +1594,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Malte Beach Life Express : Voyage sur les îles de Malte, Gozo et Comino</td>
       <td>Malte</td>
       <td>639,00 €</td>
-      <td>2000.0%</td>
+      <td>20.0%</td>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
       <td>2025-09-19</td>
       <td><a target='_blank' href='https://www.weroad.fr/voyages/malte-express-gozo-comino'>🔗</a></td>
@@ -1526,7 +1605,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Maroc 360° : Marrakech, Fès, Rabat et le désert</td>
       <td>Maroc</td>
       <td>659,00 €</td>
-      <td>1200.0%</td>
+      <td>12.0%</td>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
       <td>2025-09-12</td>
       <td><a target='_blank' href='https://www.weroad.fr/voyages/maroc-marrakech-fes-rabat-desert'>🔗</a></td>
@@ -1537,7 +1616,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Corfou Beach Life : plage et découverte des îles</td>
       <td>Grèce</td>
       <td>739,00 €</td>
-      <td>1780.0%</td>
+      <td>17.8%</td>
       <td><span class='rp-badge default'>ALMOST_FULL</span></td>
       <td>2025-09-14</td>
       <td><a target='_blank' href='https://www.weroad.fr/voyages/corfou-360'>🔗</a></td>
@@ -1559,7 +1638,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>New York 360° : à la découverte de Manhattan, Brooklyn et Harlem</td>
       <td>États-Unis d'Amérique</td>
       <td>799,00 €</td>
-      <td>2000.0%</td>
+      <td>20.0%</td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-09-28</td>
       <td><a target='_blank' href='https://www.weroad.fr/voyages/new-york'>🔗</a></td>
@@ -1570,7 +1649,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Écosse Express : Édimbourg et les Highlands comme un local</td>
       <td>Royaume-Uni</td>
       <td>849,00 €</td>
-      <td>560.0%</td>
+      <td>5.6%</td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-09-25</td>
       <td><a target='_blank' href='https://www.weroad.fr/voyages/Ecosse-express-edimbourg-highlands'>🔗</a></td>
@@ -1581,7 +1660,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Jordanie 360° : Petra, Amman et Wadi Rum</td>
       <td>Jordanie</td>
       <td>899,00 €</td>
-      <td>1000.0%</td>
+      <td>10.0%</td>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
       <td>2025-09-06</td>
       <td><a target='_blank' href='https://www.weroad.fr/voyages/jordanie-360'>🔗</a></td>
@@ -1592,7 +1671,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Sri Lanka 360° Summer</td>
       <td>Sri Lanka</td>
       <td>899,00 €</td>
-      <td>1000.0%</td>
+      <td>10.0%</td>
       <td><span class='rp-badge default'>SOLD&nbsp;OUT</span></td>
       <td>2025-09-01</td>
       <td><a target='_blank' href='https://www.weroad.fr/voyages/sri-lanka-360-ete'>🔗</a></td>
@@ -1603,7 +1682,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Indonésie d'île en île : Bali, Lembongan et Gili</td>
       <td>Indonésie</td>
       <td>899,00 €</td>
-      <td>1820.0%</td>
+      <td>18.2%</td>
       <td><span class='rp-badge default'>WAITING</span></td>
       <td>2025-09-05</td>
       <td><a target='_blank' href='https://www.weroad.fr/voyages/indonesie-bali-lombok-java-nusa-penida'>🔗</a></td>
@@ -1636,7 +1715,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Europe centrale : Prague, Vienne et Budapest en train</td>
       <td>Tchéquie</td>
       <td>849,00 €</td>
-      <td>560.0%</td>
+      <td>5.6%</td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-10-11</td>
       <td><a target='_blank' href='https://www.weroad.fr/voyages/europe-prague-vienne-budapest-weroadx'>🔗</a></td>
@@ -1724,7 +1803,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Maroc Surf : Entre océan et désert à Agadir</td>
       <td>Maroc</td>
       <td>1 099,00 €</td>
-      <td>1200.0%</td>
+      <td>12.0%</td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2025-10-04</td>
       <td><a target='_blank' href='https://www.weroad.fr/voyages/maroc-surf-ocean-desert'>🔗</a></td>
@@ -1790,7 +1869,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Bourgogne Express : sur la route des Grands Crus</td>
       <td>France</td>
       <td>599,00 €</td>
-      <td>770.0%</td>
+      <td>7.7%</td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2025-11-19</td>
       <td><a target='_blank' href='https://www.weroad.fr/voyages/bourgogne-express-route-grand-crus'>🔗</a></td>
@@ -1812,7 +1891,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Paris & Disneyland Express: entre culture, évasion et magie</td>
       <td>France</td>
       <td>699,00 €</td>
-      <td>1250.0%</td>
+      <td>12.5%</td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-11-07</td>
       <td><a target='_blank' href='https://www.weroad.fr/voyages/paris-disneyland-express-entre-culture-vasion-et-magie'>🔗</a></td>
@@ -1856,7 +1935,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Bali et Gili : ambiance tropicale et eau turquoise</td>
       <td>Indonésie</td>
       <td>889,00 €</td>
-      <td>630.0%</td>
+      <td>6.3%</td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2025-11-21</td>
       <td><a target='_blank' href='https://www.weroad.fr/voyages/bali-gili-indonesie-tropicale-eau-turquoise'>🔗</a></td>
@@ -1955,7 +2034,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Berlin Express</td>
       <td>Allemagne</td>
       <td>649,00 €</td>
-      <td>720.0%</td>
+      <td>7.2%</td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-12-18</td>
       <td><a target='_blank' href='https://www.weroad.fr/voyages/allemagne-berlin-express-tour-weroadx'>🔗</a></td>
@@ -1988,7 +2067,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Prague, Vienne et Budapest : édition Marchés de Noël</td>
       <td>Hongrie</td>
       <td>949,00 €</td>
-      <td>500.0%</td>
+      <td>5.0%</td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-12-13</td>
       <td><a target='_blank' href='https://www.weroad.fr/voyages/prague-budapest-marches-noel-weroadx'>🔗</a></td>
@@ -2032,7 +2111,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Panama Beach Life : d’îles en îles des San Blas à Bocas del Toro</td>
       <td>Panamá</td>
       <td>1 566,00 €</td>
-      <td>500.0%</td>
+      <td>5.0%</td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-12-26</td>
       <td><a target='_blank' href='https://www.weroad.fr/voyages/panama-beach-life-san-blas-bocas-del-toro'>🔗</a></td>
@@ -2076,7 +2155,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Nicaragua 360° : aventure au pays des lacs et des volcans</td>
       <td>Nicaragua</td>
       <td>1 429,00 €</td>
-      <td>1330.0%</td>
+      <td>13.3%</td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2026-01-20</td>
       <td><a target='_blank' href='https://www.weroad.fr/voyages/nicaragua-aventure-lacs-volcans'>🔗</a></td>
@@ -2109,7 +2188,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Fuerteventura Surf : aventure à la découverte de l'île</td>
       <td>Espagne</td>
       <td>999,00 €</td>
-      <td>910.0%</td>
+      <td>9.1%</td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2026-02-14</td>
       <td><a target='_blank' href='https://www.weroad.fr/voyages/fuerteventura-surf-weroadx'>🔗</a></td>
@@ -2131,7 +2210,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Maldives Beach Life BackPack : snorkeling et détente à Maafushi</td>
       <td>Maldives</td>
       <td>1 179,00 €</td>
-      <td>560.0%</td>
+      <td>5.6%</td>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
       <td>2026-02-08</td>
       <td><a target='_blank' href='https://www.weroad.fr/voyages/maldives-beach-life-detente-snorkeling-maafushi'>🔗</a></td>
@@ -2142,7 +2221,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Île Maurice Beach Life : Road trip entre plages paradisiaques et aventure locale</td>
       <td>Maurice</td>
       <td>1 199,00 €</td>
-      <td>980.0%</td>
+      <td>9.8%</td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2026-02-22</td>
       <td><a target='_blank' href='https://www.weroad.fr/voyages/ile-maurice-beach-life-road-trip-plages-aventure'>🔗</a></td>
@@ -2175,7 +2254,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Brésil : Double Carnaval à Rio & Salvador, Fiesta & plages</td>
       <td>Brésil</td>
       <td>2 929,00 €</td>
-      <td>520.0%</td>
+      <td>5.2%</td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2026-02-11</td>
       <td><a target='_blank' href='https://www.weroad.fr/voyages/bresil-carnaval-rio-salvador-fiesta-plages'>🔗</a></td>
@@ -2230,7 +2309,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Malaisie : nature sauvage et îles paradisiaques</td>
       <td>Malaisie</td>
       <td>1 105,00 €</td>
-      <td>1490.0%</td>
+      <td>14.9%</td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2026-03-29</td>
       <td><a target='_blank' href='https://www.weroad.fr/voyages/malaisie-nature-ile'>🔗</a></td>
@@ -2296,7 +2375,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Maldives Beach Life : aventure et découverte locale à Dharavandhoo</td>
       <td>Maldives</td>
       <td>1 299,00 €</td>
-      <td>710.0%</td>
+      <td>7.1%</td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2026-05-02</td>
       <td><a target='_blank' href='https://www.weroad.fr/voyages/maldives-tour-plages-paradisiaques-dauphins-weroadx'>🔗</a></td>
@@ -2478,7 +2557,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Istanbul</td>
       <td>Turquie</td>
       <td>569,00 €</td>
-      <td>500.0%</td>
+      <td>5.0%</td>
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
@@ -2492,7 +2571,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Istanbul & Cappadoce</td>
       <td>Turquie</td>
       <td>949,00 €</td>
-      <td>500.0%</td>
+      <td>5.0%</td>
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
@@ -2506,7 +2585,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Albanie</td>
       <td>Albanie</td>
       <td>639,00 €</td>
-      <td>2000.0%</td>
+      <td>20.0%</td>
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
@@ -2520,7 +2599,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Écosse</td>
       <td>Royaume-Uni</td>
       <td>849,00 €</td>
-      <td>560.0%</td>
+      <td>5.6%</td>
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
@@ -2534,7 +2613,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Inde</td>
       <td>Inde</td>
       <td>949,00 €</td>
-      <td>500.0%</td>
+      <td>5.0%</td>
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
@@ -2548,7 +2627,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Sardaigne</td>
       <td>Italie</td>
       <td>949,00 €</td>
-      <td>500.0%</td>
+      <td>5.0%</td>
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
@@ -2562,7 +2641,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Maroc</td>
       <td>Maroc</td>
       <td>479,00 €</td>
-      <td>2000.0%</td>
+      <td>20.0%</td>
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
@@ -2576,7 +2655,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Naples & la côte Amalfitaine</td>
       <td>Italie</td>
       <td>489,00 €</td>
-      <td>580.0%</td>
+      <td>5.8%</td>
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
@@ -2590,7 +2669,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Pouilles</td>
       <td>Italie</td>
       <td>1 079,00 €</td>
-      <td>2000.0%</td>
+      <td>20.0%</td>
       <td>NaN</td>
       <td>19.0</td>
       <td>None</td>
@@ -2604,7 +2683,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>New York</td>
       <td>États-Unis d'Amérique</td>
       <td>799,00 €</td>
-      <td>2000.0%</td>
+      <td>20.0%</td>
       <td>NaN</td>
       <td>11.0</td>
       <td>None</td>
@@ -2632,7 +2711,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>le Portugal</td>
       <td>Portugal</td>
       <td>1 119,00 €</td>
-      <td>2000.0%</td>
+      <td>20.0%</td>
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
@@ -2660,7 +2739,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Tchéquie</td>
       <td>Tchéquie</td>
       <td>849,00 €</td>
-      <td>560.0%</td>
+      <td>5.6%</td>
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
@@ -2744,7 +2823,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Belize</td>
       <td>Belize</td>
       <td>1 499,00 €</td>
-      <td>630.0%</td>
+      <td>6.3%</td>
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
@@ -2786,7 +2865,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Cap-Vert</td>
       <td>Cap-Vert</td>
       <td>1 599,00 €</td>
-      <td>590.0%</td>
+      <td>5.9%</td>
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
@@ -2884,7 +2963,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>France</td>
       <td>France</td>
       <td>699,00 €</td>
-      <td>1250.0%</td>
+      <td>12.5%</td>
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
@@ -2898,7 +2977,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Chine</td>
       <td>Chine</td>
       <td>1 899,00 €</td>
-      <td>950.0%</td>
+      <td>9.5%</td>
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
@@ -2968,7 +3047,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Hungary</td>
       <td>Hongrie</td>
       <td>949,00 €</td>
-      <td>500.0%</td>
+      <td>5.0%</td>
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
@@ -2996,7 +3075,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Allemagne</td>
       <td>Allemagne</td>
       <td>649,00 €</td>
-      <td>720.0%</td>
+      <td>7.2%</td>
       <td>NaN</td>
       <td>11.0</td>
       <td>None</td>
@@ -3024,7 +3103,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Panamá</td>
       <td>Panamá</td>
       <td>1 566,00 €</td>
-      <td>500.0%</td>
+      <td>5.0%</td>
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
@@ -3052,7 +3131,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Nicaragua</td>
       <td>Nicaragua</td>
       <td>1 429,00 €</td>
-      <td>1330.0%</td>
+      <td>13.3%</td>
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
@@ -3066,7 +3145,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Brésil</td>
       <td>Brésil</td>
       <td>2 929,00 €</td>
-      <td>520.0%</td>
+      <td>5.2%</td>
       <td>1.0</td>
       <td>15.0</td>
       <td>None</td>
@@ -3108,7 +3187,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Malaisie</td>
       <td>Malaisie</td>
       <td>1 105,00 €</td>
-      <td>1490.0%</td>
+      <td>14.9%</td>
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
@@ -3178,7 +3257,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Jordanie</td>
       <td>Jordanie</td>
       <td>899,00 €</td>
-      <td>1000.0%</td>
+      <td>10.0%</td>
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
@@ -3192,7 +3271,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Thailande</td>
       <td>Thaïlande</td>
       <td>1 099,00 €</td>
-      <td>1200.0%</td>
+      <td>12.0%</td>
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
@@ -3206,7 +3285,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Maroc</td>
       <td>Maroc</td>
       <td>659,00 €</td>
-      <td>1200.0%</td>
+      <td>12.0%</td>
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
@@ -3220,7 +3299,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Égypte</td>
       <td>Égypte</td>
       <td>1 079,00 €</td>
-      <td>1000.0%</td>
+      <td>10.0%</td>
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
@@ -3234,7 +3313,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Romania</td>
       <td>Roumanie</td>
       <td>469,00 €</td>
-      <td>600.0%</td>
+      <td>6.0%</td>
       <td>NaN</td>
       <td>13.0</td>
       <td>None</td>
@@ -3262,7 +3341,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Malte</td>
       <td>Malte</td>
       <td>639,00 €</td>
-      <td>2000.0%</td>
+      <td>20.0%</td>
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
@@ -3276,7 +3355,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Vietnam</td>
       <td>Viêt Nam</td>
       <td>1 059,00 €</td>
-      <td>1170.0%</td>
+      <td>11.7%</td>
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
@@ -3290,7 +3369,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Cuba</td>
       <td>Cuba</td>
       <td>969,00 €</td>
-      <td>1180.0%</td>
+      <td>11.8%</td>
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
@@ -3304,7 +3383,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Maroc</td>
       <td>Maroc</td>
       <td>519,00 €</td>
-      <td>2000.0%</td>
+      <td>20.0%</td>
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
@@ -3318,7 +3397,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Japon</td>
       <td>Japon</td>
       <td>1 499,00 €</td>
-      <td>1670.0%</td>
+      <td>16.7%</td>
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
@@ -3332,7 +3411,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Dolomites</td>
       <td>Italie</td>
       <td>919,00 €</td>
-      <td>1240.0%</td>
+      <td>12.4%</td>
       <td>NaN</td>
       <td>19.0</td>
       <td>None</td>
@@ -3360,7 +3439,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Brésil</td>
       <td>Brésil</td>
       <td>1 599,00 €</td>
-      <td>590.0%</td>
+      <td>5.9%</td>
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
@@ -3542,7 +3621,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>Maldives</td>
       <td>Maldives</td>
       <td>1 179,00 €</td>
-      <td>560.0%</td>
+      <td>5.6%</td>
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
