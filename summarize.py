@@ -1,81 +1,64 @@
-# summarize.py — Génère un unique dashboard Markdown/HTML dans docs/index.md
-# Page unique + recherche/tri/pagination (Simple-DataTables)
-# + correctif pourcentages (si valeur > 1 -> /100) + section "same_date_diff"
+# summarize.py — Page unique (docs/index.md) avec tables interactives
+# - Pourcentages normalisés
+# - URLs weRoad correctes (url + url_precise)
+# - Section "Same-date changes" basée sur best_tour_id
+# - Sparklines SVG d’historique de prix par départ
 
 from pathlib import Path
 from datetime import datetime, timezone
 import os
 import sqlite3
 import pandas as pd
+import html
 
 DOCS_DIR = Path("docs")
 OUT = DOCS_DIR / "index.md"
 DB = Path("data/weroad.db")
 
 RECENT_MONTHS = 24
-ALERT_PCT = float(os.getenv("ALERT_PCT", "0.10"))   # 10 %
-ALERT_EUR = float(os.getenv("ALERT_EUR", "150"))    # 150 €
+ALERT_PCT = float(os.getenv("ALERT_PCT", "0.10"))
+ALERT_EUR = float(os.getenv("ALERT_EUR", "150"))
+SAME_DATE_MIN_EUR = float(os.getenv("SAME_DATE_MIN_EUR", "0.0"))
 
 # ---------------- Assets (Simple-DataTables + style anti-"rectangle") ----------------
 def tables_enhancer_assets() -> str:
     return """
-<!-- Simple-DataTables (CDN) -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-datatables@9.0.3/dist/style.min.css">
 <script src="https://cdn.jsdelivr.net/npm/simple-datatables@9.0.3"></script>
-
 <style>
-/* Supprimer l'aspect "carte/rectangle" du wrapper Simple-DataTables */
-.dataTable-wrapper,
-.dataTable-wrapper .dataTable-container { background: transparent !important; border: 0 !important; box-shadow: none !important; padding: 0 !important; }
+.dataTable-wrapper, .dataTable-wrapper .dataTable-container { background: transparent !important; border: 0 !important; box-shadow: none !important; padding: 0 !important; }
 .dataTable-top, .dataTable-bottom { background: transparent !important; border: none !important; box-shadow: none !important; padding: .25rem 0 !important; }
 .dataTable-info, .dataTable-pagination, .dataTable-dropdown, .dataTable-search { margin: .35rem 0 !important; font-size: .95rem !important; }
 .dataTable-pagination a { border-radius: .4rem !important; }
-
-/* Conserver le scroll horizontal du conteneur .table-wrapper */
 .table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0 0 1.25rem 0; }
 </style>
-
 <script>
 (function() {
   const ready = (fn) => {
     if (document.readyState !== "loading") requestAnimationFrame(fn);
     else document.addEventListener("DOMContentLoaded", () => requestAnimationFrame(fn));
   };
-
   const euroToNumber = (txt) => {
     if (!txt) return null;
     const s = String(txt).replace(/\\s/g, "").replace("€","").replace(/\\u00A0/g,"").replace(",",".");
-    const v = parseFloat(s);
-    return isNaN(v) ? null : v;
+    const v = parseFloat(s); return isNaN(v) ? null : v;
   };
-
   ready(() => {
     const tables = document.querySelectorAll("table.rp-table");
     tables.forEach((tbl, tIndex) => {
       try {
         const dt = new simpleDatatables.DataTable(tbl, {
-          searchable: true,
-          fixedHeight: false,
-          perPage: 25,
-          perPageSelect: [10, 25, 50, 100],
-          labels: {
-            placeholder: "Rechercher…",
-            perPage: "{select} lignes par page",
-            noRows: "Aucune donnée",
-            info: "Affiche {start}–{end} sur {rows} lignes",
-          },
+          searchable: true, fixedHeight: false,
+          perPage: 25, perPageSelect: [10, 25, 50, 100],
+          labels: { placeholder: "Rechercher…", perPage: "{select} lignes par page", noRows: "Aucune donnée", info: "Affiche {start}–{end} sur {rows} lignes" },
         });
-
-        // tri custom € / %
         try {
           dt.columns().each((idx) => {
-            const header = tbl.tHead && tbl.tHead.rows && tbl.tHead.rows[0] && tbl.tHead.rows[0].cells
-              ? tbl.tHead.rows[0].cells[idx] : null;
+            const header = tbl.tHead && tbl.tHead.rows && tbl.tHead.rows[0] && tbl.tHead.rows[0].cells ? tbl.tHead.rows[0].cells[idx] : null;
             if (!header) return;
             const htxt = (header.textContent || "").toLowerCase();
             const isMoney = /(€|price|prix|delta_abs)/.test(htxt);
             const isPct   = /(pct|%)/.test(htxt);
-
             if (isMoney || isPct) {
               dt.columns().sort(idx, (a, b) => {
                 const ta = a.replace(/<[^>]*>/g, "");
@@ -89,17 +72,14 @@ def tables_enhancer_assets() -> str:
               });
             }
           });
-        } catch(e) {
-          console.warn("Sorter setup error on table", tIndex, e);
-        }
-      } catch (e) {
-        console.warn("DataTable init failed on table", tIndex, e);
-      }
+        } catch(e) { console.warn("Sorter setup error on table", tIndex, e); }
+      } catch (e) { console.warn("DataTable init failed on table", tIndex, e); }
     });
   });
 })();
 </script>
 """
+
 
 # ---------------- Utils rendu ----------------
 def ensure_docs():
@@ -118,12 +98,18 @@ def to_month(s):
         return None
 
 def choose_url_col(df: pd.DataFrame) -> pd.Series:
-    for c in ("url_curr", "url", "url_prev"):
+    # priorité: url_precise (date) > url_curr > url (globale) > url_prev
+    for c in ("url_precise", "url_curr", "url", "url_prev"):
         if c in df.columns:
             s = df[c].copy(); s.name = "url"; return s
     return pd.Series([None] * len(df), index=df.index, name="url")
 
-def linkify_url_col(df: pd.DataFrame):
+def linkify_url_col(df: pd.DataFrame, prefer_precise=False):
+    if prefer_precise and "url_precise" in df.columns:
+        df = df.copy()
+        df["url"] = df["url_precise"]
+    elif "url" not in df.columns:
+        df["url"] = choose_url_col(df)
     if "url" in df.columns:
         df["url"] = df["url"].map(lambda u: f"<a target='_blank' href='{u}'>🔗</a>" if pd.notna(u) and str(u).strip() else "")
     return df
@@ -140,7 +126,7 @@ def style_status_badge(v: str) -> str:
         "PLANNED":          "<span class='rp-badge on-sale'>PLANNED</span>",
         "SOLD_OUT":         "<span class='rp-badge default'>SOLD&nbsp;OUT</span>",
     }
-    return m.get(v, f"<span class='rp-badge default'>{v}</span>")
+    return m.get(v, f"<span class='rp-badge default'>{html.escape(v)}</span>")
 
 def decorate_movement(df: pd.DataFrame) -> pd.DataFrame:
     if df is None or df.empty or "movement" not in df.columns:
@@ -152,8 +138,7 @@ def decorate_movement(df: pd.DataFrame) -> pd.DataFrame:
     return out
 
 def html_table(df: pd.DataFrame, max_rows=200) -> str:
-    """Table HTML stylable via custom.css (classes rp-table + wrapper).
-       Corrige *_pct : si v>1 => v/100 avant formatage."""
+    """Table HTML stylable via custom.css. Normalise *_pct (>1 => /100)."""
     if df is None or df.empty:
         return "<p><em>Aucune donnée</em></p>"
     df = df.copy().head(max_rows)
@@ -161,7 +146,6 @@ def html_table(df: pd.DataFrame, max_rows=200) -> str:
     def has_html(s: pd.Series) -> bool:
         return s.dtype == "object" and s.astype(str).str.contains("<", regex=False).any()
 
-    # Pourcentages
     pct_cols = [c for c in df.columns if c.endswith("_pct") or c in ("delta_pct", "promo_share_pct")]
     for c in pct_cols:
         if c in df.columns and not has_html(df[c]):
@@ -175,7 +159,6 @@ def html_table(df: pd.DataFrame, max_rows=200) -> str:
                     return ""
             df[c] = df[c].map(fmt_pct)
 
-    # Montants €
     money_cols = [c for c in df.columns if any(k in c for k in ["price", "prix", "delta_abs"])]
     for c in money_cols:
         if c in df.columns and not has_html(df[c]):
@@ -183,7 +166,33 @@ def html_table(df: pd.DataFrame, max_rows=200) -> str:
 
     return "<div class='table-wrapper'>\n" + df.to_html(index=False, classes="rp-table", escape=False) + "\n</div>"
 
-# ---------------- Analyses (rendu) ----------------
+
+# ---------------- Sparklines ----------------
+def sparkline_svg(values: list[float], width: int = 120, height: int = 28, stroke="#1f6feb") -> str:
+    """Inline SVG sparkline pour une série de prix (None ignorés)."""
+    pts = [v for v in values if v is not None]
+    if len(pts) <= 1:
+        return ""
+    vmin, vmax = min(pts), max(pts)
+    if vmin == vmax:
+        vmin -= 1; vmax += 1
+    # coords
+    n = len(values)
+    step = width / max(1, n - 1)
+    def y_map(v):  # y inversé (haut = prix élevé visuellement)
+        return height - ( (v - vmin) / (vmax - vmin) * height )
+    path = []
+    for i, v in enumerate(values):
+        if v is None:
+            continue
+        x = i * step
+        y = y_map(v)
+        path.append(f"{x:.1f},{y:.1f}")
+    title = f"min:{vmin:.0f}€  max:{vmax:.0f}€"
+    return f"<svg width='{width}' height='{height}' viewBox='0 0 {width} {height}' xmlns='http://www.w3.org/2000/svg'><title>{html.escape(title)}</title><polyline fill='none' stroke='{stroke}' stroke-width='1.5' points='" + " ".join(path) + "'/></svg>"
+
+
+# ---------------- Blocs d’analyse pour affichage ----------------
 def best_dates(df: pd.DataFrame) -> pd.DataFrame:
     base = df.dropna(subset=["destination_label", "price_eur"]).copy()
     if base.empty: return pd.DataFrame()
@@ -191,7 +200,7 @@ def best_dates(df: pd.DataFrame) -> pd.DataFrame:
     out = base.loc[idx, [
         "destination_label","country_name","title","price_eur","base_price_eur",
         "discount_value_eur","discount_pct","sales_status",
-        "best_starting_date","best_ending_date","url"
+        "best_starting_date","best_ending_date","url_precise","url"
     ]].sort_values(["country_name","destination_label"]).reset_index(drop=True)
     out.rename(columns={
         "price_eur":"best_price_eur",
@@ -201,7 +210,7 @@ def best_dates(df: pd.DataFrame) -> pd.DataFrame:
     }, inplace=True)
     if "sales_status" in out.columns:
         out["sales_status"] = out["sales_status"].map(style_status_badge)
-    out = linkify_url_col(out)
+    out = linkify_url_col(out, prefer_precise=True)
     return out
 
 def cheapest_by_month(df: pd.DataFrame, top_n=15) -> pd.DataFrame:
@@ -212,12 +221,12 @@ def cheapest_by_month(df: pd.DataFrame, top_n=15) -> pd.DataFrame:
     tmp["rk"] = tmp.groupby("month_depart")["price_eur"].rank(method="first")
     out = tmp[tmp["rk"] <= top_n].sort_values(["month_depart","price_eur"])[[
         "month_depart","destination_label","title","country_name",
-        "price_eur","discount_pct","sales_status","best_starting_date","url"
+        "price_eur","discount_pct","sales_status","best_starting_date","url_precise","url"
     ]]
     out.rename(columns={"price_eur":"price_eur_min_month"}, inplace=True)
     if "sales_status" in out.columns:
         out["sales_status"] = out["sales_status"].map(style_status_badge)
-    out = linkify_url_col(out)
+    out = linkify_url_col(out, prefer_precise=True)
     return out.reset_index(drop=True)
 
 def country_summary(df: pd.DataFrame) -> pd.DataFrame:
@@ -245,11 +254,11 @@ def promo_watchlist(df: pd.DataFrame) -> pd.DataFrame:
     cols = [
         "sales_status","best_starting_date","best_ending_date",
         "title","destination_label","country_name",
-        "price_eur","discount_pct","seatsToConfirm","maxPax","weroadersCount","url"
+        "price_eur","discount_pct","seatsToConfirm","maxPax","weroadersCount","url_precise","url"
     ]
     x = x[cols].reset_index(drop=True)
     x["sales_status"] = x["sales_status"].map(style_status_badge)
-    x = linkify_url_col(x)
+    x = linkify_url_col(x, prefer_precise=True)
     return x
 
 def big_movers(wk_diff: pd.DataFrame) -> pd.DataFrame:
@@ -259,7 +268,7 @@ def big_movers(wk_diff: pd.DataFrame) -> pd.DataFrame:
         if c in x.columns:
             x[c] = pd.to_numeric(x[c], errors="coerce")
     x["flag"] = (x["delta_pct"].abs() > ALERT_PCT) | (x["delta_abs"].abs() > ALERT_EUR)
-    cols = ["destination_label","title_curr","price_eur_prev","price_eur_curr","delta_abs","delta_pct","movement","url"]
+    cols = ["destination_label","title_curr","price_eur_prev","price_eur_curr","delta_abs","delta_pct","movement","url","url_precise"]
     cols = [c for c in cols if c in x.columns]
     out = x[x["flag"]].sort_values(["delta_pct","delta_abs"], ascending=[False, False])[cols].reset_index(drop=True)
     if "delta_pct" in out.columns:
@@ -268,8 +277,9 @@ def big_movers(wk_diff: pd.DataFrame) -> pd.DataFrame:
                                              else (f"<span class='rp-delta-neg'>{v:.1%}</span>" if v<0
                                                    else "<span class='rp-delta-eq'>0%</span>")))
     out = decorate_movement(out)
-    out = linkify_url_col(out)
+    out = linkify_url_col(out, prefer_precise=False)
     return out
+
 
 # ---------------- Main ----------------
 def main():
@@ -300,16 +310,41 @@ def main():
         wd = safe_sql(conn, "SELECT * FROM weekly_diff WHERE run_date = ?", (last,))
         if not wd.empty:
             wd["url"] = choose_url_col(wd)
-            wd = wd[[c for c in ["destination_label","title_curr","price_eur_prev","price_eur_curr","delta_abs","delta_pct","movement","url"] if c in wd.columns]]
+            wd = wd[[c for c in ["destination_label","title_curr","price_eur_prev","price_eur_curr","delta_abs","delta_pct","movement","url","url_precise"] if c in wd.columns]]
 
-        # NEW: changements de prix sur même date (dernier vs précédent)
-        same_date = safe_sql(conn,
-            "SELECT slug, title, destination_label, country_name, best_starting_date, "
-            "price_eur_prev, price_eur_curr, delta_abs, delta_pct, movement, sales_status, url "
+        # Same-date changes (dernier run) - avec sparkline d’historique
+        same_date = safe_sql(
+            conn,
+            "SELECT best_tour_id, slug, title, destination_label, country_name, best_starting_date, "
+            "price_eur_prev, price_eur_curr, delta_abs, delta_pct, movement, sales_status, url_precise, url "
             "FROM same_date_diff WHERE run_date = ? "
             "ORDER BY ABS(delta_abs) DESC, ABS(delta_pct) DESC, best_starting_date",
             (last,)
         )
+
+        # Ajout sparkline par ligne (historique des prix de ce départ)
+        if not same_date.empty:
+            def hist_spark(row):
+                bid = row.get("best_tour_id")
+                bsd = row.get("best_starting_date")
+                if pd.isna(bid) or pd.isna(bsd):
+                    # fallback slug+date si pas d'id
+                    slug = row.get("slug")
+                    q = ("SELECT run_date, price_eur FROM snapshots "
+                         "WHERE slug = ? AND best_starting_date = ? ORDER BY run_date")
+                    hist = safe_sql(conn, q, (slug, bsd))
+                else:
+                    q = ("SELECT run_date, price_eur FROM snapshots "
+                         "WHERE best_tour_id = ? AND best_starting_date = ? ORDER BY run_date")
+                    hist = safe_sql(conn, q, (bid, bsd))
+
+                if hist.empty:
+                    return ""
+                vals = [float(v) if pd.notna(v) else None for v in hist["price_eur"].tolist()]
+                return sparkline_svg(vals)
+
+            same_date["history"] = same_date.apply(hist_spark, axis=1)
+            same_date = linkify_url_col(same_date, prefer_precise=True)
 
         mo_all = safe_sql(conn, "SELECT month, destination_label, prix_min, prix_avg, nb_depart FROM monthly_kpis ORDER BY month, destination_label")
         mo_recent = pd.DataFrame()
@@ -332,6 +367,7 @@ def main():
     badge_build = f"![build](https://img.shields.io/badge/build-{ts}-success)"
     coverage = f"_Historique : **{start_run}** → **{end_run}** ({len(runs)} runs)._"
 
+    # Page
     content = f"""---
 title: RoadPrice — Accueil
 ---
@@ -351,12 +387,12 @@ title: RoadPrice — Accueil
 
 ---
 
-## Changements de prix (même date) — dernier vs précédent
+## Changements de prix (même date) — dernier vs précédent  (seuil: |Δ€| ≥ {SAME_DATE_MIN_EUR:.0f})
 {html_table(same_date, max_rows=800)}
 
 ---
 
-## Gros mouvements de prix (Δ% ≥ {ALERT_PCT*100:.0f}% ou Δ€ ≥ {ALERT_EUR:.0f}€) — sur le panier “meilleur prix par destination”
+## Gros mouvements de prix (Δ% ≥ {ALERT_PCT*100:.0f}% ou Δ€ ≥ {ALERT_EUR:.0f}€)
 {html_table(movers, max_rows=250)}
 
 ---
