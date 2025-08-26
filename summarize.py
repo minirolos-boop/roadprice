@@ -1,5 +1,5 @@
-# summarize.py — Génère un site multi-pages (Jekyll) dans docs/
-# Pages : index.md, weekly.md, monthly.md, best-dates.md, countries.md, watchlist.md
+# summarize.py — Génère un unique dashboard Markdown/HTML dans docs/index.md
+# Ancien design (pas de nav, pas de multi-pages, pas de Jekyll requis)
 
 from pathlib import Path
 from datetime import datetime, timezone
@@ -7,26 +7,17 @@ import os
 import sqlite3
 import pandas as pd
 
-DOCS = Path("docs")
+DOCS_DIR = Path("docs")
+OUT = DOCS_DIR / "index.md"
 DB = Path("data/weroad.db")
 
-# Fichiers de sortie
-OUT_INDEX     = DOCS / "index.md"
-OUT_WEEKLY    = DOCS / "weekly.md"
-OUT_MONTHLY   = DOCS / "monthly.md"
-OUT_BEST      = DOCS / "best-dates.md"
-OUT_COUNTRIES = DOCS / "countries.md"
-OUT_WATCH     = DOCS / "watchlist.md"
-
-# Paramètres
 RECENT_MONTHS = 24
-ALERT_PCT = float(os.getenv("ALERT_PCT", "0.10"))
-ALERT_EUR = float(os.getenv("ALERT_EUR", "150"))
+ALERT_PCT = float(os.getenv("ALERT_PCT", "0.10"))   # 10 %
+ALERT_EUR = float(os.getenv("ALERT_EUR", "150"))    # 150 €
 
-# ---------------------- Utils / Rendu ----------------------
-def ensure_dirs():
-    (DOCS / "_includes").mkdir(parents=True, exist_ok=True)
-    (DOCS / "assets" / "css").mkdir(parents=True, exist_ok=True)
+# ---------------- Utils rendu ----------------
+def ensure_docs():
+    DOCS_DIR.mkdir(parents=True, exist_ok=True)
 
 def safe_sql(conn, q, params=()):
     try:
@@ -34,17 +25,21 @@ def safe_sql(conn, q, params=()):
     except Exception:
         return pd.DataFrame()
 
+def to_month(s):
+    try:
+        return pd.to_datetime(s).strftime("%Y-%m")
+    except Exception:
+        return None
+
 def choose_url_col(df: pd.DataFrame) -> pd.Series:
     for c in ("url_curr", "url", "url_prev"):
         if c in df.columns:
-            s = df[c].copy()
-            s.name = "url"
-            return s
+            s = df[c].copy(); s.name = "url"; return s
     return pd.Series([None] * len(df), index=df.index, name="url")
 
 def linkify_url_col(df: pd.DataFrame):
     if "url" in df.columns:
-        df["url"] = df["url"].map(lambda u: f"<a target='_blank' href='{u}'>🔗 voir</a>" if pd.notna(u) and str(u) != "" else "")
+        df["url"] = df["url"].map(lambda u: f"<a target='_blank' href='{u}'>🔗</a>" if pd.notna(u) and str(u).strip() else "")
     return df
 
 def style_status_badge(v: str) -> str:
@@ -54,10 +49,10 @@ def style_status_badge(v: str) -> str:
         "ALMOST_CONFIRMED": "<span class='rp-badge almost'>ALMOST</span>",
         "CONFIRMED":        "<span class='rp-badge confirmed'>CONFIRMED</span>",
         "GUARANTEED":       "<span class='rp-badge guaranteed'>GUARANTEED</span>",
-        "ON_SALE":          "<span class='rp-badge on-sale'>ON SALE</span>",
+        "ON_SALE":          "<span class='rp-badge on-sale'>ON&nbsp;SALE</span>",
         "WAITING_LIST":     "<span class='rp-badge default'>WAITING</span>",
         "PLANNED":          "<span class='rp-badge on-sale'>PLANNED</span>",
-        "SOLD_OUT":         "<span class='rp-badge default'>SOLD OUT</span>",
+        "SOLD_OUT":         "<span class='rp-badge default'>SOLD&nbsp;OUT</span>",
     }
     return m.get(v, f"<span class='rp-badge default'>{v}</span>")
 
@@ -70,11 +65,8 @@ def decorate_movement(df: pd.DataFrame) -> pd.DataFrame:
     out["movement"] = [f"<code class='{c}'>{s}</code>" for c, s in zip(cls, m)]
     return out
 
-def html_table(df: pd.DataFrame, max_rows=50) -> str:
-    """
-    Table HTML (pandas.to_html) + formats (€/%), sans casser les cellules déjà HTML.
-    Enveloppée par .table-wrapper pour le scroll horizontal.
-    """
+def html_table(df: pd.DataFrame, max_rows=200) -> str:
+    """Table HTML stylable via custom.css (classes rp-table + wrapper)."""
     if df is None or df.empty:
         return "<p><em>Aucune donnée</em></p>"
     df = df.copy().head(max_rows)
@@ -82,13 +74,13 @@ def html_table(df: pd.DataFrame, max_rows=50) -> str:
     def has_html(s: pd.Series) -> bool:
         return s.dtype == "object" and s.astype(str).str.contains("<", regex=False).any()
 
-    # formater % si pas déjà stylé
+    # % si pas déjà HTML
     pct_cols = [c for c in df.columns if c.endswith("_pct") or c in ("delta_pct", "promo_share_pct")]
     for c in pct_cols:
         if c in df.columns and not has_html(df[c]):
             df[c] = df[c].map(lambda v: f"{v*100:.1f}%" if pd.notna(v) else "")
 
-    # formater montants si pas déjà stylé
+    # montants € si pas déjà HTML
     money_cols = [c for c in df.columns if any(k in c for k in ["price", "prix", "delta_abs"])]
     for c in money_cols:
         if c in df.columns and not has_html(df[c]):
@@ -96,26 +88,7 @@ def html_table(df: pd.DataFrame, max_rows=50) -> str:
 
     return "<div class='table-wrapper'>\n" + df.to_html(index=False, classes="rp-table", escape=False) + "\n</div>"
 
-def write_page(path: Path, title: str, body_html: str):
-    nav = "{% include nav.html %}"
-    content = f"""---
-title: {title}
----
-
-{nav}
-
-{body_html}
-"""
-    path.write_text(content, encoding="utf-8")
-    print(f"Wrote {path}")
-
-def to_month(s):
-    try:
-        return pd.to_datetime(s).strftime("%Y-%m")
-    except Exception:
-        return None
-
-# ---------------------- Analyses ----------------------
+# -------------- Analyses ----------------
 def best_dates(df: pd.DataFrame) -> pd.DataFrame:
     base = df.dropna(subset=["destination_label", "price_eur"]).copy()
     if base.empty: return pd.DataFrame()
@@ -180,25 +153,25 @@ def promo_watchlist(df: pd.DataFrame) -> pd.DataFrame:
         "price_eur","discount_pct","seatsToConfirm","maxPax","weroadersCount","url"
     ]
     x = x[cols].reset_index(drop=True)
-    if "sales_status" in x.columns:
-        x["sales_status"] = x["sales_status"].map(style_status_badge)
+    x["sales_status"] = x["sales_status"].map(style_status_badge)
     x = linkify_url_col(x)
     return x
 
-def big_movers(wk_diff: pd.DataFrame, pct_threshold=ALERT_PCT, abs_threshold=ALERT_EUR) -> pd.DataFrame:
+def big_movers(wk_diff: pd.DataFrame) -> pd.DataFrame:
     if wk_diff.empty: return pd.DataFrame()
     x = wk_diff.copy()
-    # Sécurisation numérique
     for c in ("delta_pct","delta_abs","price_eur_prev","price_eur_curr"):
         if c in x.columns:
             x[c] = pd.to_numeric(x[c], errors="coerce")
-    x["flag"] = (x["delta_pct"].abs() > pct_threshold) | (x["delta_abs"].abs() > abs_threshold)
+    x["flag"] = (x["delta_pct"].abs() > ALERT_PCT) | (x["delta_abs"].abs() > ALERT_EUR)
     cols = ["destination_label","title_curr","price_eur_prev","price_eur_curr","delta_abs","delta_pct","movement","url"]
     cols = [c for c in cols if c in x.columns]
     out = x[x["flag"]].sort_values(["delta_pct","delta_abs"], ascending=[False, False])[cols].reset_index(drop=True)
-    # Δ% en pourcentage coloré (span) + mouvement coloré + lien URL
     if "delta_pct" in out.columns:
-        out["delta_pct"] = out["delta_pct"].map(lambda v: "" if pd.isna(v) else (f"<span class='rp-delta-pos'>+{v:.1%}</span>" if v>0 else (f"<span class='rp-delta-neg'>{v:.1%}</span>" if v<0 else "<span class='rp-delta-eq'>0%</span>")))
+        out["delta_pct"] = out["delta_pct"].map(
+            lambda v: "" if pd.isna(v) else (f"<span class='rp-delta-pos'>+{v:.1%}</span>" if v>0
+                                             else (f"<span class='rp-delta-neg'>{v:.1%}</span>" if v<0
+                                                   else "<span class='rp-delta-eq'>0%</span>")))
     out = decorate_movement(out)
     out = linkify_url_col(out)
     return out
@@ -238,34 +211,31 @@ def price_buckets(df: pd.DataFrame):
     out.columns = ["tranche_prix", "nb_offres"]
     return out
 
-# ---------------------- Main (multi-pages) ----------------------
+# -------------- Main (page unique) --------------
 def main():
-    ensure_dirs()
+    ensure_docs()
 
     if not DB.exists():
-        OUT_INDEX.write_text("# RoadPrice\n\n_Base SQLite absente : `data/weroad.db`_", encoding="utf-8")
+        OUT.write_text("# RoadPrice\n\n_Base SQLite absente : `data/weroad.db`_", encoding="utf-8")
         return
 
     conn = sqlite3.connect(DB)
     try:
-        # Période
         runs = safe_sql(conn, "SELECT DISTINCT run_date FROM weekly_kpis ORDER BY run_date")
         if runs.empty:
-            OUT_INDEX.write_text("# RoadPrice\n\n_Aucune donnée_", encoding="utf-8")
+            OUT.write_text("# RoadPrice\n\n_Aucune donnée disponible_", encoding="utf-8")
             return
+
         last = runs["run_date"].iloc[-1]
         prev = runs["run_date"].iloc[-2] if len(runs) > 1 else None
         start_run = runs["run_date"].iloc[0]
-        end_run   = runs["run_date"].iloc[-1]
+        end_run   = last
 
         # Snapshots
         df_curr = safe_sql(conn, "SELECT * FROM snapshots WHERE run_date = ?", (last,))
         df_prev = safe_sql(conn, "SELECT * FROM snapshots WHERE run_date = ?", (prev,)) if prev else pd.DataFrame()
-        if not df_curr.empty and "sales_status" in df_curr.columns:
-            df_curr["sales_status"] = df_curr["sales_status"].map(style_status_badge)
-        df_curr = linkify_url_col(df_curr)
 
-        # KPIs
+        # KPI last + histo
         kpi_last = safe_sql(conn, "SELECT * FROM weekly_kpis WHERE run_date = ?", (last,))
         kpi_hist = safe_sql(conn, "SELECT run_date, price_eur_min, price_eur_med, price_eur_avg, count_total, count_promos, promo_share_pct FROM weekly_kpis ORDER BY run_date")
 
@@ -273,7 +243,7 @@ def main():
         wd = safe_sql(conn, "SELECT * FROM weekly_diff WHERE run_date = ?", (last,))
         if not wd.empty:
             wd["url"] = choose_url_col(wd)
-            wd = wd[ [c for c in ["destination_label","title_curr","price_eur_prev","price_eur_curr","delta_abs","delta_pct","movement","url"] if c in wd.columns] ]
+            wd = wd[[c for c in ["destination_label","title_curr","price_eur_prev","price_eur_curr","delta_abs","delta_pct","movement","url"] if c in wd.columns]]
 
         # Mensuel
         mo_all = safe_sql(conn, "SELECT month, destination_label, prix_min, prix_avg, nb_depart FROM monthly_kpis ORDER BY month, destination_label")
@@ -283,12 +253,12 @@ def main():
             keep = months[-RECENT_MONTHS:] if len(months) > RECENT_MONTHS else months
             mo_recent = mo_all[mo_all["month"].isin(keep)].copy()
 
-        # Analyses actionnables
+        # Analyses
         bd      = best_dates(df_curr)
         topm    = cheapest_by_month(df_curr, top_n=15)
         ctry    = country_summary(df_curr)
         watch   = promo_watchlist(df_curr)
-        movers  = big_movers(wd, ALERT_PCT, ALERT_EUR) if not wd.empty else pd.DataFrame()
+        movers  = big_movers(wd) if not wd.empty else pd.DataFrame()
         new_df, gone_df = new_vs_gone(df_curr, df_prev)
         buckets = price_buckets(df_curr)
 
@@ -296,95 +266,75 @@ def main():
         conn.close()
 
     ts = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
-    badges = f"![run](https://img.shields.io/badge/run-{last}-blue) ![build](https://img.shields.io/badge/build-{ts}-success)"
+    badge_run   = f"![run](https://img.shields.io/badge/run-{last}-blue)"
+    badge_build = f"![build](https://img.shields.io/badge/build-{ts}-success)"
     coverage = f"_Historique : **{start_run}** → **{end_run}** ({len(runs)} runs)._"
 
-    # --------- Page : Accueil ---------
-    body_index = f"""
+    # Page unique (Markdown + HTML)
+    content = f"""---
+title: RoadPrice — Accueil
+---
+
 # RoadPrice — synthèse
-{badges}
+{badge_run} {badge_build}
 
 {coverage}
 
 **Accès rapide :**  
-- [Analyse hebdo](./weekly.html) — KPIs, gros mouvements, nouvelles/disparues  
-- [Meilleures dates](./best-dates.html) — prix mini par destination + top par mois  
-- [Watchlist](./watchlist.html) — ALMOST/CONFIRMED/GAURANTEED  
-- [Mensuel](./monthly.html) — KPIs par mois  
-- [Pays](./countries.html) — synthèse par pays
+- Analyse hebdo (KPIs, gros mouvements, nouvelles/disparues)  
+- Meilleures dates (prix mini par destination + top par mois)  
+- Watchlist (ALMOST / CONFIRMED / GUARANTEED)  
+- KPIs mensuels (toutes années + aperçu récent)  
+- Synthèse par pays
+
+---
 
 ## KPIs clés (dernier run)
 {html_table(kpi_last, max_rows=1)}
 
-## Répartition des offres par tranches de prix
-{html_table(buckets, max_rows=50)}
-"""
-    write_page(OUT_INDEX, "RoadPrice — Accueil", body_index)
+---
 
-    # --------- Page : Hebdo ---------
-    movers_html = html_table(movers, max_rows=250)
-    new_html    = html_table(new_df, max_rows=200)
-    gone_html   = html_table(gone_df, max_rows=200)
-    kpi_hist_html = html_table(kpi_hist, max_rows=1000)
+## Gros mouvements de prix (Δ% ≥ {ALERT_PCT*100:.0f}% ou Δ€ ≥ {ALERT_EUR:.0f}€)
+{html_table(movers, max_rows=250)}
 
-    body_weekly = f"""
-# Analyse hebdo
+---
 
-**Dernier run :** `{last}`  
-Seuils d'alerte : Δ% ≥ **{ALERT_PCT*100:.0f}%**, Δ€ ≥ **{ALERT_EUR:.0f}€**
-
-## Gros mouvements de prix
-{movers_html}
-
-## Nouvelles destinations (vs précédent)
-{new_html}
-
-## Destinations disparues (vs précédent)
-{gone_html}
-
-## KPIs — Historique des runs
-{kpi_hist_html}
-"""
-    write_page(OUT_WEEKLY, "RoadPrice — Hebdo", body_weekly)
-
-    # --------- Page : Meilleures dates ---------
-    body_best = f"""
-# Meilleures dates à réserver
-
-## Prix mini par destination (meilleure date)
+## Meilleures dates à réserver (prix mini par destination)
 {html_table(bd, max_rows=800)}
+
+---
 
 ## Top offres par mois (les moins chères)
 {html_table(topm, max_rows=800)}
-"""
-    write_page(OUT_BEST, "RoadPrice — Best dates", body_best)
 
-    # --------- Page : Watchlist ---------
-    body_watch = f"""
-# Watchlist (départs confirmés / presque confirmés)
+---
 
+## Watchlist — départs proches / confirmés
 {html_table(watch, max_rows=800)}
-"""
-    write_page(OUT_WATCH, "RoadPrice — Watchlist", body_watch)
 
-    # --------- Page : Mensuel ---------
-    body_monthly = f"""
-# KPIs mensuels
+---
 
-## Vue complète (toutes années)
+## Nouvelles destinations vs précédent
+{html_table(new_df, max_rows=400)}
+
+## Destinations disparues vs précédent
+{html_table(gone_df, max_rows=400)}
+
+---
+
+## Répartition par tranches de prix
+{html_table(buckets, max_rows=50)}
+
+---
+
+## KPIs mensuels — Vue complète
 {html_table(mo_all, max_rows=2000)}
 
-## Aperçu {RECENT_MONTHS} derniers mois
+## KPIs mensuels — Aperçu {RECENT_MONTHS} derniers mois
 {html_table(mo_recent, max_rows=1000)}
 """
-    write_page(OUT_MONTHLY, "RoadPrice — Mensuel", body_monthly)
-
-    # --------- Page : Pays ---------
-    body_countries = f"""
-# Synthèse par pays
-{html_table(ctry, max_rows=1000)}
-"""
-    write_page(OUT_COUNTRIES, "RoadPrice — Pays", body_countries)
+    OUT.write_text(content, encoding="utf-8")
+    print(f"Wrote {OUT}")
 
 
 if __name__ == "__main__":
