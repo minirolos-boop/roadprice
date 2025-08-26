@@ -167,7 +167,12 @@ def html_table(df: pd.DataFrame, max_rows=200) -> str:
     pct_cols = [c for c in df.columns if c.endswith("_pct") or c in ("delta_pct", "promo_share_pct")]
     for c in pct_cols:
         if c in df.columns and not has_html(df[c]):
-            df[c] = df[c].map(lambda v: f"{v*100:.1f}%" if pd.notna(v) else "")
+            df[c] = df[c].map(
+                lambda v: (
+                    f"{(v/100):.1%}" if (pd.notna(v) and v > 1)
+                    else (f"{v:.1%}" if pd.notna(v) else "")
+                )
+            )
 
     # montants € si pas déjà HTML
     money_cols = [c for c in df.columns if any(k in c for k in ["price", "prix", "delta_abs"])]
@@ -176,6 +181,7 @@ def html_table(df: pd.DataFrame, max_rows=200) -> str:
             df[c] = df[c].map(lambda v: f"{v:,.2f} €".replace(",", " ").replace(".", ",") if pd.notna(v) else "")
 
     return "<div class='table-wrapper'>\n" + df.to_html(index=False, classes="rp-table", escape=False) + "\n</div>"
+
 
 # -------------- Analyses ----------------
 def best_dates(df: pd.DataFrame) -> pd.DataFrame:
