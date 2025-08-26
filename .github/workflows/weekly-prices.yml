@@ -2,30 +2,49 @@ name: Weekly Prices Monitor
 
 on:
   schedule:
-    # Chaque mardi à 05:00 UTC ≈ 07:00 Europe/Paris
+    # Chaque mardi à 05:00 UTC ≈ 07:00 Europe/Paris (selon DST)
     - cron: "0 5 * * 2"
-  workflow_dispatch: {}  # déclenchement manuel possible
+  workflow_dispatch: {}
 
 jobs:
   run:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write   # nécessaire pour le commit auto dans le dépôt
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: Set up Python (with pip cache)
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+          cache: "pip"
+          cache-dependency-path: requirements.txt
 
       - name: Install dependencies
-        run: |
-          pip install pandas pyarrow requests openpyxl
+        run: pip install -r requirements.txt
 
       - name: Run weekly monitor
+        env:
+          # Seuils d’alertes (tu peux ajuster)
+          ALERT_PCT: "0.10"    # 10 %
+          ALERT_EUR: "150"     # 150 €
+          # Optionnel: si l'API redevient protégée
+          WEROAD_TOKEN: ${{ secrets.WEROAD_TOKEN }}
         run: |
           python monitor.py --out weekly_report.xlsx --sqlite data/weroad.db
+
+      - name: Build Markdown dashboard
+        run: |
+          python summarize.py
+
+      - name: Commit dashboard to main (docs/index.md)
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: update dashboard (docs/index.md)"
+          file_pattern: docs/index.md
 
       - name: Upload Excel artifact
         uses: actions/upload-artifact@v4
