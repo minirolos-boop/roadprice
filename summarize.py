@@ -1,4 +1,4 @@
-# summarize.py (version complète multi-années + historique)
+# summarize.py — génère docs/index.md avec tables HTML stylées (classe .rp-table)
 from pathlib import Path
 from datetime import datetime, timezone
 import sqlite3
@@ -8,29 +8,42 @@ DOCS_DIR = Path("docs")
 OUT = DOCS_DIR / "index.md"
 DB = Path("data/weroad.db")
 
-# combien de mois pour l'aperçu "récent" (sans limiter la vue complète)
+# nb de mois récents à mettre en avant (aperçu)
 RECENT_MONTHS = 24
 
 
-def md_table(df: pd.DataFrame, max_rows: int = 20) -> str:
-    """Table Markdown avec formats % et € si colonnes présentes."""
+def html_table(df: pd.DataFrame, max_rows: int = 20) -> str:
+    """Table HTML fiable (pandas.to_html), formats % et € si colonnes présentes."""
     if df is None or df.empty:
-        return "_Aucune donnée_"
+        return "<p><em>Aucune donnée</em></p>"
+
     df = df.copy().head(max_rows)
 
-    # Δ% / pourcentages
+    # Colonnes % (delta_pct, *_pct, promo_share_pct)
     pct_cols = [c for c in df.columns if c.endswith("_pct") or c == "delta_pct" or c == "promo_share_pct"]
     for c in pct_cols:
         if c in df.columns:
             df[c] = df[c].map(lambda v: f"{v*100:.1f}%" if pd.notna(v) else "")
 
-    # € / prix et deltas
+    # Colonnes montants €
     money_cols = [c for c in df.columns if any(k in c for k in ["price", "prix", "delta_abs"])]
     for c in money_cols:
         if c in df.columns:
             df[c] = df[c].map(lambda v: f"{v:,.2f} €".replace(",", " ").replace(".", ",") if pd.notna(v) else "")
 
-    return df.to_markdown(index=False)
+    # Rendu HTML (garde les liens/HTML : escape=False)
+    return df.to_html(index=False, classes="rp-table", escape=False)
+
+
+def decorate_movement(df: pd.DataFrame) -> pd.DataFrame:
+    """Colorise mouvement: ↑ rouge, ↓ vert, = gris (via <code class='up|down|equal'>)."""
+    if df is None or df.empty or "movement" not in df.columns:
+        return df
+    m = df["movement"].fillna("=")
+    cls = m.map(lambda x: "up" if x == "↑" else ("down" if x == "↓" else "equal"))
+    out = df.copy()
+    out["movement"] = [f"<code class='{c}'>{s}</code>" for c, s in zip(cls, m)]
+    return out
 
 
 def safe_read_sql(sql: str, conn, params: tuple = ()) -> pd.DataFrame:
@@ -41,7 +54,7 @@ def safe_read_sql(sql: str, conn, params: tuple = ()) -> pd.DataFrame:
 
 
 def choose_url_col(df: pd.DataFrame) -> pd.Series:
-    """Colonne 'url' en conciliant url_curr/url/url_prev si existants."""
+    """Retourne une série 'url' en conciliant url_curr/url/url_prev si existants."""
     for c in ("url_curr", "url", "url_prev"):
         if c in df.columns:
             s = df[c]
@@ -87,13 +100,13 @@ def main():
             OUT.write_text("# RoadPrice\n\n_Aucune donnée disponible pour l’instant._", encoding="utf-8")
             return
 
-        # Couverture (toutes les dates de run)
+        # Couverture historique
         runs, start_run, end_run = load_runs_coverage(conn)
 
         # KPIs du dernier run
         kpi_last = safe_read_sql("SELECT * FROM weekly_kpis WHERE run_date = ?", conn, (last,))
 
-        # Historique des KPIs hebdo (tous les runs)
+        # Historique KPIs (tous runs)
         kpi_hist = safe_read_sql(
             "SELECT run_date, price_eur_min, price_eur_med, price_eur_avg, "
             "count_total, count_promos, promo_share_pct "
@@ -106,31 +119,32 @@ def main():
         if not wd.empty:
             wd["url"] = choose_url_col(wd)
             base_cols = [
-                "destination_label",
-                "title_curr",
-                "price_eur_prev",
-                "price_eur_curr",
-                "delta_abs",
-                "delta_pct",
-                "url",
+                "destination_label", "title_curr",
+                "price_eur_prev", "price_eur_curr",
+                "delta_abs", "delta_pct",
+                "movement", "url",
             ]
             base_cols = [c for c in base_cols if c in wd.columns]
             wd_base = wd[base_cols].copy()
+
             inc = wd_base[wd_base.get("delta_pct").notna()].sort_values("delta_pct", ascending=False).head(15)
             dec = wd_base[wd_base.get("delta_pct").notna()].sort_values("delta_pct", ascending=True).head(15)
+
+            # Coloration ↑/↓/=
+            inc = decorate_movement(inc)
+            dec = decorate_movement(dec)
         else:
             inc = pd.DataFrame()
             dec = pd.DataFrame()
 
-        # KPIs mensuels – COMPLET (toutes années, pas de LIMIT)
+        # KPIs mensuels — complet (toutes années)
         mo_all = safe_read_sql(
             "SELECT month, destination_label, prix_min, prix_avg, nb_depart "
-            "FROM monthly_kpis "
-            "ORDER BY month, destination_label",
+            "FROM monthly_kpis ORDER BY month, destination_label",
             conn,
         )
 
-        # Synthèse par année (à partir de monthly_kpis)
+        # Synthèse annuelle
         year_summary = pd.DataFrame()
         if not mo_all.empty:
             tmp = mo_all.copy()
@@ -147,7 +161,7 @@ def main():
                 .sort_values("year")
             )
 
-        # Aperçu récentes périodes (N derniers mois distincts)
+        # Aperçu N derniers mois
         mo_recent = pd.DataFrame()
         if not mo_all.empty:
             unique_months = sorted(mo_all["month"].dropna().unique())
@@ -164,25 +178,25 @@ def main():
     if start_run and end_run:
         coverage = f"_Historique des runs : du **{start_run}** au **{end_run}** ({len(runs)} exécutions)._"
 
-    # KPIs (dernier run)
+    # Rendus HTML
     if not kpi_last.empty:
         keep = [
-            "price_eur_min",
-            "price_eur_med",
-            "price_eur_avg",
-            "count_total",
-            "count_promos",
-            "promo_share_pct",
+            "price_eur_min", "price_eur_med", "price_eur_avg",
+            "count_total", "count_promos", "promo_share_pct",
         ]
         keep = [c for c in keep if c in kpi_last.columns]
-        kpi_md = md_table(kpi_last[keep], max_rows=1)
+        kpi_html = html_table(kpi_last[keep], max_rows=1)
     else:
-        kpi_md = "_Aucune donnée_"
+        kpi_html = "<p><em>Aucune donnée</em></p>"
 
-    # Historique des KPIs (tous les runs)
-    kpi_hist_md = md_table(kpi_hist, max_rows=200) if not kpi_hist.empty else "_Aucune donnée_"
+    kpi_hist_html = html_table(kpi_hist, max_rows=500) if not kpi_hist.empty else "<p><em>Aucune donnée</em></p>"
+    inc_html = html_table(inc)
+    dec_html = html_table(dec)
+    mo_all_html = html_table(mo_all, max_rows=1000)
+    mo_recent_html = html_table(mo_recent, max_rows=300)
+    year_summary_html = html_table(year_summary, max_rows=100)
 
-    # Contenu Markdown complet
+    # Contenu Markdown (avec blocs HTML)
     content = f"""---
 title: RoadPrice – Évolutions tarifaires
 ---
@@ -198,46 +212,45 @@ title: RoadPrice – Évolutions tarifaires
 ---
 
 ## Indicateurs clés — Dernier run
-{kpi_md}
+{kpi_html}
 
 ---
 
 ## Historique des KPIs hebdo (tous les runs)
-{ kpi_hist_md }
+{kpi_hist_html}
 
 ---
 
-## Top **hausses** (Δ% — dernier run)
-{ md_table(inc) }
+## Top <strong>hausses</strong> (Δ% — dernier run)
+{inc_html}
 
 ---
 
-## Top **baisses** (Δ% — dernier run)
-{ md_table(dec) }
+## Top <strong>baisses</strong> (Δ% — dernier run)
+{dec_html}
 
 ---
 
 ## KPIs mensuels — Vue complète (toutes années)
-{ md_table(mo_all, max_rows=500) }
+{mo_all_html}
 
 ---
 
 ## KPIs mensuels — Aperçu {RECENT_MONTHS} derniers mois
-{ md_table(mo_recent, max_rows=300) }
+{mo_recent_html}
 
 ---
 
 ## Synthèse par année (depuis monthly_kpis)
-{ md_table(year_summary, max_rows=50) }
+{year_summary_html}
 
 ---
 
 ### Légende
-- **Δ%** : variation relative vs snapshot précédent.  
-- **Δ€** : variation absolue en euros.  
+- <strong>Δ%</strong> : variation relative vs snapshot précédent.  
+- <strong>Δ€</strong> : variation absolue en euros.  
 - Les liens mènent à la page WeRoad de l’offre (si disponible).
 """
-
     OUT.write_text(content, encoding="utf-8")
     print(f"Wrote {OUT}")
 
