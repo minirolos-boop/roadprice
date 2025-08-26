@@ -4,63 +4,42 @@ title: RoadPrice — Accueil
 
 # RoadPrice — synthèse
 
-<!-- Simple-DataTables (CDN) -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-datatables@9.0.3/dist/style.min.css">
 <script src="https://cdn.jsdelivr.net/npm/simple-datatables@9.0.3"></script>
-
 <style>
-/* Supprimer l'aspect "carte/rectangle" du wrapper Simple-DataTables */
-.dataTable-wrapper,
-.dataTable-wrapper .dataTable-container { background: transparent !important; border: 0 !important; box-shadow: none !important; padding: 0 !important; }
+.dataTable-wrapper, .dataTable-wrapper .dataTable-container { background: transparent !important; border: 0 !important; box-shadow: none !important; padding: 0 !important; }
 .dataTable-top, .dataTable-bottom { background: transparent !important; border: none !important; box-shadow: none !important; padding: .25rem 0 !important; }
 .dataTable-info, .dataTable-pagination, .dataTable-dropdown, .dataTable-search { margin: .35rem 0 !important; font-size: .95rem !important; }
 .dataTable-pagination a { border-radius: .4rem !important; }
-
-/* Conserver le scroll horizontal du conteneur .table-wrapper */
 .table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0 0 1.25rem 0; }
 </style>
-
 <script>
 (function() {
   const ready = (fn) => {
     if (document.readyState !== "loading") requestAnimationFrame(fn);
     else document.addEventListener("DOMContentLoaded", () => requestAnimationFrame(fn));
   };
-
   const euroToNumber = (txt) => {
     if (!txt) return null;
     const s = String(txt).replace(/\s/g, "").replace("€","").replace(/\u00A0/g,"").replace(",",".");
-    const v = parseFloat(s);
-    return isNaN(v) ? null : v;
+    const v = parseFloat(s); return isNaN(v) ? null : v;
   };
-
   ready(() => {
     const tables = document.querySelectorAll("table.rp-table");
     tables.forEach((tbl, tIndex) => {
       try {
         const dt = new simpleDatatables.DataTable(tbl, {
-          searchable: true,
-          fixedHeight: false,
-          perPage: 25,
-          perPageSelect: [10, 25, 50, 100],
-          labels: {
-            placeholder: "Rechercher…",
-            perPage: "{select} lignes par page",
-            noRows: "Aucune donnée",
-            info: "Affiche {start}–{end} sur {rows} lignes",
-          },
+          searchable: true, fixedHeight: false,
+          perPage: 25, perPageSelect: [10, 25, 50, 100],
+          labels: { placeholder: "Rechercher…", perPage: "{select} lignes par page", noRows: "Aucune donnée", info: "Affiche {start}–{end} sur {rows} lignes" },
         });
-
-        // tri custom € / %
         try {
           dt.columns().each((idx) => {
-            const header = tbl.tHead && tbl.tHead.rows && tbl.tHead.rows[0] && tbl.tHead.rows[0].cells
-              ? tbl.tHead.rows[0].cells[idx] : null;
+            const header = tbl.tHead && tbl.tHead.rows && tbl.tHead.rows[0] && tbl.tHead.rows[0].cells ? tbl.tHead.rows[0].cells[idx] : null;
             if (!header) return;
             const htxt = (header.textContent || "").toLowerCase();
             const isMoney = /(€|price|prix|delta_abs)/.test(htxt);
             const isPct   = /(pct|%)/.test(htxt);
-
             if (isMoney || isPct) {
               dt.columns().sort(idx, (a, b) => {
                 const ta = a.replace(/<[^>]*>/g, "");
@@ -74,18 +53,14 @@ title: RoadPrice — Accueil
               });
             }
           });
-        } catch(e) {
-          console.warn("Sorter setup error on table", tIndex, e);
-        }
-      } catch (e) {
-        console.warn("DataTable init failed on table", tIndex, e);
-      }
+        } catch(e) { console.warn("Sorter setup error on table", tIndex, e); }
+      } catch (e) { console.warn("DataTable init failed on table", tIndex, e); }
     });
   });
 })();
 </script>
 
-![run](https://img.shields.io/badge/run-2025-08-26-blue) ![build](https://img.shields.io/badge/build-2025-08-26 20:37 UTC-success)
+![run](https://img.shields.io/badge/run-2025-08-26-blue) ![build](https://img.shields.io/badge/build-2025-08-26 21:04 UTC-success)
 
 _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
 
@@ -151,12 +126,12 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
 
 ---
 
-## Changements de prix (même date) — dernier vs précédent
+## Changements de prix (même date) — dernier vs précédent  (seuil: |Δ€| ≥ 0)
 <p><em>Aucune donnée</em></p>
 
 ---
 
-## Gros mouvements de prix (Δ% ≥ 10% ou Δ€ ≥ 150€) — sur le panier “meilleur prix par destination”
+## Gros mouvements de prix (Δ% ≥ 10% ou Δ€ ≥ 150€)
 <p><em>Aucune donnée</em></p>
 
 ---
@@ -176,6 +151,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <th>sales_status</th>
       <th>date_debut</th>
       <th>date_fin</th>
+      <th>url_precise</th>
       <th>url</th>
     </tr>
   </thead>
@@ -191,7 +167,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge default'>WAITING</span></td>
       <td>2025-09-08</td>
       <td>2025-09-20</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/afrique-du-sud-cap-safari-parc-kruger'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/afrique-du-sud-cap-safari-parc-kruger/3485c3c9-e940-42ea-84ec-8f0379d93a8b</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/afrique-du-sud-cap-safari-parc-kruger/3485c3c9-e940-42ea-84ec-8f0379d93a8b'>🔗</a></td>
     </tr>
     <tr>
       <td>Albanie</td>
@@ -204,7 +181,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2025-11-02</td>
       <td>2025-11-07</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/albanie-express-hiver'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/albanie-express-hiver/d1f93401-4d46-45aa-b657-214d5cc1ca4c</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/albanie-express-hiver/d1f93401-4d46-45aa-b657-214d5cc1ca4c'>🔗</a></td>
     </tr>
     <tr>
       <td>Allemagne</td>
@@ -217,7 +195,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-12-18</td>
       <td>2025-12-22</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/allemagne-berlin-express-tour-weroadx'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/allemagne-berlin-express-tour-weroadx/e5d6c677-81fc-44be-abbf-d9589f0ebf6d</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/allemagne-berlin-express-tour-weroadx/e5d6c677-81fc-44be-abbf-d9589f0ebf6d'>🔗</a></td>
     </tr>
     <tr>
       <td>Argentine</td>
@@ -230,7 +209,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge default'>WAITING</span></td>
       <td>2025-09-07</td>
       <td>2025-09-15</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/argentine-bresil-360'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/argentine-bresil-360/e6576e71-bb5e-4654-8395-479132600efd</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/argentine-bresil-360/e6576e71-bb5e-4654-8395-479132600efd'>🔗</a></td>
     </tr>
     <tr>
       <td>Patagonie</td>
@@ -243,7 +223,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
       <td>2025-10-28</td>
       <td>2025-11-09</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/patagonie-360'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/patagonie-360/5857150e-6900-42bc-9490-3341afa4190e</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/patagonie-360/5857150e-6900-42bc-9490-3341afa4190e'>🔗</a></td>
     </tr>
     <tr>
       <td>Australie</td>
@@ -256,7 +237,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge default'>SOLD&nbsp;OUT</span></td>
       <td>2025-09-21</td>
       <td>2025-10-04</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/australie-de-sydney-a-brisbane'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/australie-de-sydney-a-brisbane/71ad43cc-f00f-4060-b3ab-db20c2cf8759</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/australie-de-sydney-a-brisbane/71ad43cc-f00f-4060-b3ab-db20c2cf8759'>🔗</a></td>
     </tr>
     <tr>
       <td>Autriche</td>
@@ -269,7 +251,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2025-11-26</td>
       <td>2025-11-30</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/autriche-kitzbuhel-ski-snowboard'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/autriche-kitzbuhel-ski-snowboard/0b5412fb-f73d-421d-9976-c29ec0aa81a0</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/autriche-kitzbuhel-ski-snowboard/0b5412fb-f73d-421d-9976-c29ec0aa81a0'>🔗</a></td>
     </tr>
     <tr>
       <td>Belgique</td>
@@ -282,7 +265,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2025-11-11</td>
       <td>2025-11-16</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/bruxelles-amsterdam-express-culture'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/bruxelles-amsterdam-express-culture/0e2cf4a6-3b15-41d9-aeb9-843c1e541f70</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/bruxelles-amsterdam-express-culture/0e2cf4a6-3b15-41d9-aeb9-843c1e541f70'>🔗</a></td>
     </tr>
     <tr>
       <td>Belize</td>
@@ -295,7 +279,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-10-17</td>
       <td>2025-10-25</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/belize-jungles-plages-blue-hole'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/belize-jungles-plages-blue-hole/b1d4305d-a377-46ed-b533-dad5169b092e</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/belize-jungles-plages-blue-hole/b1d4305d-a377-46ed-b533-dad5169b092e'>🔗</a></td>
     </tr>
     <tr>
       <td>Chili & Bolivie</td>
@@ -308,7 +293,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
       <td>2025-11-01</td>
       <td>2025-11-12</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/bolivie-et-chili-360'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/bolivie-et-chili-360/1ff089b7-7105-4750-a027-f101e4ff4ad1</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/bolivie-et-chili-360/1ff089b7-7105-4750-a027-f101e4ff4ad1'>🔗</a></td>
     </tr>
     <tr>
       <td>Brésil</td>
@@ -321,7 +307,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
       <td>2025-10-17</td>
       <td>2025-10-26</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/bresil-mer-plage-foret-rio-de-janeiro'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/bresil-mer-plage-foret-rio-de-janeiro/8c9a0abb-bb94-41b6-9cd0-ca0ae9490e12</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/bresil-mer-plage-foret-rio-de-janeiro/8c9a0abb-bb94-41b6-9cd0-ca0ae9490e12'>🔗</a></td>
     </tr>
     <tr>
       <td>Bulgarie</td>
@@ -334,7 +321,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2025-12-23</td>
       <td>2025-12-28</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/bulgarie-ski-express-bansko'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/bulgarie-ski-express-bansko/fe4a35e2-a5ee-47a5-b200-b1ca9e303e6d</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/bulgarie-ski-express-bansko/fe4a35e2-a5ee-47a5-b200-b1ca9e303e6d'>🔗</a></td>
     </tr>
     <tr>
       <td>Cambodge</td>
@@ -347,7 +335,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2026-03-20</td>
       <td>2026-03-31</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/laos-cambodge-routes-temples-indochine'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/laos-cambodge-routes-temples-indochine/3a3d0763-6567-4060-b7cc-eb9ab1b3c06d</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/laos-cambodge-routes-temples-indochine/3a3d0763-6567-4060-b7cc-eb9ab1b3c06d'>🔗</a></td>
     </tr>
     <tr>
       <td>Canada</td>
@@ -360,7 +349,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge default'>ALMOST_FULL</span></td>
       <td>2025-09-19</td>
       <td>2025-09-26</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/canada-quebec-montreal-toronto-niagara'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/canada-quebec-montreal-toronto-niagara/5d4bdd04-4236-45bf-9c2f-2b87f5f173aa</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/canada-quebec-montreal-toronto-niagara/5d4bdd04-4236-45bf-9c2f-2b87f5f173aa'>🔗</a></td>
     </tr>
     <tr>
       <td>Cap-Vert</td>
@@ -373,7 +363,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-10-19</td>
       <td>2025-10-28</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/cap-vert-beach-life-santiago-fogo-boa-vista'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/cap-vert-beach-life-santiago-fogo-boa-vista/8b1e7e50-5a70-42f4-9885-6b4b762ceee8</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/cap-vert-beach-life-santiago-fogo-boa-vista/8b1e7e50-5a70-42f4-9885-6b4b762ceee8'>🔗</a></td>
     </tr>
     <tr>
       <td>Chili et Bolivie</td>
@@ -386,7 +377,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-10-11</td>
       <td>2025-10-22</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/chili-bolivie-aventure-salar-uyuni'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/chili-bolivie-aventure-salar-uyuni/5514e1b5-d1c9-47a0-9bd9-918d9189cfe4</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/chili-bolivie-aventure-salar-uyuni/5514e1b5-d1c9-47a0-9bd9-918d9189cfe4'>🔗</a></td>
     </tr>
     <tr>
       <td>Chine</td>
@@ -399,7 +391,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2026-11-20</td>
       <td>2026-12-01</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/chine'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/chine/a01b1a11-a4b5-4767-b6d8-6d28e6c532b9</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/chine/a01b1a11-a4b5-4767-b6d8-6d28e6c532b9'>🔗</a></td>
     </tr>
     <tr>
       <td>Colombie</td>
@@ -412,7 +405,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-11-23</td>
       <td>2025-12-04</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/colombie-360'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/colombie-360/16b572f8-f3b9-4e9c-9404-fb8c77dd80ab</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/colombie-360/16b572f8-f3b9-4e9c-9404-fb8c77dd80ab'>🔗</a></td>
     </tr>
     <tr>
       <td>Corée du Sud</td>
@@ -425,7 +419,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge default'>ALMOST_FULL</span></td>
       <td>2025-10-18</td>
       <td>2025-10-27</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/coree-du-sud-360'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/coree-du-sud-360/d1db200e-8ac8-40ad-88d3-04c78aff3fc2</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/coree-du-sud-360/d1db200e-8ac8-40ad-88d3-04c78aff3fc2'>🔗</a></td>
     </tr>
     <tr>
       <td>Costa Rica</td>
@@ -438,7 +433,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2026-10-20</td>
       <td>2026-11-01</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/costa-rica-360'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/costa-rica-360/24c10910-4182-45e8-876a-370ccd2f1dff</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/costa-rica-360/24c10910-4182-45e8-876a-370ccd2f1dff'>🔗</a></td>
     </tr>
     <tr>
       <td>Cuba</td>
@@ -451,7 +447,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
       <td>2025-09-20</td>
       <td>2025-10-01</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/cuba-360'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/cuba-360/f632605e-d0f9-473b-a118-34113dce67c0</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/cuba-360/f632605e-d0f9-473b-a118-34113dce67c0'>🔗</a></td>
     </tr>
     <tr>
       <td>Barcelone & Costa Brava</td>
@@ -464,7 +461,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2025-10-29</td>
       <td>2025-11-04</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/barcelone-costa-brava-360'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/barcelone-costa-brava-360/821e1e1e-bdcb-442a-bf67-d1423fd2b452</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/barcelone-costa-brava-360/821e1e1e-bdcb-442a-bf67-d1423fd2b452'>🔗</a></td>
     </tr>
     <tr>
       <td>Espagne</td>
@@ -477,7 +475,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2026-02-14</td>
       <td>2026-02-21</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/fuerteventura-surf-weroadx'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/fuerteventura-surf-weroadx/f6fde568-0c8e-4e19-8820-61d5b5b313e1</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/fuerteventura-surf-weroadx/f6fde568-0c8e-4e19-8820-61d5b5b313e1'>🔗</a></td>
     </tr>
     <tr>
       <td>Gran Canaria</td>
@@ -490,7 +489,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2026-07-08</td>
       <td>2026-07-12</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/gran-canaria-express-ile-soleil'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/gran-canaria-express-ile-soleil/683f12d0-d741-45d3-80d9-8c7d2032290b</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/gran-canaria-express-ile-soleil/683f12d0-d741-45d3-80d9-8c7d2032290b'>🔗</a></td>
     </tr>
     <tr>
       <td>Îles Canaries</td>
@@ -503,7 +503,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-10-11</td>
       <td>2025-10-18</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/fuerteventura-lanzarote-plages-volcans'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/fuerteventura-lanzarote-plages-volcans/67e0eec3-90ff-4856-9dce-57691558b87d</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/fuerteventura-lanzarote-plages-volcans/67e0eec3-90ff-4856-9dce-57691558b87d'>🔗</a></td>
     </tr>
     <tr>
       <td>Pays Baltes</td>
@@ -516,7 +517,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-10-25</td>
       <td>2025-11-01</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/pays-baltes-tallinn-riga-vilnius'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/pays-baltes-tallinn-riga-vilnius/4233778c-476f-4887-8f15-6c0bcda166ca</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/pays-baltes-tallinn-riga-vilnius/4233778c-476f-4887-8f15-6c0bcda166ca'>🔗</a></td>
     </tr>
     <tr>
       <td>Finlande</td>
@@ -529,7 +531,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2026-01-23</td>
       <td>2026-01-28</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/laponie-finlandaise'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/laponie-finlandaise/3197a02f-7b14-4dea-8e82-acdb48bae7da</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/laponie-finlandaise/3197a02f-7b14-4dea-8e82-acdb48bae7da'>🔗</a></td>
     </tr>
     <tr>
       <td>Auvergne</td>
@@ -542,7 +545,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2026-09-28</td>
       <td>2026-10-02</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/auvergne-express'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/auvergne-express/ec34a251-229a-4b5d-be8c-855439805fa5</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/auvergne-express/ec34a251-229a-4b5d-be8c-855439805fa5'>🔗</a></td>
     </tr>
     <tr>
       <td>Bordeaux</td>
@@ -555,7 +559,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2026-03-07</td>
       <td>2026-03-11</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/bordeaux-dune-du-pilat'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/bordeaux-dune-du-pilat/a23dc152-3886-4500-baa5-15933d8c2266</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/bordeaux-dune-du-pilat/a23dc152-3886-4500-baa5-15933d8c2266'>🔗</a></td>
     </tr>
     <tr>
       <td>Bourgogne</td>
@@ -568,7 +573,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2025-11-19</td>
       <td>2025-11-23</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/bourgogne-express-route-grand-crus'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/bourgogne-express-route-grand-crus/dc2f4b00-102c-4305-9f1b-f18851bd24ca</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/bourgogne-express-route-grand-crus/dc2f4b00-102c-4305-9f1b-f18851bd24ca'>🔗</a></td>
     </tr>
     <tr>
       <td>Bretagne</td>
@@ -581,7 +587,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2026-07-25</td>
       <td>2026-07-29</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/bretagne-quiberon-belle-ile'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/bretagne-quiberon-belle-ile/5d5bea6a-d9c1-4759-884a-c3b5cae8e31c</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/bretagne-quiberon-belle-ile/5d5bea6a-d9c1-4759-884a-c3b5cae8e31c'>🔗</a></td>
     </tr>
     <tr>
       <td>France</td>
@@ -594,7 +601,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2026-04-03</td>
       <td>2026-04-07</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/mediterranee-express-montpellier-sete-camargue'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/mediterranee-express-montpellier-sete-camargue/cb56f7b5-be01-40e8-a7de-e5daaa3c881d</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/mediterranee-express-montpellier-sete-camargue/cb56f7b5-be01-40e8-a7de-e5daaa3c881d'>🔗</a></td>
     </tr>
     <tr>
       <td>Corfou</td>
@@ -607,7 +615,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge default'>ALMOST_FULL</span></td>
       <td>2025-09-14</td>
       <td>2025-09-21</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/corfou-360'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/corfou-360/9d44fecc-3467-4a0f-b668-c1cd49f0e9c3</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/corfou-360/9d44fecc-3467-4a0f-b668-c1cd49f0e9c3'>🔗</a></td>
     </tr>
     <tr>
       <td>Crète</td>
@@ -620,7 +629,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge default'>WAITING</span></td>
       <td>2025-09-13</td>
       <td>2025-09-20</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/crete-beach-life'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/crete-beach-life/151b04d2-e13f-421a-a398-abc9861657da</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/crete-beach-life/151b04d2-e13f-421a-a398-abc9861657da'>🔗</a></td>
     </tr>
     <tr>
       <td>Grecia</td>
@@ -633,7 +643,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge default'>SOLD&nbsp;OUT</span></td>
       <td>2025-09-14</td>
       <td>2025-09-21</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/grece-360-athenes-meteores-peloponnese'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/grece-360-athenes-meteores-peloponnese/57cacbf8-6ddd-4c2c-a68c-82eb85b4c3ed</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/grece-360-athenes-meteores-peloponnese/57cacbf8-6ddd-4c2c-a68c-82eb85b4c3ed'>🔗</a></td>
     </tr>
     <tr>
       <td>Guatemala</td>
@@ -646,7 +657,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
       <td>2025-10-01</td>
       <td>2025-10-12</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/guatemala-volcans-nature-cultures-anciennes'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/guatemala-volcans-nature-cultures-anciennes/d474d722-e01f-4ed9-92c4-ae89a702a7f9</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/guatemala-volcans-nature-cultures-anciennes/d474d722-e01f-4ed9-92c4-ae89a702a7f9'>🔗</a></td>
     </tr>
     <tr>
       <td>Géorgie</td>
@@ -659,7 +671,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2025-12-28</td>
       <td>2026-01-02</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/georgie-caucase-ski-snowboard'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/georgie-caucase-ski-snowboard/bacb86c1-cfdb-4691-893b-593ddd94b1a9</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/georgie-caucase-ski-snowboard/bacb86c1-cfdb-4691-893b-593ddd94b1a9'>🔗</a></td>
     </tr>
     <tr>
       <td>Hongrie</td>
@@ -672,7 +685,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-10-29</td>
       <td>2025-11-02</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/budapest-express'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/budapest-express/c2cdb0e5-7d03-447d-8cbe-c867b2e02c61</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/budapest-express/c2cdb0e5-7d03-447d-8cbe-c867b2e02c61'>🔗</a></td>
     </tr>
     <tr>
       <td>Hungary</td>
@@ -685,7 +699,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-12-13</td>
       <td>2025-12-19</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/prague-budapest-marches-noel-weroadx'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/prague-budapest-marches-noel-weroadx/5f0863ec-25a3-42b2-9738-7bfb27a5e7ee</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/prague-budapest-marches-noel-weroadx/5f0863ec-25a3-42b2-9738-7bfb27a5e7ee'>🔗</a></td>
     </tr>
     <tr>
       <td>Inde</td>
@@ -698,7 +713,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-09-26</td>
       <td>2025-10-04</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/inde-rajasthan-taj-mahal'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/inde-rajasthan-taj-mahal/08c99925-1059-4f3a-9d34-a737157c5e11</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/inde-rajasthan-taj-mahal/08c99925-1059-4f3a-9d34-a737157c5e11'>🔗</a></td>
     </tr>
     <tr>
       <td>INDONÉSIE</td>
@@ -711,7 +727,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2026-06-03</td>
       <td>2026-06-10</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/bali-360'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/bali-360/cc638763-0322-4393-bc0f-c6a217624507</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/bali-360/cc638763-0322-4393-bc0f-c6a217624507'>🔗</a></td>
     </tr>
     <tr>
       <td>Indonesie</td>
@@ -724,7 +741,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge default'>WAITING</span></td>
       <td>2025-09-05</td>
       <td>2025-09-14</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/indonesie-bali-lombok-java-nusa-penida'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/indonesie-bali-lombok-java-nusa-penida/d0b065fd-904f-4676-97d6-44355c8075bb</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/indonesie-bali-lombok-java-nusa-penida/d0b065fd-904f-4676-97d6-44355c8075bb'>🔗</a></td>
     </tr>
     <tr>
       <td>Indonésie</td>
@@ -737,7 +755,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2025-11-21</td>
       <td>2025-11-29</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/bali-gili-indonesie-tropicale-eau-turquoise'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/bali-gili-indonesie-tropicale-eau-turquoise/cf7b2440-b096-49db-93bc-a63d02147298</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/bali-gili-indonesie-tropicale-eau-turquoise/cf7b2440-b096-49db-93bc-a63d02147298'>🔗</a></td>
     </tr>
     <tr>
       <td>Irlande</td>
@@ -750,7 +769,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2026-03-03</td>
       <td>2026-03-08</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/irlande-express-tour-dublin-galway-connemara-weroadx'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/irlande-express-tour-dublin-galway-connemara-weroadx/e0cd8b57-38b3-4c5b-86bc-d62707bc876b</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/irlande-express-tour-dublin-galway-connemara-weroadx/e0cd8b57-38b3-4c5b-86bc-d62707bc876b'>🔗</a></td>
     </tr>
     <tr>
       <td>Islande</td>
@@ -763,7 +783,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2026-03-11</td>
       <td>2026-03-15</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/islande-express'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/islande-express/d898ced6-2b42-4c17-b767-4a831b07989c</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/islande-express/d898ced6-2b42-4c17-b767-4a831b07989c'>🔗</a></td>
     </tr>
     <tr>
       <td>Dolomites</td>
@@ -776,7 +797,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
       <td>2025-09-27</td>
       <td>2025-10-04</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/dolomites'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/dolomites/cd862058-7484-4ee5-b21b-7152baf7951f</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/dolomites/cd862058-7484-4ee5-b21b-7152baf7951f'>🔗</a></td>
     </tr>
     <tr>
       <td>Italie</td>
@@ -789,7 +811,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2026-02-12</td>
       <td>2026-02-16</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/italie-carnaval-venise-masques-aperitivo'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/italie-carnaval-venise-masques-aperitivo/9d104808-b7d6-4ebe-b63a-6338d095d374</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/italie-carnaval-venise-masques-aperitivo/9d104808-b7d6-4ebe-b63a-6338d095d374'>🔗</a></td>
     </tr>
     <tr>
       <td>Naples & la côte Amalfitaine</td>
@@ -802,7 +825,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-09-27</td>
       <td>2025-10-01</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/naples-cote-amalfitaine'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/naples-cote-amalfitaine/d89f2758-79ec-4f9d-89c6-5bf9c0d317bc</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/naples-cote-amalfitaine/d89f2758-79ec-4f9d-89c6-5bf9c0d317bc'>🔗</a></td>
     </tr>
     <tr>
       <td>Pouilles</td>
@@ -815,7 +839,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-09-27</td>
       <td>2025-10-04</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/pouilles-360'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/pouilles-360/090b8ef2-dd13-4002-b1ef-9ec04e9a9907</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/pouilles-360/090b8ef2-dd13-4002-b1ef-9ec04e9a9907'>🔗</a></td>
     </tr>
     <tr>
       <td>Sardaigne</td>
@@ -828,7 +853,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-09-26</td>
       <td>2025-10-03</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/sardaigne'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/sardaigne/5e78d21a-3663-46ac-b06f-518bb06c4cf7</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/sardaigne/5e78d21a-3663-46ac-b06f-518bb06c4cf7'>🔗</a></td>
     </tr>
     <tr>
       <td>Sicile</td>
@@ -841,7 +867,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2025-09-12</td>
       <td>2025-09-19</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/sicile-favignana-san-vito-lo-capo-zingaro'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/sicile-favignana-san-vito-lo-capo-zingaro/ed3ff8f4-7f8d-4954-82d0-e24cc2d20fdf</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/sicile-favignana-san-vito-lo-capo-zingaro/ed3ff8f4-7f8d-4954-82d0-e24cc2d20fdf'>🔗</a></td>
     </tr>
     <tr>
       <td>Japon</td>
@@ -854,7 +881,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
       <td>2025-09-26</td>
       <td>2025-10-06</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/japon-360'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/japon-360/a5da9bc1-f6ff-48ee-bd83-c7e58a0752c9</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/japon-360/a5da9bc1-f6ff-48ee-bd83-c7e58a0752c9'>🔗</a></td>
     </tr>
     <tr>
       <td>Jordanie</td>
@@ -867,7 +895,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
       <td>2025-09-06</td>
       <td>2025-09-13</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/jordanie-360'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/jordanie-360/afcab481-8862-453c-8b0b-df94fe52dce2</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/jordanie-360/afcab481-8862-453c-8b0b-df94fe52dce2'>🔗</a></td>
     </tr>
     <tr>
       <td>Kazakhstan</td>
@@ -880,7 +909,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-10-11</td>
       <td>2025-10-19</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/kazakhstan-almaty-turkestan-desert-4x4'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/kazakhstan-almaty-turkestan-desert-4x4/eb8f9a24-77ff-46e8-9d80-f2c28c5717b6</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/kazakhstan-almaty-turkestan-desert-4x4/eb8f9a24-77ff-46e8-9d80-f2c28c5717b6'>🔗</a></td>
     </tr>
     <tr>
       <td>Kenya</td>
@@ -893,7 +923,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-11-23</td>
       <td>2025-12-02</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/kenya-afrique-safari-plage-village'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/kenya-afrique-safari-plage-village/47543c07-3a00-4029-913d-da11f9d9d789</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/kenya-afrique-safari-plage-village/47543c07-3a00-4029-913d-da11f9d9d789'>🔗</a></td>
     </tr>
     <tr>
       <td>Kirghizistan</td>
@@ -906,7 +937,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-09-28</td>
       <td>2025-10-06</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/kirghizistan-winter'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/kirghizistan-winter/541ca4fc-cf41-4cb7-9a5a-c599eb83b6f8</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/kirghizistan-winter/541ca4fc-cf41-4cb7-9a5a-c599eb83b6f8'>🔗</a></td>
     </tr>
     <tr>
       <td>Malaisie</td>
@@ -919,7 +951,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2026-03-29</td>
       <td>2026-04-09</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/malaisie-nature-ile'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/malaisie-nature-ile/c37b0913-06fc-4049-8953-3b73e3430880</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/malaisie-nature-ile/c37b0913-06fc-4049-8953-3b73e3430880'>🔗</a></td>
     </tr>
     <tr>
       <td>Maldives</td>
@@ -932,7 +965,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
       <td>2026-02-08</td>
       <td>2026-02-15</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/maldives-beach-life-detente-snorkeling-maafushi'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/maldives-beach-life-detente-snorkeling-maafushi/04c9b0b2-fc7f-4100-8174-58a62de3d2f6</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/maldives-beach-life-detente-snorkeling-maafushi/04c9b0b2-fc7f-4100-8174-58a62de3d2f6'>🔗</a></td>
     </tr>
     <tr>
       <td>Malte</td>
@@ -945,7 +979,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
       <td>2025-09-19</td>
       <td>2025-09-24</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/malte-express-gozo-comino'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/malte-express-gozo-comino/562901ce-50c2-426f-9b47-479ea882d372</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/malte-express-gozo-comino/562901ce-50c2-426f-9b47-479ea882d372'>🔗</a></td>
     </tr>
     <tr>
       <td>Maroc</td>
@@ -958,7 +993,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-09-27</td>
       <td>2025-10-01</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/maroc-trekking-mount-toubkal'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/maroc-trekking-mount-toubkal/4310fa36-bb29-48fb-856e-359806887f88</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/maroc-trekking-mount-toubkal/4310fa36-bb29-48fb-856e-359806887f88'>🔗</a></td>
     </tr>
     <tr>
       <td>Maurice</td>
@@ -971,7 +1007,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2026-02-22</td>
       <td>2026-03-01</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/ile-maurice-beach-life-road-trip-plages-aventure'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/ile-maurice-beach-life-road-trip-plages-aventure/16df8b33-89b1-43a4-ad3b-3cb1422e6475</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/ile-maurice-beach-life-road-trip-plages-aventure/16df8b33-89b1-43a4-ad3b-3cb1422e6475'>🔗</a></td>
     </tr>
     <tr>
       <td>Mexique</td>
@@ -984,7 +1021,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2026-01-03</td>
       <td>2026-01-10</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/mexique-yucatan-beach-life'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/mexique-yucatan-beach-life/0b25142d-a8c0-4876-b686-09a5a65c2bec</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/mexique-yucatan-beach-life/0b25142d-a8c0-4876-b686-09a5a65c2bec'>🔗</a></td>
     </tr>
     <tr>
       <td>Namibie</td>
@@ -997,7 +1035,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2026-07-10</td>
       <td>2026-07-20</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/namibie'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/namibie/61f10893-a458-417d-a0ff-b8bc29bf418a</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/namibie/61f10893-a458-417d-a0ff-b8bc29bf418a'>🔗</a></td>
     </tr>
     <tr>
       <td>Nicaragua</td>
@@ -1010,7 +1049,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2026-01-20</td>
       <td>2026-01-31</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/nicaragua-aventure-lacs-volcans'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/nicaragua-aventure-lacs-volcans/6581d368-826f-46c2-a893-664aa3666c3f</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/nicaragua-aventure-lacs-volcans/6581d368-826f-46c2-a893-664aa3666c3f'>🔗</a></td>
     </tr>
     <tr>
       <td>Norvège</td>
@@ -1023,7 +1063,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-12-29</td>
       <td>2026-01-04</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/norvege-lofoten-aurore-boreales'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/norvege-lofoten-aurore-boreales/0f479dd1-e9b6-40ec-9576-8eed660fa474</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/norvege-lofoten-aurore-boreales/0f479dd1-e9b6-40ec-9576-8eed660fa474'>🔗</a></td>
     </tr>
     <tr>
       <td>Nouvelle-Zélande</td>
@@ -1036,7 +1077,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
       <td>2025-11-18</td>
       <td>2025-12-01</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/nouvelle-zelande-360'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/nouvelle-zelande-360/71f6cafe-68e7-4353-8896-7abffce8ad52</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/nouvelle-zelande-360/71f6cafe-68e7-4353-8896-7abffce8ad52'>🔗</a></td>
     </tr>
     <tr>
       <td>Népal</td>
@@ -1049,7 +1091,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
       <td>2025-10-19</td>
       <td>2025-10-27</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/nepal'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/nepal/09858358-b277-4895-97c7-edb8b98ebe3e</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/nepal/09858358-b277-4895-97c7-edb8b98ebe3e'>🔗</a></td>
     </tr>
     <tr>
       <td>Oman</td>
@@ -1062,7 +1105,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
       <td>2025-11-07</td>
       <td>2025-11-15</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/oman'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/oman/77ce635f-0502-479d-afc6-6b51f8f4d033</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/oman/77ce635f-0502-479d-afc6-6b51f8f4d033'>🔗</a></td>
     </tr>
     <tr>
       <td>Ouzbékistan</td>
@@ -1075,7 +1119,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge default'>WAITING</span></td>
       <td>2025-09-21</td>
       <td>2025-09-29</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/ouzbekistan-tachkent-samarkand-360'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/ouzbekistan-tachkent-samarkand-360/83f3e4d5-0674-4453-b714-7cfb349bab8c</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/ouzbekistan-tachkent-samarkand-360/83f3e4d5-0674-4453-b714-7cfb349bab8c'>🔗</a></td>
     </tr>
     <tr>
       <td>Panamá</td>
@@ -1088,7 +1133,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-12-26</td>
       <td>2026-01-04</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/panama-beach-life-san-blas-bocas-del-toro'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/panama-beach-life-san-blas-bocas-del-toro/ca12031b-f919-40f6-b4e4-6c93e8c50516</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/panama-beach-life-san-blas-bocas-del-toro/ca12031b-f919-40f6-b4e4-6c93e8c50516'>🔗</a></td>
     </tr>
     <tr>
       <td>Philippines</td>
@@ -1101,7 +1147,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2026-05-10</td>
       <td>2026-05-22</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/philippines-360'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/philippines-360/d49cefea-e595-4b75-a68f-6dff13374c5a</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/philippines-360/d49cefea-e595-4b75-a68f-6dff13374c5a'>🔗</a></td>
     </tr>
     <tr>
       <td>Madère</td>
@@ -1114,7 +1161,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2025-09-26</td>
       <td>2025-10-03</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/madere-360'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/madere-360/34c660d6-804e-41f6-90bf-3cab644b7870</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/madere-360/34c660d6-804e-41f6-90bf-3cab644b7870'>🔗</a></td>
     </tr>
     <tr>
       <td>Portugal</td>
@@ -1127,7 +1175,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2025-11-06</td>
       <td>2025-11-10</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/portugal-express'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/portugal-express/5f928c79-9649-480e-9d9a-0bb5e3826de3</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/portugal-express/5f928c79-9649-480e-9d9a-0bb5e3826de3'>🔗</a></td>
     </tr>
     <tr>
       <td>le Portugal</td>
@@ -1140,7 +1189,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-09-28</td>
       <td>2025-10-05</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/portugal-algarve-lisbonne'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/portugal-algarve-lisbonne/a8166e8a-3c9d-4ebe-9cb2-f8054daa5190</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/portugal-algarve-lisbonne/a8166e8a-3c9d-4ebe-9cb2-f8054daa5190'>🔗</a></td>
     </tr>
     <tr>
       <td>Pérou</td>
@@ -1153,7 +1203,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge default'>SOLD&nbsp;OUT</span></td>
       <td>2025-09-07</td>
       <td>2025-09-18</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/perou-360'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/perou-360/1fbc1234-869a-4e05-8800-124e2b0432e3</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/perou-360/1fbc1234-869a-4e05-8800-124e2b0432e3'>🔗</a></td>
     </tr>
     <tr>
       <td>Romania</td>
@@ -1166,7 +1217,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
       <td>2025-09-17</td>
       <td>2025-09-21</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/transylvanie-express-route-comte-dracula'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/transylvanie-express-route-comte-dracula/8a2982d2-c24c-4361-8101-f6a4fbb9e5ef</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/transylvanie-express-route-comte-dracula/8a2982d2-c24c-4361-8101-f6a4fbb9e5ef'>🔗</a></td>
     </tr>
     <tr>
       <td>Écosse</td>
@@ -1179,7 +1231,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-09-25</td>
       <td>2025-09-29</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/Ecosse-express-edimbourg-highlands'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/Ecosse-express-edimbourg-highlands/6ff88504-1177-48bc-b5cc-932725dd1d79</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/Ecosse-express-edimbourg-highlands/6ff88504-1177-48bc-b5cc-932725dd1d79'>🔗</a></td>
     </tr>
     <tr>
       <td>Réunion</td>
@@ -1192,7 +1245,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-12-15</td>
       <td>2025-12-22</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/ile-reunion-cirques-volcan-plages'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/ile-reunion-cirques-volcan-plages/1d152290-dbfc-413e-baee-48ddcd2a4ffb</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/ile-reunion-cirques-volcan-plages/1d152290-dbfc-413e-baee-48ddcd2a4ffb'>🔗</a></td>
     </tr>
     <tr>
       <td>Slovénie</td>
@@ -1205,7 +1259,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge default'>ALMOST_FULL</span></td>
       <td>2025-09-23</td>
       <td>2025-09-28</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/slovenie-360'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/slovenie-360/51571407-697c-4137-bd98-6a5a32404bff</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/slovenie-360/51571407-697c-4137-bd98-6a5a32404bff'>🔗</a></td>
     </tr>
     <tr>
       <td>Sri Lanka</td>
@@ -1218,7 +1273,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge default'>SOLD&nbsp;OUT</span></td>
       <td>2025-09-01</td>
       <td>2025-09-12</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/sri-lanka-360-ete'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/sri-lanka-360-ete/cd29383d-b82d-4c3b-a062-052b18c87d3f</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/sri-lanka-360-ete/cd29383d-b82d-4c3b-a062-052b18c87d3f'>🔗</a></td>
     </tr>
     <tr>
       <td>Suisse</td>
@@ -1231,7 +1287,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-10-22</td>
       <td>2025-10-26</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/suisse-express-alpes-lacs-montagnes'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/suisse-express-alpes-lacs-montagnes/28df726d-d517-4b7c-8072-a9c1ff638411</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/suisse-express-alpes-lacs-montagnes/28df726d-d517-4b7c-8072-a9c1ff638411'>🔗</a></td>
     </tr>
     <tr>
       <td>Suède</td>
@@ -1244,7 +1301,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2025-12-30</td>
       <td>2026-01-03</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/suede-lulea-laponie'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/suede-lulea-laponie/914ba73f-ceab-4cd8-92f4-f966f0ed37db</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/suede-lulea-laponie/914ba73f-ceab-4cd8-92f4-f966f0ed37db'>🔗</a></td>
     </tr>
     <tr>
       <td>Sénégal</td>
@@ -1257,7 +1315,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-11-02</td>
       <td>2025-11-11</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/senegal-entre-terre-et-fleuve'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/senegal-entre-terre-et-fleuve/14011cbd-6e8f-4ca5-861c-5c389da9fbed</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/senegal-entre-terre-et-fleuve/14011cbd-6e8f-4ca5-861c-5c389da9fbed'>🔗</a></td>
     </tr>
     <tr>
       <td>Tanzanie</td>
@@ -1270,7 +1329,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-12-26</td>
       <td>2026-01-05</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/kilimandjaro-trekking-lemosho-route-safari'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/kilimandjaro-trekking-lemosho-route-safari/2cf26f9c-b039-4e59-939c-4666e92acd44</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/kilimandjaro-trekking-lemosho-route-safari/2cf26f9c-b039-4e59-939c-4666e92acd44'>🔗</a></td>
     </tr>
     <tr>
       <td>Tchéquie</td>
@@ -1283,7 +1343,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-10-11</td>
       <td>2025-10-17</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/europe-prague-vienne-budapest-weroadx'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/europe-prague-vienne-budapest-weroadx/ee1e9275-45f4-4120-a2b4-0dedbe5d3d65</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/europe-prague-vienne-budapest-weroadx/ee1e9275-45f4-4120-a2b4-0dedbe5d3d65'>🔗</a></td>
     </tr>
     <tr>
       <td>Thailande</td>
@@ -1296,7 +1357,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
       <td>2025-09-11</td>
       <td>2025-09-22</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/thailande-360-ete'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/thailande-360-ete/e3f05c52-64db-42c9-a457-8b25c6fb177e</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/thailande-360-ete/e3f05c52-64db-42c9-a457-8b25c6fb177e'>🔗</a></td>
     </tr>
     <tr>
       <td>Thaïlande</td>
@@ -1309,7 +1371,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2026-01-15</td>
       <td>2026-01-24</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/thailande-plage-hiver'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/thailande-plage-hiver/0aa75913-2a0b-4e4c-a3d9-fea3deb052a4</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/thailande-plage-hiver/0aa75913-2a0b-4e4c-a3d9-fea3deb052a4'>🔗</a></td>
     </tr>
     <tr>
       <td>Tunisie</td>
@@ -1322,7 +1385,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-10-15</td>
       <td>2025-10-19</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/tunisie-express-djerba-detente-culture'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/tunisie-express-djerba-detente-culture/a36141f8-fe71-4213-9468-4434f3e031b6</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/tunisie-express-djerba-detente-culture/a36141f8-fe71-4213-9468-4434f3e031b6'>🔗</a></td>
     </tr>
     <tr>
       <td>Istanbul</td>
@@ -1335,7 +1399,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-09-17</td>
       <td>2025-09-21</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/istanbul-express'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/istanbul-express/78553c0f-2e64-4b94-bf07-152ba50a0bcb</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/istanbul-express/78553c0f-2e64-4b94-bf07-152ba50a0bcb'>🔗</a></td>
     </tr>
     <tr>
       <td>Istanbul & Cappadoce</td>
@@ -1348,7 +1413,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-09-19</td>
       <td>2025-09-26</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/istanbul-cappadoce'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/istanbul-cappadoce/9f065672-d538-4d64-b27e-077f0e867b88</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/istanbul-cappadoce/9f065672-d538-4d64-b27e-077f0e867b88'>🔗</a></td>
     </tr>
     <tr>
       <td>Turquie</td>
@@ -1361,7 +1427,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2026-05-01</td>
       <td>2026-05-09</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/turquie-istanbul-cappadoce-ephese'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/turquie-istanbul-cappadoce-ephese/597a75fe-83b7-428f-8942-c5c5e6959ce1</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/turquie-istanbul-cappadoce-ephese/597a75fe-83b7-428f-8942-c5c5e6959ce1'>🔗</a></td>
     </tr>
     <tr>
       <td>Vietnam</td>
@@ -1374,7 +1441,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2026-03-07</td>
       <td>2026-03-16</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/vietnam-backpack'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/vietnam-backpack/3fe8d53b-1989-4731-9c7c-30b8a01cd8f0</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/vietnam-backpack/3fe8d53b-1989-4731-9c7c-30b8a01cd8f0'>🔗</a></td>
     </tr>
     <tr>
       <td>Égypte</td>
@@ -1387,7 +1455,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2025-12-05</td>
       <td>2025-12-09</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/le-caire-express-egypt'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/le-caire-express-egypt/bfe5c5e8-2c20-4761-9093-e5941d18325c</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/le-caire-express-egypt/bfe5c5e8-2c20-4761-9093-e5941d18325c'>🔗</a></td>
     </tr>
     <tr>
       <td>Émirats Arabes Unis</td>
@@ -1400,7 +1469,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2025-10-17</td>
       <td>2025-10-23</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/dubai-abou-dhabi-desert'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/dubai-abou-dhabi-desert/ea5c696d-41ec-4831-8b2e-65f6d10205f1</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/dubai-abou-dhabi-desert/ea5c696d-41ec-4831-8b2e-65f6d10205f1'>🔗</a></td>
     </tr>
     <tr>
       <td>Équateur</td>
@@ -1413,7 +1483,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge default'>WAITING</span></td>
       <td>2025-09-05</td>
       <td>2025-09-19</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/equateur-galapogos-amazonie'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/equateur-galapogos-amazonie/7e4307e1-1821-426e-bcaa-ccb4120a2a56</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/equateur-galapogos-amazonie/7e4307e1-1821-426e-bcaa-ccb4120a2a56'>🔗</a></td>
     </tr>
     <tr>
       <td>Équateur & Amazonie</td>
@@ -1426,7 +1497,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
       <td>2025-11-19</td>
       <td>2025-11-29</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/equateur-et-amazonie'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/equateur-et-amazonie/cc3d1845-1f91-4944-9ee4-312a8ab36bf8</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/equateur-et-amazonie/cc3d1845-1f91-4944-9ee4-312a8ab36bf8'>🔗</a></td>
     </tr>
     <tr>
       <td>Floride</td>
@@ -1439,7 +1511,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
       <td>2025-11-09</td>
       <td>2025-11-18</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/floride'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/floride/c763c529-259d-4aa7-a56d-eedb7277cd0d</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/floride/c763c529-259d-4aa7-a56d-eedb7277cd0d'>🔗</a></td>
     </tr>
     <tr>
       <td>New York</td>
@@ -1452,7 +1525,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-09-28</td>
       <td>2025-10-03</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/new-york'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/new-york/be94222b-4570-4efc-abc5-e9fffca1ace0</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/new-york/be94222b-4570-4efc-abc5-e9fffca1ace0'>🔗</a></td>
     </tr>
     <tr>
       <td>Route 66</td>
@@ -1465,7 +1539,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge default'>SOLD&nbsp;OUT</span></td>
       <td>2025-09-12</td>
       <td>2025-09-26</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/road-trip-route-66-chicago-los-angeles'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/road-trip-route-66-chicago-los-angeles/e6b8bddc-1bc1-4087-a6ba-dc460de73139</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/road-trip-route-66-chicago-los-angeles/e6b8bddc-1bc1-4087-a6ba-dc460de73139'>🔗</a></td>
     </tr>
     <tr>
       <td>États-Unis</td>
@@ -1478,7 +1553,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
       <td>2025-10-26</td>
       <td>2025-11-06</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/far-west-360'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/far-west-360/737ac5d4-4aa4-4ea0-8689-996f9835ca89</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/far-west-360/737ac5d4-4aa4-4ea0-8689-996f9835ca89'>🔗</a></td>
     </tr>
   </tbody>
 </table>
@@ -1499,6 +1575,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <th>discount_pct</th>
       <th>sales_status</th>
       <th>best_starting_date</th>
+      <th>url_precise</th>
       <th>url</th>
     </tr>
   </thead>
@@ -1512,7 +1589,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge default'>ALMOST_FULL</span></td>
       <td>2025-08-31</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/islande-expedition'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/islande-expedition/5f3339d6-7b58-4a8f-a3cc-6b6194015a03</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/islande-expedition/5f3339d6-7b58-4a8f-a3cc-6b6194015a03'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-08</td>
@@ -1523,7 +1601,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>17.8%</td>
       <td><span class='rp-badge default'>SOLD&nbsp;OUT</span></td>
       <td>2025-08-29</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/islande-360-ete'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/islande-360-ete/383a8efe-d171-43f0-8c13-40ab3475ec83</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/islande-360-ete/383a8efe-d171-43f0-8c13-40ab3475ec83'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-09</td>
@@ -1534,7 +1613,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>6.0%</td>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
       <td>2025-09-17</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/transylvanie-express-route-comte-dracula'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/transylvanie-express-route-comte-dracula/8a2982d2-c24c-4361-8101-f6a4fbb9e5ef</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/transylvanie-express-route-comte-dracula/8a2982d2-c24c-4361-8101-f6a4fbb9e5ef'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-09</td>
@@ -1545,7 +1625,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>20.0%</td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-09-27</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/maroc-trekking-mount-toubkal'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/maroc-trekking-mount-toubkal/4310fa36-bb29-48fb-856e-359806887f88</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/maroc-trekking-mount-toubkal/4310fa36-bb29-48fb-856e-359806887f88'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-09</td>
@@ -1556,7 +1637,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>5.8%</td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-09-27</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/naples-cote-amalfitaine'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/naples-cote-amalfitaine/d89f2758-79ec-4f9d-89c6-5bf9c0d317bc</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/naples-cote-amalfitaine/d89f2758-79ec-4f9d-89c6-5bf9c0d317bc'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-09</td>
@@ -1567,7 +1649,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>20.0%</td>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
       <td>2025-09-23</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/maroc-marrakech-essaouira-desert'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/maroc-marrakech-essaouira-desert/95e7a0a0-1110-4737-a411-b4b710b8dcd8</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/maroc-marrakech-essaouira-desert/95e7a0a0-1110-4737-a411-b4b710b8dcd8'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-09</td>
@@ -1578,7 +1661,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>5.0%</td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-09-17</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/istanbul-express'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/istanbul-express/78553c0f-2e64-4b94-bf07-152ba50a0bcb</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/istanbul-express/78553c0f-2e64-4b94-bf07-152ba50a0bcb'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-09</td>
@@ -1589,7 +1673,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>20.0%</td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-09-23</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/albanie-tirana-plages-sud'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/albanie-tirana-plages-sud/d117ece9-bd9e-494a-bae7-281d52d89619</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/albanie-tirana-plages-sud/d117ece9-bd9e-494a-bae7-281d52d89619'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-09</td>
@@ -1600,7 +1685,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>20.0%</td>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
       <td>2025-09-19</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/malte-express-gozo-comino'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/malte-express-gozo-comino/562901ce-50c2-426f-9b47-479ea882d372</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/malte-express-gozo-comino/562901ce-50c2-426f-9b47-479ea882d372'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-09</td>
@@ -1611,7 +1697,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>12.0%</td>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
       <td>2025-09-12</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/maroc-marrakech-fes-rabat-desert'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/maroc-marrakech-fes-rabat-desert/2e17500f-c6fb-4880-949e-390fd175f648</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/maroc-marrakech-fes-rabat-desert/2e17500f-c6fb-4880-949e-390fd175f648'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-09</td>
@@ -1622,7 +1709,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>17.8%</td>
       <td><span class='rp-badge default'>ALMOST_FULL</span></td>
       <td>2025-09-14</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/corfou-360'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/corfou-360/9d44fecc-3467-4a0f-b668-c1cd49f0e9c3</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/corfou-360/9d44fecc-3467-4a0f-b668-c1cd49f0e9c3'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-09</td>
@@ -1633,7 +1721,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
       <td>2025-09-17</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/maroc'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/maroc/ac582f74-41af-464c-84e8-cb1ab505c18f</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/maroc/ac582f74-41af-464c-84e8-cb1ab505c18f'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-09</td>
@@ -1644,7 +1733,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>20.0%</td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-09-28</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/new-york'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/new-york/be94222b-4570-4efc-abc5-e9fffca1ace0</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/new-york/be94222b-4570-4efc-abc5-e9fffca1ace0'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-09</td>
@@ -1655,7 +1745,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>5.6%</td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-09-25</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/Ecosse-express-edimbourg-highlands'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/Ecosse-express-edimbourg-highlands/6ff88504-1177-48bc-b5cc-932725dd1d79</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/Ecosse-express-edimbourg-highlands/6ff88504-1177-48bc-b5cc-932725dd1d79'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-09</td>
@@ -1666,7 +1757,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>10.0%</td>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
       <td>2025-09-06</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/jordanie-360'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/jordanie-360/afcab481-8862-453c-8b0b-df94fe52dce2</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/jordanie-360/afcab481-8862-453c-8b0b-df94fe52dce2'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-09</td>
@@ -1677,7 +1769,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>10.0%</td>
       <td><span class='rp-badge default'>SOLD&nbsp;OUT</span></td>
       <td>2025-09-01</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/sri-lanka-360-ete'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/sri-lanka-360-ete/cd29383d-b82d-4c3b-a062-052b18c87d3f</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/sri-lanka-360-ete/cd29383d-b82d-4c3b-a062-052b18c87d3f'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-09</td>
@@ -1688,7 +1781,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>18.2%</td>
       <td><span class='rp-badge default'>WAITING</span></td>
       <td>2025-09-05</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/indonesie-bali-lombok-java-nusa-penida'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/indonesie-bali-lombok-java-nusa-penida/d0b065fd-904f-4676-97d6-44355c8075bb</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/indonesie-bali-lombok-java-nusa-penida/d0b065fd-904f-4676-97d6-44355c8075bb'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-10</td>
@@ -1699,7 +1793,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-10-29</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/budapest-express'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/budapest-express/c2cdb0e5-7d03-447d-8cbe-c867b2e02c61</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/budapest-express/c2cdb0e5-7d03-447d-8cbe-c867b2e02c61'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-10</td>
@@ -1710,7 +1805,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-10-15</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/tunisie-express-djerba-detente-culture'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/tunisie-express-djerba-detente-culture/a36141f8-fe71-4213-9468-4434f3e031b6</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/tunisie-express-djerba-detente-culture/a36141f8-fe71-4213-9468-4434f3e031b6'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-10</td>
@@ -1721,7 +1817,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>5.6%</td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-10-11</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/europe-prague-vienne-budapest-weroadx'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/europe-prague-vienne-budapest-weroadx/ee1e9275-45f4-4120-a2b4-0dedbe5d3d65</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/europe-prague-vienne-budapest-weroadx/ee1e9275-45f4-4120-a2b4-0dedbe5d3d65'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-10</td>
@@ -1732,7 +1829,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2025-10-18</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/chateaux-loire-express-blois-amboise-tours'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/chateaux-loire-express-blois-amboise-tours/7e1b847d-3a09-4e7a-b59d-fd565fa3f764</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/chateaux-loire-express-blois-amboise-tours/7e1b847d-3a09-4e7a-b59d-fd565fa3f764'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-10</td>
@@ -1743,7 +1841,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-10-25</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/pays-baltes-tallinn-riga-vilnius'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/pays-baltes-tallinn-riga-vilnius/4233778c-476f-4887-8f15-6c0bcda166ca</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/pays-baltes-tallinn-riga-vilnius/4233778c-476f-4887-8f15-6c0bcda166ca'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-10</td>
@@ -1754,7 +1853,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-10-22</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/suisse-express-alpes-lacs-montagnes'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/suisse-express-alpes-lacs-montagnes/28df726d-d517-4b7c-8072-a9c1ff638411</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/suisse-express-alpes-lacs-montagnes/28df726d-d517-4b7c-8072-a9c1ff638411'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-10</td>
@@ -1765,7 +1865,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2025-10-26</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/rome-chianti-florence-luques-pise'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/rome-chianti-florence-luques-pise/bb439071-6ea1-4311-8017-092346b1aa36</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/rome-chianti-florence-luques-pise/bb439071-6ea1-4311-8017-092346b1aa36'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-10</td>
@@ -1776,7 +1877,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
       <td>2025-10-19</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/nepal'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/nepal/09858358-b277-4895-97c7-edb8b98ebe3e</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/nepal/09858358-b277-4895-97c7-edb8b98ebe3e'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-10</td>
@@ -1787,7 +1889,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-10-11</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/fuerteventura-lanzarote-plages-volcans'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/fuerteventura-lanzarote-plages-volcans/67e0eec3-90ff-4856-9dce-57691558b87d</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/fuerteventura-lanzarote-plages-volcans/67e0eec3-90ff-4856-9dce-57691558b87d'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-10</td>
@@ -1798,7 +1901,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-10-12</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/ibiza-formentera-baleares'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/ibiza-formentera-baleares/3527020b-7f01-4028-a0c4-63035ed07ea9</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/ibiza-formentera-baleares/3527020b-7f01-4028-a0c4-63035ed07ea9'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-10</td>
@@ -1809,7 +1913,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>12.0%</td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2025-10-04</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/maroc-surf-ocean-desert'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/maroc-surf-ocean-desert/665e3872-06c6-4ca7-b2c6-b2c127e42410</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/maroc-surf-ocean-desert/665e3872-06c6-4ca7-b2c6-b2c127e42410'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-10</td>
@@ -1820,7 +1925,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-10-04</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/sicile-palerme-san-vito'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/sicile-palerme-san-vito/52eddb48-7798-4b5c-8798-3fc4656441e9</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/sicile-palerme-san-vito/52eddb48-7798-4b5c-8798-3fc4656441e9'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-10</td>
@@ -1831,7 +1937,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2025-10-17</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/dubai-abou-dhabi-desert'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/dubai-abou-dhabi-desert/ea5c696d-41ec-4831-8b2e-65f6d10205f1</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/dubai-abou-dhabi-desert/ea5c696d-41ec-4831-8b2e-65f6d10205f1'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-10</td>
@@ -1842,7 +1949,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2025-10-29</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/barcelone-costa-brava-360'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/barcelone-costa-brava-360/821e1e1e-bdcb-442a-bf67-d1423fd2b452</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/barcelone-costa-brava-360/821e1e1e-bdcb-442a-bf67-d1423fd2b452'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-10</td>
@@ -1853,7 +1961,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-10-30</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/islande-aurores-boreales'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/islande-aurores-boreales/7c8a9c13-6755-4bf5-921d-511c71054350</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/islande-aurores-boreales/7c8a9c13-6755-4bf5-921d-511c71054350'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-11</td>
@@ -1864,7 +1973,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2025-11-02</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/albanie-express-hiver'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/albanie-express-hiver/d1f93401-4d46-45aa-b657-214d5cc1ca4c</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/albanie-express-hiver/d1f93401-4d46-45aa-b657-214d5cc1ca4c'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-11</td>
@@ -1875,7 +1985,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>7.7%</td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2025-11-19</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/bourgogne-express-route-grand-crus'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/bourgogne-express-route-grand-crus/dc2f4b00-102c-4305-9f1b-f18851bd24ca</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/bourgogne-express-route-grand-crus/dc2f4b00-102c-4305-9f1b-f18851bd24ca'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-11</td>
@@ -1886,7 +1997,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2025-11-06</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/portugal-express'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/portugal-express/5f928c79-9649-480e-9d9a-0bb5e3826de3</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/portugal-express/5f928c79-9649-480e-9d9a-0bb5e3826de3'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-11</td>
@@ -1897,7 +2009,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>12.5%</td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-11-07</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/paris-disneyland-express-entre-culture-vasion-et-magie'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/paris-disneyland-express-entre-culture-vasion-et-magie/9c88a53e-1f9b-4f26-946a-ee08ef9172ac</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/paris-disneyland-express-entre-culture-vasion-et-magie/9c88a53e-1f9b-4f26-946a-ee08ef9172ac'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-11</td>
@@ -1908,7 +2021,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2025-11-11</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/bruxelles-amsterdam-express-culture'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/bruxelles-amsterdam-express-culture/0e2cf4a6-3b15-41d9-aeb9-843c1e541f70</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/bruxelles-amsterdam-express-culture/0e2cf4a6-3b15-41d9-aeb9-843c1e541f70'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-11</td>
@@ -1919,7 +2033,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2025-11-26</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/alpe-d-huez-express-ski-snowboard'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/alpe-d-huez-express-ski-snowboard/8c28b30f-0cc3-459c-8914-238125bdb537</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/alpe-d-huez-express-ski-snowboard/8c28b30f-0cc3-459c-8914-238125bdb537'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-11</td>
@@ -1930,7 +2045,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2025-11-26</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/autriche-kitzbuhel-ski-snowboard'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/autriche-kitzbuhel-ski-snowboard/0b5412fb-f73d-421d-9976-c29ec0aa81a0</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/autriche-kitzbuhel-ski-snowboard/0b5412fb-f73d-421d-9976-c29ec0aa81a0'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-11</td>
@@ -1941,7 +2057,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>6.3%</td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2025-11-21</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/bali-gili-indonesie-tropicale-eau-turquoise'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/bali-gili-indonesie-tropicale-eau-turquoise/cf7b2440-b096-49db-93bc-a63d02147298</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/bali-gili-indonesie-tropicale-eau-turquoise/cf7b2440-b096-49db-93bc-a63d02147298'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-11</td>
@@ -1952,7 +2069,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
       <td>2025-11-28</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/sri-lanka-360-hiver'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/sri-lanka-360-hiver/70ff426d-905e-4e91-99e1-f5bfffe14768</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/sri-lanka-360-hiver/70ff426d-905e-4e91-99e1-f5bfffe14768'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-11</td>
@@ -1963,7 +2081,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
       <td>2025-11-07</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/oman'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/oman/77ce635f-0502-479d-afc6-6b51f8f4d033</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/oman/77ce635f-0502-479d-afc6-6b51f8f4d033'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-11</td>
@@ -1974,7 +2093,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-11-15</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/jordanie-trekking'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/jordanie-trekking/08ab2340-2115-4c98-8b7a-c18643dfad8d</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/jordanie-trekking/08ab2340-2115-4c98-8b7a-c18643dfad8d'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-11</td>
@@ -1985,7 +2105,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
       <td>2025-11-19</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/equateur-et-amazonie'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/equateur-et-amazonie/cc3d1845-1f91-4944-9ee4-312a8ab36bf8</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/equateur-et-amazonie/cc3d1845-1f91-4944-9ee4-312a8ab36bf8'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-11</td>
@@ -1996,7 +2117,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
       <td>2025-11-01</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/inde-rajasthan-agra-varanasi'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/inde-rajasthan-agra-varanasi/508c2831-dbf0-4b96-b9d5-ab7095a0f62b</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/inde-rajasthan-agra-varanasi/508c2831-dbf0-4b96-b9d5-ab7095a0f62b'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-11</td>
@@ -2007,7 +2129,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
       <td>2025-11-15</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/indonesie-360'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/indonesie-360/0c2b49fa-d541-43a4-9c97-8a4ad1f8af3b</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/indonesie-360/0c2b49fa-d541-43a4-9c97-8a4ad1f8af3b'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-11</td>
@@ -2018,7 +2141,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-11-03</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/mexique-yucatan-maya'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/mexique-yucatan-maya/42832fc4-b316-4127-a357-aa4e125dfd94</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/mexique-yucatan-maya/42832fc4-b316-4127-a357-aa4e125dfd94'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-12</td>
@@ -2029,7 +2153,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2025-12-05</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/le-caire-express-egypt'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/le-caire-express-egypt/bfe5c5e8-2c20-4761-9093-e5941d18325c</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/le-caire-express-egypt/bfe5c5e8-2c20-4761-9093-e5941d18325c'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-12</td>
@@ -2040,7 +2165,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>7.2%</td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-12-18</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/allemagne-berlin-express-tour-weroadx'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/allemagne-berlin-express-tour-weroadx/e5d6c677-81fc-44be-abbf-d9589f0ebf6d</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/allemagne-berlin-express-tour-weroadx/e5d6c677-81fc-44be-abbf-d9589f0ebf6d'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-12</td>
@@ -2051,7 +2177,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2025-12-23</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/bulgarie-ski-express-bansko'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/bulgarie-ski-express-bansko/fe4a35e2-a5ee-47a5-b200-b1ca9e303e6d</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/bulgarie-ski-express-bansko/fe4a35e2-a5ee-47a5-b200-b1ca9e303e6d'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-12</td>
@@ -2062,7 +2189,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2025-12-28</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/georgie-caucase-ski-snowboard'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/georgie-caucase-ski-snowboard/bacb86c1-cfdb-4691-893b-593ddd94b1a9</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/georgie-caucase-ski-snowboard/bacb86c1-cfdb-4691-893b-593ddd94b1a9'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-12</td>
@@ -2073,7 +2201,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>5.0%</td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-12-13</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/prague-budapest-marches-noel-weroadx'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/prague-budapest-marches-noel-weroadx/5f0863ec-25a3-42b2-9738-7bfb27a5e7ee</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/prague-budapest-marches-noel-weroadx/5f0863ec-25a3-42b2-9738-7bfb27a5e7ee'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-12</td>
@@ -2084,7 +2213,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-12-15</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/ile-reunion-cirques-volcan-plages'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/ile-reunion-cirques-volcan-plages/1d152290-dbfc-413e-baee-48ddcd2a4ffb</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/ile-reunion-cirques-volcan-plages/1d152290-dbfc-413e-baee-48ddcd2a4ffb'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-12</td>
@@ -2095,7 +2225,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-12-29</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/norvege-lofoten-aurore-boreales'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/norvege-lofoten-aurore-boreales/0f479dd1-e9b6-40ec-9576-8eed660fa474</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/norvege-lofoten-aurore-boreales/0f479dd1-e9b6-40ec-9576-8eed660fa474'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-12</td>
@@ -2106,7 +2237,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2025-12-30</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/suede-lulea-laponie'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/suede-lulea-laponie/914ba73f-ceab-4cd8-92f4-f966f0ed37db</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/suede-lulea-laponie/914ba73f-ceab-4cd8-92f4-f966f0ed37db'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-12</td>
@@ -2117,7 +2249,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>5.0%</td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-12-26</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/panama-beach-life-san-blas-bocas-del-toro'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/panama-beach-life-san-blas-bocas-del-toro/ca12031b-f919-40f6-b4e4-6c93e8c50516</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/panama-beach-life-san-blas-bocas-del-toro/ca12031b-f919-40f6-b4e4-6c93e8c50516'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-12</td>
@@ -2128,7 +2261,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-12-26</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/kilimandjaro-trekking-lemosho-route-safari'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/kilimandjaro-trekking-lemosho-route-safari/2cf26f9c-b039-4e59-939c-4666e92acd44</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/kilimandjaro-trekking-lemosho-route-safari/2cf26f9c-b039-4e59-939c-4666e92acd44'>🔗</a></td>
     </tr>
     <tr>
       <td>2026-01</td>
@@ -2139,7 +2273,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2026-01-15</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/thailande-plage-hiver'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/thailande-plage-hiver/0aa75913-2a0b-4e4c-a3d9-fea3deb052a4</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/thailande-plage-hiver/0aa75913-2a0b-4e4c-a3d9-fea3deb052a4'>🔗</a></td>
     </tr>
     <tr>
       <td>2026-01</td>
@@ -2150,7 +2285,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2026-01-03</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/mexique-yucatan-beach-life'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/mexique-yucatan-beach-life/0b25142d-a8c0-4876-b686-09a5a65c2bec</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/mexique-yucatan-beach-life/0b25142d-a8c0-4876-b686-09a5a65c2bec'>🔗</a></td>
     </tr>
     <tr>
       <td>2026-01</td>
@@ -2161,7 +2297,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>13.3%</td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2026-01-20</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/nicaragua-aventure-lacs-volcans'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/nicaragua-aventure-lacs-volcans/6581d368-826f-46c2-a893-664aa3666c3f</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/nicaragua-aventure-lacs-volcans/6581d368-826f-46c2-a893-664aa3666c3f'>🔗</a></td>
     </tr>
     <tr>
       <td>2026-01</td>
@@ -2172,7 +2309,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2026-01-23</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/laponie-finlandaise'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/laponie-finlandaise/3197a02f-7b14-4dea-8e82-acdb48bae7da</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/laponie-finlandaise/3197a02f-7b14-4dea-8e82-acdb48bae7da'>🔗</a></td>
     </tr>
     <tr>
       <td>2026-02</td>
@@ -2183,7 +2321,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2026-02-12</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/italie-carnaval-venise-masques-aperitivo'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/italie-carnaval-venise-masques-aperitivo/9d104808-b7d6-4ebe-b63a-6338d095d374</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/italie-carnaval-venise-masques-aperitivo/9d104808-b7d6-4ebe-b63a-6338d095d374'>🔗</a></td>
     </tr>
     <tr>
       <td>2026-02</td>
@@ -2194,7 +2333,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>9.1%</td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2026-02-14</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/fuerteventura-surf-weroadx'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/fuerteventura-surf-weroadx/f6fde568-0c8e-4e19-8820-61d5b5b313e1</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/fuerteventura-surf-weroadx/f6fde568-0c8e-4e19-8820-61d5b5b313e1'>🔗</a></td>
     </tr>
     <tr>
       <td>2026-02</td>
@@ -2205,7 +2345,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2026-02-23</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/ouzbekistan-hiver'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/ouzbekistan-hiver/ec6387ab-c26c-4658-b57f-53d8c609906e</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/ouzbekistan-hiver/ec6387ab-c26c-4658-b57f-53d8c609906e'>🔗</a></td>
     </tr>
     <tr>
       <td>2026-02</td>
@@ -2216,7 +2357,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>5.6%</td>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
       <td>2026-02-08</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/maldives-beach-life-detente-snorkeling-maafushi'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/maldives-beach-life-detente-snorkeling-maafushi/04c9b0b2-fc7f-4100-8174-58a62de3d2f6</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/maldives-beach-life-detente-snorkeling-maafushi/04c9b0b2-fc7f-4100-8174-58a62de3d2f6'>🔗</a></td>
     </tr>
     <tr>
       <td>2026-02</td>
@@ -2227,7 +2369,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>9.8%</td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2026-02-22</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/ile-maurice-beach-life-road-trip-plages-aventure'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/ile-maurice-beach-life-road-trip-plages-aventure/16df8b33-89b1-43a4-ad3b-3cb1422e6475</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/ile-maurice-beach-life-road-trip-plages-aventure/16df8b33-89b1-43a4-ad3b-3cb1422e6475'>🔗</a></td>
     </tr>
     <tr>
       <td>2026-02</td>
@@ -2238,7 +2381,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2026-02-21</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/thailande-360-hiver'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/thailande-360-hiver/99b5e49e-0dbc-488b-b26f-ed8d56b9b3aa</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/thailande-360-hiver/99b5e49e-0dbc-488b-b26f-ed8d56b9b3aa'>🔗</a></td>
     </tr>
     <tr>
       <td>2026-02</td>
@@ -2249,7 +2393,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2026-02-22</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/japon-ski-snowboard'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/japon-ski-snowboard/5f816e11-0b35-400b-95f1-0925692dc2f0</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/japon-ski-snowboard/5f816e11-0b35-400b-95f1-0925692dc2f0'>🔗</a></td>
     </tr>
     <tr>
       <td>2026-02</td>
@@ -2260,7 +2405,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>5.2%</td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2026-02-11</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/bresil-carnaval-rio-salvador-fiesta-plages'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/bresil-carnaval-rio-salvador-fiesta-plages/9fa3f4b0-0b21-45fb-9fbb-de6e846e1247</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/bresil-carnaval-rio-salvador-fiesta-plages/9fa3f4b0-0b21-45fb-9fbb-de6e846e1247'>🔗</a></td>
     </tr>
     <tr>
       <td>2026-03</td>
@@ -2271,7 +2417,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2026-03-11</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/islande-express'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/islande-express/d898ced6-2b42-4c17-b767-4a831b07989c</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/islande-express/d898ced6-2b42-4c17-b767-4a831b07989c'>🔗</a></td>
     </tr>
     <tr>
       <td>2026-03</td>
@@ -2282,7 +2429,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2026-03-07</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/bordeaux-dune-du-pilat'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/bordeaux-dune-du-pilat/a23dc152-3886-4500-baa5-15933d8c2266</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/bordeaux-dune-du-pilat/a23dc152-3886-4500-baa5-15933d8c2266'>🔗</a></td>
     </tr>
     <tr>
       <td>2026-03</td>
@@ -2293,7 +2441,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2026-03-03</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/irlande-express-tour-dublin-galway-connemara-weroadx'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/irlande-express-tour-dublin-galway-connemara-weroadx/e0cd8b57-38b3-4c5b-86bc-d62707bc876b</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/irlande-express-tour-dublin-galway-connemara-weroadx/e0cd8b57-38b3-4c5b-86bc-d62707bc876b'>🔗</a></td>
     </tr>
     <tr>
       <td>2026-03</td>
@@ -2304,7 +2453,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2026-03-07</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/vietnam-backpack'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/vietnam-backpack/3fe8d53b-1989-4731-9c7c-30b8a01cd8f0</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/vietnam-backpack/3fe8d53b-1989-4731-9c7c-30b8a01cd8f0'>🔗</a></td>
     </tr>
     <tr>
       <td>2026-03</td>
@@ -2315,7 +2465,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>14.9%</td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2026-03-29</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/malaisie-nature-ile'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/malaisie-nature-ile/c37b0913-06fc-4049-8953-3b73e3430880</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/malaisie-nature-ile/c37b0913-06fc-4049-8953-3b73e3430880'>🔗</a></td>
     </tr>
     <tr>
       <td>2026-03</td>
@@ -2326,7 +2477,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2026-03-05</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/thailande-hiver-expedition'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/thailande-hiver-expedition/7b9ecb87-8a57-472a-b61f-5cdcf8ab9d33</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/thailande-hiver-expedition/7b9ecb87-8a57-472a-b61f-5cdcf8ab9d33'>🔗</a></td>
     </tr>
     <tr>
       <td>2026-03</td>
@@ -2337,7 +2489,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2026-03-13</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/irlande-tour-saint-patrick'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/irlande-tour-saint-patrick/db8c4b49-3180-41dd-af15-28a720c78422</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/irlande-tour-saint-patrick/db8c4b49-3180-41dd-af15-28a720c78422'>🔗</a></td>
     </tr>
     <tr>
       <td>2026-03</td>
@@ -2348,7 +2501,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2026-03-20</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/laos-cambodge-routes-temples-indochine'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/laos-cambodge-routes-temples-indochine/3a3d0763-6567-4060-b7cc-eb9ab1b3c06d</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/laos-cambodge-routes-temples-indochine/3a3d0763-6567-4060-b7cc-eb9ab1b3c06d'>🔗</a></td>
     </tr>
     <tr>
       <td>2026-04</td>
@@ -2359,7 +2513,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2026-04-03</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/mediterranee-express-montpellier-sete-camargue'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/mediterranee-express-montpellier-sete-camargue/cb56f7b5-be01-40e8-a7de-e5daaa3c881d</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/mediterranee-express-montpellier-sete-camargue/cb56f7b5-be01-40e8-a7de-e5daaa3c881d'>🔗</a></td>
     </tr>
     <tr>
       <td>2026-05</td>
@@ -2370,7 +2525,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2026-05-30</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/nepal-trekking'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/nepal-trekking/e4592ae4-0fd2-435c-b7e2-b49227eb1ce1</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/nepal-trekking/e4592ae4-0fd2-435c-b7e2-b49227eb1ce1'>🔗</a></td>
     </tr>
     <tr>
       <td>2026-05</td>
@@ -2381,7 +2537,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>7.1%</td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2026-05-02</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/maldives-tour-plages-paradisiaques-dauphins-weroadx'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/maldives-tour-plages-paradisiaques-dauphins-weroadx/1334bdff-066b-4d62-a883-ae514a869f20</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/maldives-tour-plages-paradisiaques-dauphins-weroadx/1334bdff-066b-4d62-a883-ae514a869f20'>🔗</a></td>
     </tr>
     <tr>
       <td>2026-05</td>
@@ -2392,7 +2549,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2026-05-01</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/turquie-istanbul-cappadoce-ephese'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/turquie-istanbul-cappadoce-ephese/597a75fe-83b7-428f-8942-c5c5e6959ce1</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/turquie-istanbul-cappadoce-ephese/597a75fe-83b7-428f-8942-c5c5e6959ce1'>🔗</a></td>
     </tr>
     <tr>
       <td>2026-05</td>
@@ -2403,7 +2561,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2026-05-29</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/usa-rock-n-drive'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/usa-rock-n-drive/c7a1403c-b8fd-41c1-a1ab-f23bd497b6fe</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/usa-rock-n-drive/c7a1403c-b8fd-41c1-a1ab-f23bd497b6fe'>🔗</a></td>
     </tr>
     <tr>
       <td>2026-05</td>
@@ -2414,7 +2573,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2026-05-01</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/acores-sao-miguel-faial-terceira'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/acores-sao-miguel-faial-terceira/84b78f91-1db0-4e65-80b6-235d0a1562bf</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/acores-sao-miguel-faial-terceira/84b78f91-1db0-4e65-80b6-235d0a1562bf'>🔗</a></td>
     </tr>
     <tr>
       <td>2026-05</td>
@@ -2425,7 +2585,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2026-05-10</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/philippines-360'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/philippines-360/d49cefea-e595-4b75-a68f-6dff13374c5a</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/philippines-360/d49cefea-e595-4b75-a68f-6dff13374c5a'>🔗</a></td>
     </tr>
     <tr>
       <td>2026-06</td>
@@ -2436,7 +2597,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2026-06-24</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/cote-azur-express-france-nice-monaco'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/cote-azur-express-france-nice-monaco/0361186f-ad97-4ac8-9ecd-db873c693a71</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/cote-azur-express-france-nice-monaco/0361186f-ad97-4ac8-9ecd-db873c693a71'>🔗</a></td>
     </tr>
     <tr>
       <td>2026-06</td>
@@ -2447,7 +2609,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2026-06-03</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/bali-360'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/bali-360/cc638763-0322-4393-bc0f-c6a217624507</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/bali-360/cc638763-0322-4393-bc0f-c6a217624507'>🔗</a></td>
     </tr>
     <tr>
       <td>2026-06</td>
@@ -2458,7 +2621,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2026-06-21</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/thailande-ete-expedition'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/thailande-ete-expedition/3fc78f4a-d22d-4465-9f15-e20c98932305</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/thailande-ete-expedition/3fc78f4a-d22d-4465-9f15-e20c98932305'>🔗</a></td>
     </tr>
     <tr>
       <td>2026-07</td>
@@ -2469,7 +2633,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2026-07-08</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/gran-canaria-express-ile-soleil'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/gran-canaria-express-ile-soleil/683f12d0-d741-45d3-80d9-8c7d2032290b</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/gran-canaria-express-ile-soleil/683f12d0-d741-45d3-80d9-8c7d2032290b'>🔗</a></td>
     </tr>
     <tr>
       <td>2026-07</td>
@@ -2480,7 +2645,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2026-07-25</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/bretagne-quiberon-belle-ile'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/bretagne-quiberon-belle-ile/5d5bea6a-d9c1-4759-884a-c3b5cae8e31c</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/bretagne-quiberon-belle-ile/5d5bea6a-d9c1-4759-884a-c3b5cae8e31c'>🔗</a></td>
     </tr>
     <tr>
       <td>2026-07</td>
@@ -2491,7 +2657,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2026-07-10</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/namibie'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/namibie/61f10893-a458-417d-a0ff-b8bc29bf418a</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/namibie/61f10893-a458-417d-a0ff-b8bc29bf418a'>🔗</a></td>
     </tr>
     <tr>
       <td>2026-09</td>
@@ -2502,7 +2669,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2026-09-28</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/auvergne-express'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/auvergne-express/ec34a251-229a-4b5d-be8c-855439805fa5</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/auvergne-express/ec34a251-229a-4b5d-be8c-855439805fa5'>🔗</a></td>
     </tr>
     <tr>
       <td>2026-10</td>
@@ -2513,7 +2681,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2026-10-20</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/costa-rica-360'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/costa-rica-360/24c10910-4182-45e8-876a-370ccd2f1dff</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/costa-rica-360/24c10910-4182-45e8-876a-370ccd2f1dff'>🔗</a></td>
     </tr>
     <tr>
       <td>2026-11</td>
@@ -2524,7 +2693,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2026-11-20</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/chine'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/chine/a01b1a11-a4b5-4767-b6d8-6d28e6c532b9</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/chine/a01b1a11-a4b5-4767-b6d8-6d28e6c532b9'>🔗</a></td>
     </tr>
   </tbody>
 </table>
@@ -2548,6 +2718,7 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <th>seatsToConfirm</th>
       <th>maxPax</th>
       <th>weroadersCount</th>
+      <th>url_precise</th>
       <th>url</th>
     </tr>
   </thead>
@@ -2564,7 +2735,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/istanbul-express'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/istanbul-express/78553c0f-2e64-4b94-bf07-152ba50a0bcb</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/istanbul-express/78553c0f-2e64-4b94-bf07-152ba50a0bcb'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
@@ -2578,7 +2750,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/istanbul-cappadoce'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/istanbul-cappadoce/9f065672-d538-4d64-b27e-077f0e867b88</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/istanbul-cappadoce/9f065672-d538-4d64-b27e-077f0e867b88'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
@@ -2592,7 +2765,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/albanie-tirana-plages-sud'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/albanie-tirana-plages-sud/d117ece9-bd9e-494a-bae7-281d52d89619</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/albanie-tirana-plages-sud/d117ece9-bd9e-494a-bae7-281d52d89619'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
@@ -2606,7 +2780,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/Ecosse-express-edimbourg-highlands'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/Ecosse-express-edimbourg-highlands/6ff88504-1177-48bc-b5cc-932725dd1d79</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/Ecosse-express-edimbourg-highlands/6ff88504-1177-48bc-b5cc-932725dd1d79'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
@@ -2620,7 +2795,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/inde-rajasthan-taj-mahal'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/inde-rajasthan-taj-mahal/08c99925-1059-4f3a-9d34-a737157c5e11</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/inde-rajasthan-taj-mahal/08c99925-1059-4f3a-9d34-a737157c5e11'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
@@ -2634,7 +2810,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/sardaigne'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/sardaigne/5e78d21a-3663-46ac-b06f-518bb06c4cf7</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/sardaigne/5e78d21a-3663-46ac-b06f-518bb06c4cf7'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
@@ -2648,7 +2825,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/maroc-trekking-mount-toubkal'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/maroc-trekking-mount-toubkal/4310fa36-bb29-48fb-856e-359806887f88</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/maroc-trekking-mount-toubkal/4310fa36-bb29-48fb-856e-359806887f88'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
@@ -2662,7 +2840,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/naples-cote-amalfitaine'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/naples-cote-amalfitaine/d89f2758-79ec-4f9d-89c6-5bf9c0d317bc</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/naples-cote-amalfitaine/d89f2758-79ec-4f9d-89c6-5bf9c0d317bc'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
@@ -2676,7 +2855,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>19.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/pouilles-360'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/pouilles-360/090b8ef2-dd13-4002-b1ef-9ec04e9a9907</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/pouilles-360/090b8ef2-dd13-4002-b1ef-9ec04e9a9907'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
@@ -2690,7 +2870,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>11.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/new-york'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/new-york/be94222b-4570-4efc-abc5-e9fffca1ace0</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/new-york/be94222b-4570-4efc-abc5-e9fffca1ace0'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
@@ -2704,7 +2885,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/kirghizistan-winter'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/kirghizistan-winter/541ca4fc-cf41-4cb7-9a5a-c599eb83b6f8</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/kirghizistan-winter/541ca4fc-cf41-4cb7-9a5a-c599eb83b6f8'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
@@ -2718,7 +2900,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/portugal-algarve-lisbonne'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/portugal-algarve-lisbonne/a8166e8a-3c9d-4ebe-9cb2-f8054daa5190</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/portugal-algarve-lisbonne/a8166e8a-3c9d-4ebe-9cb2-f8054daa5190'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
@@ -2732,7 +2915,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>11.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/sicile-palerme-san-vito'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/sicile-palerme-san-vito/52eddb48-7798-4b5c-8798-3fc4656441e9</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/sicile-palerme-san-vito/52eddb48-7798-4b5c-8798-3fc4656441e9'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
@@ -2746,7 +2930,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/europe-prague-vienne-budapest-weroadx'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/europe-prague-vienne-budapest-weroadx/ee1e9275-45f4-4120-a2b4-0dedbe5d3d65</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/europe-prague-vienne-budapest-weroadx/ee1e9275-45f4-4120-a2b4-0dedbe5d3d65'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
@@ -2760,7 +2945,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/fuerteventura-lanzarote-plages-volcans'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/fuerteventura-lanzarote-plages-volcans/67e0eec3-90ff-4856-9dce-57691558b87d</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/fuerteventura-lanzarote-plages-volcans/67e0eec3-90ff-4856-9dce-57691558b87d'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
@@ -2774,7 +2960,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/kazakhstan-almaty-turkestan-desert-4x4'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/kazakhstan-almaty-turkestan-desert-4x4/eb8f9a24-77ff-46e8-9d80-f2c28c5717b6</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/kazakhstan-almaty-turkestan-desert-4x4/eb8f9a24-77ff-46e8-9d80-f2c28c5717b6'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
@@ -2788,7 +2975,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>14.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/chili-bolivie-aventure-salar-uyuni'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/chili-bolivie-aventure-salar-uyuni/5514e1b5-d1c9-47a0-9bd9-918d9189cfe4</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/chili-bolivie-aventure-salar-uyuni/5514e1b5-d1c9-47a0-9bd9-918d9189cfe4'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
@@ -2802,7 +2990,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/ibiza-formentera-baleares'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/ibiza-formentera-baleares/3527020b-7f01-4028-a0c4-63035ed07ea9</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/ibiza-formentera-baleares/3527020b-7f01-4028-a0c4-63035ed07ea9'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
@@ -2816,7 +3005,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/tunisie-express-djerba-detente-culture'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/tunisie-express-djerba-detente-culture/a36141f8-fe71-4213-9468-4434f3e031b6</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/tunisie-express-djerba-detente-culture/a36141f8-fe71-4213-9468-4434f3e031b6'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
@@ -2830,7 +3020,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/belize-jungles-plages-blue-hole'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/belize-jungles-plages-blue-hole/b1d4305d-a377-46ed-b533-dad5169b092e</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/belize-jungles-plages-blue-hole/b1d4305d-a377-46ed-b533-dad5169b092e'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
@@ -2844,7 +3035,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/colombie-aventure-amazonie-caraibes-san-andres'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/colombie-aventure-amazonie-caraibes-san-andres/ed317950-357c-45de-8890-43ca8e9f67b5</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/colombie-aventure-amazonie-caraibes-san-andres/ed317950-357c-45de-8890-43ca8e9f67b5'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
@@ -2858,7 +3050,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/turquie-on-the-road'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/turquie-on-the-road/7f33ff07-3755-4f2c-9adc-3b3aa8e131c0</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/turquie-on-the-road/7f33ff07-3755-4f2c-9adc-3b3aa8e131c0'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
@@ -2872,7 +3065,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/cap-vert-beach-life-santiago-fogo-boa-vista'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/cap-vert-beach-life-santiago-fogo-boa-vista/8b1e7e50-5a70-42f4-9885-6b4b762ceee8</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/cap-vert-beach-life-santiago-fogo-boa-vista/8b1e7e50-5a70-42f4-9885-6b4b762ceee8'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
@@ -2886,7 +3080,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/suisse-express-alpes-lacs-montagnes'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/suisse-express-alpes-lacs-montagnes/28df726d-d517-4b7c-8072-a9c1ff638411</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/suisse-express-alpes-lacs-montagnes/28df726d-d517-4b7c-8072-a9c1ff638411'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
@@ -2900,7 +3095,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/pays-baltes-tallinn-riga-vilnius'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/pays-baltes-tallinn-riga-vilnius/4233778c-476f-4887-8f15-6c0bcda166ca</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/pays-baltes-tallinn-riga-vilnius/4233778c-476f-4887-8f15-6c0bcda166ca'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
@@ -2914,7 +3110,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/budapest-express'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/budapest-express/c2cdb0e5-7d03-447d-8cbe-c867b2e02c61</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/budapest-express/c2cdb0e5-7d03-447d-8cbe-c867b2e02c61'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
@@ -2928,7 +3125,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/islande-aurores-boreales'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/islande-aurores-boreales/7c8a9c13-6755-4bf5-921d-511c71054350</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/islande-aurores-boreales/7c8a9c13-6755-4bf5-921d-511c71054350'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
@@ -2942,7 +3140,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/senegal-entre-terre-et-fleuve'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/senegal-entre-terre-et-fleuve/14011cbd-6e8f-4ca5-861c-5c389da9fbed</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/senegal-entre-terre-et-fleuve/14011cbd-6e8f-4ca5-861c-5c389da9fbed'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
@@ -2956,7 +3155,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/mexique-yucatan-maya'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/mexique-yucatan-maya/42832fc4-b316-4127-a357-aa4e125dfd94</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/mexique-yucatan-maya/42832fc4-b316-4127-a357-aa4e125dfd94'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
@@ -2970,7 +3170,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/paris-disneyland-express-entre-culture-vasion-et-magie'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/paris-disneyland-express-entre-culture-vasion-et-magie/9c88a53e-1f9b-4f26-946a-ee08ef9172ac</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/paris-disneyland-express-entre-culture-vasion-et-magie/9c88a53e-1f9b-4f26-946a-ee08ef9172ac'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
@@ -2984,7 +3185,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/chine-pekin-hong-kong-grande-muraille-weroadx'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/chine-pekin-hong-kong-grande-muraille-weroadx/2acbb677-7ac2-46d1-8fff-94f8d833afb3</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/chine-pekin-hong-kong-grande-muraille-weroadx/2acbb677-7ac2-46d1-8fff-94f8d833afb3'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
@@ -2998,7 +3200,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/jordanie-trekking'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/jordanie-trekking/08ab2340-2115-4c98-8b7a-c18643dfad8d</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/jordanie-trekking/08ab2340-2115-4c98-8b7a-c18643dfad8d'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
@@ -3012,7 +3215,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/mexique-360'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/mexique-360/91ae642f-ad03-4066-b721-1ee4eda5e3b2</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/mexique-360/91ae642f-ad03-4066-b721-1ee4eda5e3b2'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
@@ -3026,7 +3230,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/kenya-afrique-safari-plage-village'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/kenya-afrique-safari-plage-village/47543c07-3a00-4029-913d-da11f9d9d789</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/kenya-afrique-safari-plage-village/47543c07-3a00-4029-913d-da11f9d9d789'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
@@ -3040,7 +3245,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/colombie-360'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/colombie-360/16b572f8-f3b9-4e9c-9404-fb8c77dd80ab</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/colombie-360/16b572f8-f3b9-4e9c-9404-fb8c77dd80ab'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
@@ -3054,7 +3260,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/prague-budapest-marches-noel-weroadx'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/prague-budapest-marches-noel-weroadx/5f0863ec-25a3-42b2-9738-7bfb27a5e7ee</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/prague-budapest-marches-noel-weroadx/5f0863ec-25a3-42b2-9738-7bfb27a5e7ee'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
@@ -3068,7 +3275,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/ile-reunion-cirques-volcan-plages'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/ile-reunion-cirques-volcan-plages/1d152290-dbfc-413e-baee-48ddcd2a4ffb</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/ile-reunion-cirques-volcan-plages/1d152290-dbfc-413e-baee-48ddcd2a4ffb'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
@@ -3082,7 +3290,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>11.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/allemagne-berlin-express-tour-weroadx'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/allemagne-berlin-express-tour-weroadx/e5d6c677-81fc-44be-abbf-d9589f0ebf6d</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/allemagne-berlin-express-tour-weroadx/e5d6c677-81fc-44be-abbf-d9589f0ebf6d'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
@@ -3096,7 +3305,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>2.0</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/kilimandjaro-trekking-lemosho-route-safari'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/kilimandjaro-trekking-lemosho-route-safari/2cf26f9c-b039-4e59-939c-4666e92acd44</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/kilimandjaro-trekking-lemosho-route-safari/2cf26f9c-b039-4e59-939c-4666e92acd44'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
@@ -3110,7 +3320,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/panama-beach-life-san-blas-bocas-del-toro'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/panama-beach-life-san-blas-bocas-del-toro/ca12031b-f919-40f6-b4e4-6c93e8c50516</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/panama-beach-life-san-blas-bocas-del-toro/ca12031b-f919-40f6-b4e4-6c93e8c50516'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
@@ -3124,7 +3335,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/norvege-lofoten-aurore-boreales'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/norvege-lofoten-aurore-boreales/0f479dd1-e9b6-40ec-9576-8eed660fa474</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/norvege-lofoten-aurore-boreales/0f479dd1-e9b6-40ec-9576-8eed660fa474'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
@@ -3138,7 +3350,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/nicaragua-aventure-lacs-volcans'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/nicaragua-aventure-lacs-volcans/6581d368-826f-46c2-a893-664aa3666c3f</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/nicaragua-aventure-lacs-volcans/6581d368-826f-46c2-a893-664aa3666c3f'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
@@ -3152,7 +3365,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>1.0</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/bresil-carnaval-rio-salvador-fiesta-plages'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/bresil-carnaval-rio-salvador-fiesta-plages/9fa3f4b0-0b21-45fb-9fbb-de6e846e1247</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/bresil-carnaval-rio-salvador-fiesta-plages/9fa3f4b0-0b21-45fb-9fbb-de6e846e1247'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
@@ -3166,7 +3380,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/italie-carnaval-venise-masques-aperitivo'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/italie-carnaval-venise-masques-aperitivo/9d104808-b7d6-4ebe-b63a-6338d095d374</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/italie-carnaval-venise-masques-aperitivo/9d104808-b7d6-4ebe-b63a-6338d095d374'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
@@ -3180,7 +3395,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/laos-cambodge-routes-temples-indochine'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/laos-cambodge-routes-temples-indochine/3a3d0763-6567-4060-b7cc-eb9ab1b3c06d</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/laos-cambodge-routes-temples-indochine/3a3d0763-6567-4060-b7cc-eb9ab1b3c06d'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
@@ -3194,7 +3410,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/malaisie-nature-ile'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/malaisie-nature-ile/c37b0913-06fc-4049-8953-3b73e3430880</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/malaisie-nature-ile/c37b0913-06fc-4049-8953-3b73e3430880'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
@@ -3208,7 +3425,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/mediterranee-express-montpellier-sete-camargue'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/mediterranee-express-montpellier-sete-camargue/cb56f7b5-be01-40e8-a7de-e5daaa3c881d</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/mediterranee-express-montpellier-sete-camargue/cb56f7b5-be01-40e8-a7de-e5daaa3c881d'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
@@ -3222,7 +3440,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>17.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/turquie-istanbul-cappadoce-ephese'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/turquie-istanbul-cappadoce-ephese/597a75fe-83b7-428f-8942-c5c5e6959ce1</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/turquie-istanbul-cappadoce-ephese/597a75fe-83b7-428f-8942-c5c5e6959ce1'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
@@ -3236,7 +3455,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>9.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/acores-sao-miguel-faial-terceira'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/acores-sao-miguel-faial-terceira/84b78f91-1db0-4e65-80b6-235d0a1562bf</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/acores-sao-miguel-faial-terceira/84b78f91-1db0-4e65-80b6-235d0a1562bf'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
@@ -3250,7 +3470,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/cote-azur-express-france-nice-monaco'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/cote-azur-express-france-nice-monaco/0361186f-ad97-4ac8-9ecd-db873c693a71</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/cote-azur-express-france-nice-monaco/0361186f-ad97-4ac8-9ecd-db873c693a71'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
@@ -3264,7 +3485,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/jordanie-360'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/jordanie-360/afcab481-8862-453c-8b0b-df94fe52dce2</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/jordanie-360/afcab481-8862-453c-8b0b-df94fe52dce2'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
@@ -3278,7 +3500,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/thailande-360-ete'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/thailande-360-ete/e3f05c52-64db-42c9-a457-8b25c6fb177e</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/thailande-360-ete/e3f05c52-64db-42c9-a457-8b25c6fb177e'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
@@ -3292,7 +3515,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/maroc-marrakech-fes-rabat-desert'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/maroc-marrakech-fes-rabat-desert/2e17500f-c6fb-4880-949e-390fd175f648</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/maroc-marrakech-fes-rabat-desert/2e17500f-c6fb-4880-949e-390fd175f648'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
@@ -3306,7 +3530,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/egypte-360'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/egypte-360/2d57b987-0463-465e-b916-636dd0cc50cf</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/egypte-360/2d57b987-0463-465e-b916-636dd0cc50cf'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
@@ -3320,7 +3545,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>13.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/transylvanie-express-route-comte-dracula'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/transylvanie-express-route-comte-dracula/8a2982d2-c24c-4361-8101-f6a4fbb9e5ef</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/transylvanie-express-route-comte-dracula/8a2982d2-c24c-4361-8101-f6a4fbb9e5ef'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
@@ -3334,7 +3560,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/maroc'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/maroc/ac582f74-41af-464c-84e8-cb1ab505c18f</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/maroc/ac582f74-41af-464c-84e8-cb1ab505c18f'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
@@ -3348,7 +3575,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/malte-express-gozo-comino'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/malte-express-gozo-comino/562901ce-50c2-426f-9b47-479ea882d372</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/malte-express-gozo-comino/562901ce-50c2-426f-9b47-479ea882d372'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
@@ -3362,7 +3590,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/vietnam'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/vietnam/a1eb2771-a671-4f45-8838-1bb93cebf42a</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/vietnam/a1eb2771-a671-4f45-8838-1bb93cebf42a'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
@@ -3376,7 +3605,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/cuba-360'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/cuba-360/f632605e-d0f9-473b-a118-34113dce67c0</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/cuba-360/f632605e-d0f9-473b-a118-34113dce67c0'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
@@ -3390,7 +3620,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/maroc-marrakech-essaouira-desert'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/maroc-marrakech-essaouira-desert/95e7a0a0-1110-4737-a411-b4b710b8dcd8</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/maroc-marrakech-essaouira-desert/95e7a0a0-1110-4737-a411-b4b710b8dcd8'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
@@ -3404,7 +3635,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/japon-360'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/japon-360/a5da9bc1-f6ff-48ee-bd83-c7e58a0752c9</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/japon-360/a5da9bc1-f6ff-48ee-bd83-c7e58a0752c9'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
@@ -3418,7 +3650,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>19.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/dolomites'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/dolomites/cd862058-7484-4ee5-b21b-7152baf7951f</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/dolomites/cd862058-7484-4ee5-b21b-7152baf7951f'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
@@ -3432,7 +3665,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/guatemala-volcans-nature-cultures-anciennes'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/guatemala-volcans-nature-cultures-anciennes/d474d722-e01f-4ed9-92c4-ae89a702a7f9</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/guatemala-volcans-nature-cultures-anciennes/d474d722-e01f-4ed9-92c4-ae89a702a7f9'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
@@ -3446,7 +3680,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/bresil-mer-plage-foret-rio-de-janeiro'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/bresil-mer-plage-foret-rio-de-janeiro/8c9a0abb-bb94-41b6-9cd0-ca0ae9490e12</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/bresil-mer-plage-foret-rio-de-janeiro/8c9a0abb-bb94-41b6-9cd0-ca0ae9490e12'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
@@ -3460,7 +3695,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/nepal'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/nepal/09858358-b277-4895-97c7-edb8b98ebe3e</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/nepal/09858358-b277-4895-97c7-edb8b98ebe3e'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
@@ -3474,7 +3710,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/far-west-360'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/far-west-360/737ac5d4-4aa4-4ea0-8689-996f9835ca89</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/far-west-360/737ac5d4-4aa4-4ea0-8689-996f9835ca89'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
@@ -3488,7 +3725,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/patagonie-360'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/patagonie-360/5857150e-6900-42bc-9490-3341afa4190e</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/patagonie-360/5857150e-6900-42bc-9490-3341afa4190e'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
@@ -3502,7 +3740,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/inde-rajasthan-agra-varanasi'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/inde-rajasthan-agra-varanasi/508c2831-dbf0-4b96-b9d5-ab7095a0f62b</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/inde-rajasthan-agra-varanasi/508c2831-dbf0-4b96-b9d5-ab7095a0f62b'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
@@ -3516,7 +3755,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/bolivie-et-chili-360'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/bolivie-et-chili-360/1ff089b7-7105-4750-a027-f101e4ff4ad1</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/bolivie-et-chili-360/1ff089b7-7105-4750-a027-f101e4ff4ad1'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
@@ -3530,7 +3770,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/oman'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/oman/77ce635f-0502-479d-afc6-6b51f8f4d033</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/oman/77ce635f-0502-479d-afc6-6b51f8f4d033'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
@@ -3544,7 +3785,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/floride'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/floride/c763c529-259d-4aa7-a56d-eedb7277cd0d</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/floride/c763c529-259d-4aa7-a56d-eedb7277cd0d'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
@@ -3558,7 +3800,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/indonesie-360'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/indonesie-360/0c2b49fa-d541-43a4-9c97-8a4ad1f8af3b</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/indonesie-360/0c2b49fa-d541-43a4-9c97-8a4ad1f8af3b'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
@@ -3572,7 +3815,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/nouvelle-zelande-360'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/nouvelle-zelande-360/71f6cafe-68e7-4353-8896-7abffce8ad52</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/nouvelle-zelande-360/71f6cafe-68e7-4353-8896-7abffce8ad52'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
@@ -3586,7 +3830,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/equateur-et-amazonie'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/equateur-et-amazonie/cc3d1845-1f91-4944-9ee4-312a8ab36bf8</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/equateur-et-amazonie/cc3d1845-1f91-4944-9ee4-312a8ab36bf8'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
@@ -3600,7 +3845,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/vietnam-cambodge'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/vietnam-cambodge/2918d031-dfc8-4d3d-a912-2e981e0c1bb2</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/vietnam-cambodge/2918d031-dfc8-4d3d-a912-2e981e0c1bb2'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
@@ -3614,7 +3860,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/sri-lanka-360-hiver'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/sri-lanka-360-hiver/70ff426d-905e-4e91-99e1-f5bfffe14768</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/sri-lanka-360-hiver/70ff426d-905e-4e91-99e1-f5bfffe14768'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
@@ -3628,7 +3875,8 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td><a target='_blank' href='https://www.weroad.fr/voyages/maldives-beach-life-detente-snorkeling-maafushi'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/maldives-beach-life-detente-snorkeling-maafushi/04c9b0b2-fc7f-4100-8174-58a62de3d2f6</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/maldives-beach-life-detente-snorkeling-maafushi/04c9b0b2-fc7f-4100-8174-58a62de3d2f6'>🔗</a></td>
     </tr>
   </tbody>
 </table>
