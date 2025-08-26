@@ -1,8 +1,6 @@
 # summarize.py — Génère un unique dashboard Markdown/HTML dans docs/index.md
-# - Design simple (une page)
-# - Tri / filtre / recherche / pagination côté client (Simple-DataTables)
-# - Pas de "rectangle" autour des tables (wrapper dés-stylé)
-# - Normalisation des colonnes en % (x>1 => x/100)
+# Page unique + recherche/tri/pagination (Simple-DataTables)
+# + correctif pourcentages (si valeur > 1 -> /100) + section "same_date_diff"
 
 from pathlib import Path
 from datetime import datetime, timezone
@@ -18,7 +16,7 @@ RECENT_MONTHS = 24
 ALERT_PCT = float(os.getenv("ALERT_PCT", "0.10"))   # 10 %
 ALERT_EUR = float(os.getenv("ALERT_EUR", "150"))    # 150 €
 
-# ---------------- Assets (Simple-DataTables + style anti "rectangle") ----------------
+# ---------------- Assets (Simple-DataTables + style anti-"rectangle") ----------------
 def tables_enhancer_assets() -> str:
     return """
 <!-- Simple-DataTables (CDN) -->
@@ -26,34 +24,24 @@ def tables_enhancer_assets() -> str:
 <script src="https://cdn.jsdelivr.net/npm/simple-datatables@9.0.3"></script>
 
 <style>
-/* --- Enlever le look "carte/rectangle" de Simple-DataTables --- */
-.dataTable-wrapper.rp-dt-unstyled {
-  background: transparent; border: none; box-shadow: none; padding: 0;
-}
-.dataTable-wrapper.rp-dt-unstyled .dataTable-container {
-  max-height: none !important; overflow: visible !important;
-  background: transparent; border: none; box-shadow: none;
-}
-.dataTable-wrapper.rp-dt-unstyled .dataTable-top,
-.dataTable-wrapper.rp-dt-unstyled .dataTable-bottom {
-  background: transparent; border: none; box-shadow: none; padding: .25rem 0;
-}
-.dataTable-wrapper.rp-dt-unstyled .dataTable-info,
-.dataTable-wrapper.rp-dt-unstyled .dataTable-pagination,
-.dataTable-wrapper.rp-dt-unstyled .dataTable-dropdown,
-.dataTable-wrapper.rp-dt-unstyled .dataTable-search {
-  margin: .35rem 0; font-size: 0.95rem;
-}
-.dataTable-wrapper.rp-dt-unstyled .dataTable-pagination a { border-radius: .4rem; }
-.dataTable-wrapper.rp-dt-unstyled table { background: transparent; border: none; box-shadow: none; }
+/* Supprimer l'aspect "carte/rectangle" du wrapper Simple-DataTables */
+.dataTable-wrapper,
+.dataTable-wrapper .dataTable-container { background: transparent !important; border: 0 !important; box-shadow: none !important; padding: 0 !important; }
+.dataTable-top, .dataTable-bottom { background: transparent !important; border: none !important; box-shadow: none !important; padding: .25rem 0 !important; }
+.dataTable-info, .dataTable-pagination, .dataTable-dropdown, .dataTable-search { margin: .35rem 0 !important; font-size: .95rem !important; }
+.dataTable-pagination a { border-radius: .4rem !important; }
 
-/* Conserver le scroll horizontal via .table-wrapper (déjà dans custom.css) */
+/* Conserver le scroll horizontal du conteneur .table-wrapper */
 .table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0 0 1.25rem 0; }
 </style>
 
 <script>
-document.addEventListener("DOMContentLoaded", () => {
-  // convertir "1 234,56 €" -> 1234.56 pour tri numérique
+(function() {
+  const ready = (fn) => {
+    if (document.readyState !== "loading") requestAnimationFrame(fn);
+    else document.addEventListener("DOMContentLoaded", () => requestAnimationFrame(fn));
+  };
+
   const euroToNumber = (txt) => {
     if (!txt) return null;
     const s = String(txt).replace(/\\s/g, "").replace("€","").replace(/\\u00A0/g,"").replace(",",".");
@@ -61,51 +49,59 @@ document.addEventListener("DOMContentLoaded", () => {
     return isNaN(v) ? null : v;
   };
 
-  document.querySelectorAll("table.rp-table").forEach((tbl) => {
-    const dt = new simpleDatatables.DataTable(tbl, {
-      searchable: true,
-      fixedHeight: false,            // pas de cadre/scroll interne
-      perPage: 25,
-      perPageSelect: [10,25,50,100],
-      labels: {
-        placeholder: "Rechercher…",
-        perPage: "{select} lignes par page",
-        noRows: "Aucune donnée",
-        info: "Affiche {start}–{end} sur {rows} lignes",
-      },
-    });
-
-    // déshabille le wrapper (évite le "rectangle")
-    const wrapper = tbl.closest(".dataTable-wrapper");
-    if (wrapper) wrapper.classList.add("rp-dt-unstyled");
-
-    // tri custom pour colonnes € et %
-    dt.columns().each((idx) => {
-      const header = tbl.tHead?.rows?.[0]?.cells?.[idx];
-      if (!header) return;
-      const htxt = header.textContent.toLowerCase();
-      const isMoney = /(€|price|prix|delta_abs)/.test(htxt);
-      const isPct   = /(pct|%)/.test(htxt);
-
-      if (isMoney || isPct) {
-        dt.columns().sort(idx, (a, b) => {
-          const ta = a.replace(/<[^>]*>/g, ""); // enlève HTML
-          const tb = b.replace(/<[^>]*>/g, "");
-          const na = isPct ? parseFloat(ta.replace("%","").replace(",",".")) : euroToNumber(ta);
-          const nb = isPct ? parseFloat(tb.replace("%","").replace(",",".")) : euroToNumber(tb);
-          if (isNaN(na) && isNaN(nb)) return 0;
-          if (isNaN(na)) return -1;
-          if (isNaN(nb)) return 1;
-          return na - nb;
+  ready(() => {
+    const tables = document.querySelectorAll("table.rp-table");
+    tables.forEach((tbl, tIndex) => {
+      try {
+        const dt = new simpleDatatables.DataTable(tbl, {
+          searchable: true,
+          fixedHeight: false,
+          perPage: 25,
+          perPageSelect: [10, 25, 50, 100],
+          labels: {
+            placeholder: "Rechercher…",
+            perPage: "{select} lignes par page",
+            noRows: "Aucune donnée",
+            info: "Affiche {start}–{end} sur {rows} lignes",
+          },
         });
+
+        // tri custom € / %
+        try {
+          dt.columns().each((idx) => {
+            const header = tbl.tHead && tbl.tHead.rows && tbl.tHead.rows[0] && tbl.tHead.rows[0].cells
+              ? tbl.tHead.rows[0].cells[idx] : null;
+            if (!header) return;
+            const htxt = (header.textContent || "").toLowerCase();
+            const isMoney = /(€|price|prix|delta_abs)/.test(htxt);
+            const isPct   = /(pct|%)/.test(htxt);
+
+            if (isMoney || isPct) {
+              dt.columns().sort(idx, (a, b) => {
+                const ta = a.replace(/<[^>]*>/g, "");
+                const tb = b.replace(/<[^>]*>/g, "");
+                const na = isPct ? parseFloat(ta.replace("%","").replace(",",".")) : euroToNumber(ta);
+                const nb = isPct ? parseFloat(tb.replace("%","").replace(",",".")) : euroToNumber(tb);
+                if (na == null && nb == null) return 0;
+                if (na == null) return -1;
+                if (nb == null) return 1;
+                return na - nb;
+              });
+            }
+          });
+        } catch(e) {
+          console.warn("Sorter setup error on table", tIndex, e);
+        }
+      } catch (e) {
+        console.warn("DataTable init failed on table", tIndex, e);
       }
     });
   });
-});
+})();
 </script>
 """
 
-# ---------------- Utils de rendu ----------------
+# ---------------- Utils rendu ----------------
 def ensure_docs():
     DOCS_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -157,7 +153,7 @@ def decorate_movement(df: pd.DataFrame) -> pd.DataFrame:
 
 def html_table(df: pd.DataFrame, max_rows=200) -> str:
     """Table HTML stylable via custom.css (classes rp-table + wrapper).
-       Corrige les colonnes *_pct* (si valeur >1 → valeur/100 avant formatage)."""
+       Corrige *_pct : si v>1 => v/100 avant formatage."""
     if df is None or df.empty:
         return "<p><em>Aucune donnée</em></p>"
     df = df.copy().head(max_rows)
@@ -165,24 +161,21 @@ def html_table(df: pd.DataFrame, max_rows=200) -> str:
     def has_html(s: pd.Series) -> bool:
         return s.dtype == "object" and s.astype(str).str.contains("<", regex=False).any()
 
-    # % si pas déjà HTML
+    # Pourcentages
     pct_cols = [c for c in df.columns if c.endswith("_pct") or c in ("delta_pct", "promo_share_pct")]
     for c in pct_cols:
         if c in df.columns and not has_html(df[c]):
-            def _fmt_pct(v):
-                if pd.isna(v):
-                    return ""
+            def fmt_pct(v):
+                if pd.isna(v): return ""
                 try:
-                    v = float(v)
+                    vv = float(v)
+                    if vv > 1: vv = vv / 100.0
+                    return f"{vv:.1%}"
                 except Exception:
                     return ""
-                # normalisation : si déjà en pourcentage (ex. 720.0), on /100
-                if v > 1.0:
-                    v = v / 100.0
-                return f"{v:.1%}"
-            df[c] = df[c].map(_fmt_pct)
+            df[c] = df[c].map(fmt_pct)
 
-    # montants € si pas déjà HTML
+    # Montants €
     money_cols = [c for c in df.columns if any(k in c for k in ["price", "prix", "delta_abs"])]
     for c in money_cols:
         if c in df.columns and not has_html(df[c]):
@@ -190,7 +183,7 @@ def html_table(df: pd.DataFrame, max_rows=200) -> str:
 
     return "<div class='table-wrapper'>\n" + df.to_html(index=False, classes="rp-table", escape=False) + "\n</div>"
 
-# ---------------- Analyses ----------------
+# ---------------- Analyses (rendu) ----------------
 def best_dates(df: pd.DataFrame) -> pd.DataFrame:
     base = df.dropna(subset=["destination_label", "price_eur"]).copy()
     if base.empty: return pd.DataFrame()
@@ -269,59 +262,13 @@ def big_movers(wk_diff: pd.DataFrame) -> pd.DataFrame:
     cols = ["destination_label","title_curr","price_eur_prev","price_eur_curr","delta_abs","delta_pct","movement","url"]
     cols = [c for c in cols if c in x.columns]
     out = x[x["flag"]].sort_values(["delta_pct","delta_abs"], ascending=[False, False])[cols].reset_index(drop=True)
-
-    # format delta_pct avec normalisation éventuelle (>1 -> /100)
     if "delta_pct" in out.columns:
-        def _fmt(v):
-            if pd.isna(v):
-                return ""
-            try:
-                v = float(v)
-            except Exception:
-                return ""
-            if abs(v) > 1.0:  # si déjà en %, reviens à fraction
-                v = v / 100.0
-            sign = "+" if v > 0 else ""
-            return f"<span class='{'rp-delta-pos' if v>0 else ('rp-delta-neg' if v<0 else 'rp-delta-eq')}'>{sign}{v:.1%}</span>"
-        out["delta_pct"] = out["delta_pct"].map(_fmt)
-
+        out["delta_pct"] = out["delta_pct"].map(
+            lambda v: "" if pd.isna(v) else (f"<span class='rp-delta-pos'>+{v:.1%}</span>" if v>0
+                                             else (f"<span class='rp-delta-neg'>{v:.1%}</span>" if v<0
+                                                   else "<span class='rp-delta-eq'>0%</span>")))
     out = decorate_movement(out)
     out = linkify_url_col(out)
-    return out
-
-def new_vs_gone(df_curr: pd.DataFrame, df_prev: pd.DataFrame | None):
-    if df_prev is None or df_prev.empty or df_curr.empty:
-        return pd.DataFrame(), pd.DataFrame()
-    curr = set(df_curr["destination_label"].dropna().unique())
-    prev = set(df_prev["destination_label"].dropna().unique())
-    new_labels  = curr - prev
-    gone_labels = prev - curr
-
-    new = df_curr[df_curr["destination_label"].isin(new_labels)].copy()
-    if not new.empty:
-        idx = new.groupby("destination_label")["price_eur"].idxmin()
-        new = new.loc[idx, ["destination_label","country_name","title","price_eur","discount_pct","best_starting_date","url"]]
-        new = new.sort_values(["country_name","destination_label"]).reset_index(drop=True)
-        new = linkify_url_col(new)
-
-    gone = df_prev[df_prev["destination_label"].isin(gone_labels)].copy()
-    if not gone.empty:
-        idx2 = gone.groupby("destination_label")["price_eur"].idxmin()
-        gone = gone.loc[idx2, ["destination_label","country_name","title","price_eur","best_starting_date","url"]]
-        gone.rename(columns={"price_eur":"last_seen_price_eur","best_starting_date":"last_seen_date"}, inplace=True)
-        gone = gone.sort_values(["country_name","destination_label"]).reset_index(drop=True)
-        gone = linkify_url_col(gone)
-
-    return new, gone
-
-def price_buckets(df: pd.DataFrame):
-    if df.empty: return pd.DataFrame()
-    bins   = [0, 800, 1000, 1200, 1500, 2000, 3000, 99999]
-    labels = ["<800", "800–999", "1000–1199", "1200–1499", "1500–1999", "2000–2999", "≥3000"]
-    x = df.dropna(subset=["price_eur"]).copy()
-    x["bucket"] = pd.cut(x["price_eur"], bins=bins, labels=labels, right=False)
-    out = x["bucket"].value_counts().reindex(labels, fill_value=0).reset_index()
-    out.columns = ["tranche_prix", "nb_offres"]
     return out
 
 # ---------------- Main ----------------
@@ -355,6 +302,15 @@ def main():
             wd["url"] = choose_url_col(wd)
             wd = wd[[c for c in ["destination_label","title_curr","price_eur_prev","price_eur_curr","delta_abs","delta_pct","movement","url"] if c in wd.columns]]
 
+        # NEW: changements de prix sur même date (dernier vs précédent)
+        same_date = safe_sql(conn,
+            "SELECT slug, title, destination_label, country_name, best_starting_date, "
+            "price_eur_prev, price_eur_curr, delta_abs, delta_pct, movement, sales_status, url "
+            "FROM same_date_diff WHERE run_date = ? "
+            "ORDER BY ABS(delta_abs) DESC, ABS(delta_pct) DESC, best_starting_date",
+            (last,)
+        )
+
         mo_all = safe_sql(conn, "SELECT month, destination_label, prix_min, prix_avg, nb_depart FROM monthly_kpis ORDER BY month, destination_label")
         mo_recent = pd.DataFrame()
         if not mo_all.empty:
@@ -367,8 +323,6 @@ def main():
         ctry    = country_summary(df_curr)
         watch   = promo_watchlist(df_curr)
         movers  = big_movers(wd) if not wd.empty else pd.DataFrame()
-        new_df, gone_df = new_vs_gone(df_curr, df_prev)
-        buckets = price_buckets(df_curr)
 
     finally:
         conn.close()
@@ -397,7 +351,12 @@ title: RoadPrice — Accueil
 
 ---
 
-## Gros mouvements de prix (Δ% ≥ {ALERT_PCT*100:.0f}% ou Δ€ ≥ {ALERT_EUR:.0f}€)
+## Changements de prix (même date) — dernier vs précédent
+{html_table(same_date, max_rows=800)}
+
+---
+
+## Gros mouvements de prix (Δ% ≥ {ALERT_PCT*100:.0f}% ou Δ€ ≥ {ALERT_EUR:.0f}€) — sur le panier “meilleur prix par destination”
 {html_table(movers, max_rows=250)}
 
 ---
@@ -417,16 +376,8 @@ title: RoadPrice — Accueil
 
 ---
 
-## Nouvelles destinations vs précédent
-{html_table(new_df, max_rows=400)}
-
-## Destinations disparues vs précédent
-{html_table(gone_df, max_rows=400)}
-
----
-
-## Répartition par tranches de prix
-{html_table(buckets, max_rows=50)}
+## KPIs hebdo — Historique des runs
+{html_table(kpi_hist, max_rows=1000)}
 
 ---
 
