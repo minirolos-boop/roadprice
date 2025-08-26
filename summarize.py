@@ -352,4 +352,24 @@ title: RoadPrice – Évolutions tarifaires
 
 ---
 
-## KPIs mensuels
+## KPIs mensuels — Vue complète (toutes années)
+{mo_all_html}
+
+---
+
+## KPIs mensuels — Aperçu {RECENT_MONTHS} derniers mois
+{mo_recent_html}
+
+---
+
+### Légende
+- <strong>Δ%</strong> : variation relative vs snapshot précédent.  
+- <strong>Δ€</strong> : variation absolue en euros.  
+- Les liens mènent à la page WeRoad de l’offre (si disponible).
+"""
+    OUT.write_text(content, encoding="utf-8")
+    print(f"Wrote {OUT}")
+
+
+if __name__ == "__main__":
+    main()
