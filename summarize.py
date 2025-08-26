@@ -1,5 +1,8 @@
 # summarize.py — Génère un unique dashboard Markdown/HTML dans docs/index.md
-# Ancien design (une seule page) + tri/filtre/recherche/pagination côté client (Simple-DataTables)
+# - Design simple (une page)
+# - Tri / filtre / recherche / pagination côté client (Simple-DataTables)
+# - Pas de "rectangle" autour des tables (wrapper dés-stylé)
+# - Normalisation des colonnes en % (x>1 => x/100)
 
 from pathlib import Path
 from datetime import datetime, timezone
@@ -15,10 +18,8 @@ RECENT_MONTHS = 24
 ALERT_PCT = float(os.getenv("ALERT_PCT", "0.10"))   # 10 %
 ALERT_EUR = float(os.getenv("ALERT_EUR", "150"))    # 150 €
 
-# ---------------- Helpers assets (DataTables + style anti-"rectangle") ----------------
+# ---------------- Assets (Simple-DataTables + style anti "rectangle") ----------------
 def tables_enhancer_assets() -> str:
-    """Assets + JS qui transforme toutes les tables .rp-table en tables interactives,
-    sans hauteur fixe ni "carte" (wrapper dés-stylé)."""
     return """
 <!-- Simple-DataTables (CDN) -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-datatables@9.0.3/dist/style.min.css">
@@ -46,7 +47,7 @@ def tables_enhancer_assets() -> str:
 .dataTable-wrapper.rp-dt-unstyled .dataTable-pagination a { border-radius: .4rem; }
 .dataTable-wrapper.rp-dt-unstyled table { background: transparent; border: none; box-shadow: none; }
 
-/* Conserver ton scroll horizontal via .table-wrapper */
+/* Conserver le scroll horizontal via .table-wrapper (déjà dans custom.css) */
 .table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0 0 1.25rem 0; }
 </style>
 
@@ -63,7 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll("table.rp-table").forEach((tbl) => {
     const dt = new simpleDatatables.DataTable(tbl, {
       searchable: true,
-      fixedHeight: false,            // important: pas de cadre/scroll interne
+      fixedHeight: false,            // pas de cadre/scroll interne
       perPage: 25,
       perPageSelect: [10,25,50,100],
       labels: {
@@ -88,13 +89,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (isMoney || isPct) {
         dt.columns().sort(idx, (a, b) => {
-          const ta = a.replace(/<[^>]*>/g, ""); // enlève HTML des cellules (badges/liens)
+          const ta = a.replace(/<[^>]*>/g, ""); // enlève HTML
           const tb = b.replace(/<[^>]*>/g, "");
           const na = isPct ? parseFloat(ta.replace("%","").replace(",",".")) : euroToNumber(ta);
           const nb = isPct ? parseFloat(tb.replace("%","").replace(",",".")) : euroToNumber(tb);
-          if (na == null && nb == null) return 0;
-          if (na == null) return -1;
-          if (nb == null) return 1;
+          if (isNaN(na) && isNaN(nb)) return 0;
+          if (isNaN(na)) return -1;
+          if (isNaN(nb)) return 1;
           return na - nb;
         });
       }
@@ -155,7 +156,8 @@ def decorate_movement(df: pd.DataFrame) -> pd.DataFrame:
     return out
 
 def html_table(df: pd.DataFrame, max_rows=200) -> str:
-    """Table HTML stylable via custom.css (classes rp-table + wrapper)."""
+    """Table HTML stylable via custom.css (classes rp-table + wrapper).
+       Corrige les colonnes *_pct* (si valeur >1 → valeur/100 avant formatage)."""
     if df is None or df.empty:
         return "<p><em>Aucune donnée</em></p>"
     df = df.copy().head(max_rows)
@@ -167,12 +169,18 @@ def html_table(df: pd.DataFrame, max_rows=200) -> str:
     pct_cols = [c for c in df.columns if c.endswith("_pct") or c in ("delta_pct", "promo_share_pct")]
     for c in pct_cols:
         if c in df.columns and not has_html(df[c]):
-            df[c] = df[c].map(
-                lambda v: (
-                    f"{(v/100):.1%}" if (pd.notna(v) and v > 1)
-                    else (f"{v:.1%}" if pd.notna(v) else "")
-                )
-            )
+            def _fmt_pct(v):
+                if pd.isna(v):
+                    return ""
+                try:
+                    v = float(v)
+                except Exception:
+                    return ""
+                # normalisation : si déjà en pourcentage (ex. 720.0), on /100
+                if v > 1.0:
+                    v = v / 100.0
+                return f"{v:.1%}"
+            df[c] = df[c].map(_fmt_pct)
 
     # montants € si pas déjà HTML
     money_cols = [c for c in df.columns if any(k in c for k in ["price", "prix", "delta_abs"])]
@@ -182,8 +190,7 @@ def html_table(df: pd.DataFrame, max_rows=200) -> str:
 
     return "<div class='table-wrapper'>\n" + df.to_html(index=False, classes="rp-table", escape=False) + "\n</div>"
 
-
-# -------------- Analyses ----------------
+# ---------------- Analyses ----------------
 def best_dates(df: pd.DataFrame) -> pd.DataFrame:
     base = df.dropna(subset=["destination_label", "price_eur"]).copy()
     if base.empty: return pd.DataFrame()
@@ -262,11 +269,22 @@ def big_movers(wk_diff: pd.DataFrame) -> pd.DataFrame:
     cols = ["destination_label","title_curr","price_eur_prev","price_eur_curr","delta_abs","delta_pct","movement","url"]
     cols = [c for c in cols if c in x.columns]
     out = x[x["flag"]].sort_values(["delta_pct","delta_abs"], ascending=[False, False])[cols].reset_index(drop=True)
+
+    # format delta_pct avec normalisation éventuelle (>1 -> /100)
     if "delta_pct" in out.columns:
-        out["delta_pct"] = out["delta_pct"].map(
-            lambda v: "" if pd.isna(v) else (f"<span class='rp-delta-pos'>+{v:.1%}</span>" if v>0
-                                             else (f"<span class='rp-delta-neg'>{v:.1%}</span>" if v<0
-                                                   else "<span class='rp-delta-eq'>0%</span>")))
+        def _fmt(v):
+            if pd.isna(v):
+                return ""
+            try:
+                v = float(v)
+            except Exception:
+                return ""
+            if abs(v) > 1.0:  # si déjà en %, reviens à fraction
+                v = v / 100.0
+            sign = "+" if v > 0 else ""
+            return f"<span class='{'rp-delta-pos' if v>0 else ('rp-delta-neg' if v<0 else 'rp-delta-eq')}'>{sign}{v:.1%}</span>"
+        out["delta_pct"] = out["delta_pct"].map(_fmt)
+
     out = decorate_movement(out)
     out = linkify_url_col(out)
     return out
@@ -306,7 +324,7 @@ def price_buckets(df: pd.DataFrame):
     out.columns = ["tranche_prix", "nb_offres"]
     return out
 
-# -------------- Main (page unique) --------------
+# ---------------- Main ----------------
 def main():
     ensure_docs()
 
@@ -360,7 +378,6 @@ def main():
     badge_build = f"![build](https://img.shields.io/badge/build-{ts}-success)"
     coverage = f"_Historique : **{start_run}** → **{end_run}** ({len(runs)} runs)._"
 
-    # Page unique (Markdown + HTML)
     content = f"""---
 title: RoadPrice — Accueil
 ---
