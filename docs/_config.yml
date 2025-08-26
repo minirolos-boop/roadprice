@@ -5,8 +5,12 @@ remote_theme: pages-themes/cayman@v0.2.0
 
 plugins:
   - jekyll-remote-theme
-  - jekyll-feed
-  - jekyll-sitemap
+  # Tu peux garder feed/sitemap si tu veux
+  # - jekyll-feed
+  # - jekyll-sitemap
+
+# 👇 Ajoute ceci
+repository: miniroles-boop/roadprice
 
 markdown: kramdown
 kramdown:
