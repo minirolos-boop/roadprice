@@ -9,34 +9,24 @@ title: RoadPrice — Accueil
 <script src="https://cdn.jsdelivr.net/npm/simple-datatables@9.0.3"></script>
 
 <style>
-/* --- Enlever le look "carte/rectangle" de Simple-DataTables --- */
-.dataTable-wrapper.rp-dt-unstyled {
-  background: transparent; border: none; box-shadow: none; padding: 0;
-}
-.dataTable-wrapper.rp-dt-unstyled .dataTable-container {
-  max-height: none !important; overflow: visible !important;
-  background: transparent; border: none; box-shadow: none;
-}
-.dataTable-wrapper.rp-dt-unstyled .dataTable-top,
-.dataTable-wrapper.rp-dt-unstyled .dataTable-bottom {
-  background: transparent; border: none; box-shadow: none; padding: .25rem 0;
-}
-.dataTable-wrapper.rp-dt-unstyled .dataTable-info,
-.dataTable-wrapper.rp-dt-unstyled .dataTable-pagination,
-.dataTable-wrapper.rp-dt-unstyled .dataTable-dropdown,
-.dataTable-wrapper.rp-dt-unstyled .dataTable-search {
-  margin: .35rem 0; font-size: 0.95rem;
-}
-.dataTable-wrapper.rp-dt-unstyled .dataTable-pagination a { border-radius: .4rem; }
-.dataTable-wrapper.rp-dt-unstyled table { background: transparent; border: none; box-shadow: none; }
+/* Supprimer l'aspect "carte/rectangle" du wrapper Simple-DataTables */
+.dataTable-wrapper,
+.dataTable-wrapper .dataTable-container { background: transparent !important; border: 0 !important; box-shadow: none !important; padding: 0 !important; }
+.dataTable-top, .dataTable-bottom { background: transparent !important; border: none !important; box-shadow: none !important; padding: .25rem 0 !important; }
+.dataTable-info, .dataTable-pagination, .dataTable-dropdown, .dataTable-search { margin: .35rem 0 !important; font-size: .95rem !important; }
+.dataTable-pagination a { border-radius: .4rem !important; }
 
-/* Conserver le scroll horizontal via .table-wrapper (déjà dans custom.css) */
+/* Conserver le scroll horizontal du conteneur .table-wrapper */
 .table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0 0 1.25rem 0; }
 </style>
 
 <script>
-document.addEventListener("DOMContentLoaded", () => {
-  // convertir "1 234,56 €" -> 1234.56 pour tri numérique
+(function() {
+  const ready = (fn) => {
+    if (document.readyState !== "loading") requestAnimationFrame(fn);
+    else document.addEventListener("DOMContentLoaded", () => requestAnimationFrame(fn));
+  };
+
   const euroToNumber = (txt) => {
     if (!txt) return null;
     const s = String(txt).replace(/\s/g, "").replace("€","").replace(/\u00A0/g,"").replace(",",".");
@@ -44,50 +34,58 @@ document.addEventListener("DOMContentLoaded", () => {
     return isNaN(v) ? null : v;
   };
 
-  document.querySelectorAll("table.rp-table").forEach((tbl) => {
-    const dt = new simpleDatatables.DataTable(tbl, {
-      searchable: true,
-      fixedHeight: false,            // pas de cadre/scroll interne
-      perPage: 25,
-      perPageSelect: [10,25,50,100],
-      labels: {
-        placeholder: "Rechercher…",
-        perPage: "{select} lignes par page",
-        noRows: "Aucune donnée",
-        info: "Affiche {start}–{end} sur {rows} lignes",
-      },
-    });
-
-    // déshabille le wrapper (évite le "rectangle")
-    const wrapper = tbl.closest(".dataTable-wrapper");
-    if (wrapper) wrapper.classList.add("rp-dt-unstyled");
-
-    // tri custom pour colonnes € et %
-    dt.columns().each((idx) => {
-      const header = tbl.tHead?.rows?.[0]?.cells?.[idx];
-      if (!header) return;
-      const htxt = header.textContent.toLowerCase();
-      const isMoney = /(€|price|prix|delta_abs)/.test(htxt);
-      const isPct   = /(pct|%)/.test(htxt);
-
-      if (isMoney || isPct) {
-        dt.columns().sort(idx, (a, b) => {
-          const ta = a.replace(/<[^>]*>/g, ""); // enlève HTML
-          const tb = b.replace(/<[^>]*>/g, "");
-          const na = isPct ? parseFloat(ta.replace("%","").replace(",",".")) : euroToNumber(ta);
-          const nb = isPct ? parseFloat(tb.replace("%","").replace(",",".")) : euroToNumber(tb);
-          if (isNaN(na) && isNaN(nb)) return 0;
-          if (isNaN(na)) return -1;
-          if (isNaN(nb)) return 1;
-          return na - nb;
+  ready(() => {
+    const tables = document.querySelectorAll("table.rp-table");
+    tables.forEach((tbl, tIndex) => {
+      try {
+        const dt = new simpleDatatables.DataTable(tbl, {
+          searchable: true,
+          fixedHeight: false,
+          perPage: 25,
+          perPageSelect: [10, 25, 50, 100],
+          labels: {
+            placeholder: "Rechercher…",
+            perPage: "{select} lignes par page",
+            noRows: "Aucune donnée",
+            info: "Affiche {start}–{end} sur {rows} lignes",
+          },
         });
+
+        // tri custom € / %
+        try {
+          dt.columns().each((idx) => {
+            const header = tbl.tHead && tbl.tHead.rows && tbl.tHead.rows[0] && tbl.tHead.rows[0].cells
+              ? tbl.tHead.rows[0].cells[idx] : null;
+            if (!header) return;
+            const htxt = (header.textContent || "").toLowerCase();
+            const isMoney = /(€|price|prix|delta_abs)/.test(htxt);
+            const isPct   = /(pct|%)/.test(htxt);
+
+            if (isMoney || isPct) {
+              dt.columns().sort(idx, (a, b) => {
+                const ta = a.replace(/<[^>]*>/g, "");
+                const tb = b.replace(/<[^>]*>/g, "");
+                const na = isPct ? parseFloat(ta.replace("%","").replace(",",".")) : euroToNumber(ta);
+                const nb = isPct ? parseFloat(tb.replace("%","").replace(",",".")) : euroToNumber(tb);
+                if (na == null && nb == null) return 0;
+                if (na == null) return -1;
+                if (nb == null) return 1;
+                return na - nb;
+              });
+            }
+          });
+        } catch(e) {
+          console.warn("Sorter setup error on table", tIndex, e);
+        }
+      } catch (e) {
+        console.warn("DataTable init failed on table", tIndex, e);
       }
     });
   });
-});
+})();
 </script>
 
-![run](https://img.shields.io/badge/run-2025-08-26-blue) ![build](https://img.shields.io/badge/build-2025-08-26 20:23 UTC-success)
+![run](https://img.shields.io/badge/run-2025-08-26-blue) ![build](https://img.shields.io/badge/build-2025-08-26 20:37 UTC-success)
 
 _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
 
@@ -153,7 +151,12 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
 
 ---
 
-## Gros mouvements de prix (Δ% ≥ 10% ou Δ€ ≥ 150€)
+## Changements de prix (même date) — dernier vs précédent
+<p><em>Aucune donnée</em></p>
+
+---
+
+## Gros mouvements de prix (Δ% ≥ 10% ou Δ€ ≥ 150€) — sur le panier “meilleur prix par destination”
 <p><em>Aucune donnée</em></p>
 
 ---
@@ -3633,51 +3636,29 @@ _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
 
 ---
 
-## Nouvelles destinations vs précédent
-<p><em>Aucune donnée</em></p>
-
-## Destinations disparues vs précédent
-<p><em>Aucune donnée</em></p>
-
----
-
-## Répartition par tranches de prix
+## KPIs hebdo — Historique des runs
 <div class='table-wrapper'>
 <table border="1" class="dataframe rp-table">
   <thead>
     <tr style="text-align: right;">
-      <th>tranche_prix</th>
-      <th>nb_offres</th>
+      <th>run_date</th>
+      <th>price_eur_min</th>
+      <th>price_eur_med</th>
+      <th>price_eur_avg</th>
+      <th>count_total</th>
+      <th>count_promos</th>
+      <th>promo_share_pct</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td><800</td>
-      <td>27</td>
-    </tr>
-    <tr>
-      <td>800–999</td>
-      <td>32</td>
-    </tr>
-    <tr>
-      <td>1000–1199</td>
-      <td>20</td>
-    </tr>
-    <tr>
-      <td>1200–1499</td>
-      <td>22</td>
-    </tr>
-    <tr>
-      <td>1500–1999</td>
-      <td>30</td>
-    </tr>
-    <tr>
-      <td>2000–2999</td>
-      <td>13</td>
-    </tr>
-    <tr>
-      <td>≥3000</td>
-      <td>1</td>
+      <td>2025-08-26</td>
+      <td>469,00 €</td>
+      <td>1 149,00 €</td>
+      <td>1 288,17 €</td>
+      <td>145</td>
+      <td>51</td>
+      <td>35.2%</td>
     </tr>
   </tbody>
 </table>
