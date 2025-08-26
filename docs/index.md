@@ -1,13 +1,12 @@
 ---
-title: RoadPrice – Accueil
-layout: default
+title: RoadPrice — Accueil
 ---
 
 {% include nav.html %}
 
 
 # RoadPrice — synthèse
-![run](https://img.shields.io/badge/run-2025-08-26-blue) ![build](https://img.shields.io/badge/build-2025-08-26 19:19 UTC-success)
+![run](https://img.shields.io/badge/run-2025-08-26-blue) ![build](https://img.shields.io/badge/build-2025-08-26 19:42 UTC-success)
 
 _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
 
