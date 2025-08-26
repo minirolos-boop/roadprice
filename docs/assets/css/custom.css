@@ -1,35 +1,79 @@
 :root {
   --rp-accent: #1f6feb;
   --rp-green: #2da44e;
-  --rp-red: #d73a49;
+  --rp-red:   #d73a49;
 }
 
-/* Tables HTML générées par pandas.to_html */
+/* ---------------------------
+   Tables (pandas.to_html)
+---------------------------- */
+.table-wrapper {
+  overflow-x: auto;          /* scroll horizontal si table large */
+  -webkit-overflow-scrolling: touch;
+  margin: 0 0 1.25rem 0;
+}
+
 .rp-table {
   width: 100%;
   border-collapse: collapse;
-  margin: 1rem 0 2rem 0;
+  margin: 0.25rem 0 1.25rem 0;
   font-variant-numeric: tabular-nums;
   font-size: 0.95rem;
+  background: #fff;
 }
+
 .rp-table thead th {
   background: #f6f8fa;
   border-bottom: 2px solid #d0d7de;
   text-align: left;
   padding: .6rem .7rem;
+  position: sticky;
+  top: 0;                    /* en-tête collant dans le wrapper */
+  z-index: 1;
 }
+
 .rp-table td {
   padding: .55rem .7rem;
   border-bottom: 1px solid #e5e7eb;
   vertical-align: top;
+  white-space: nowrap;       /* lisible en horizontal + scroll */
 }
+
 .rp-table tbody tr:hover {
   background: #fafbfc;
 }
-.rp-table a { text-decoration: none; }
+
+.rp-table a { text-decoration: none; color: #0969da; }
 .rp-table a:hover { text-decoration: underline; }
 
-/* Emphase des mouvements */
-code.up    { color: var(--rp-red);   font-weight: 600; }  /* hausse */
-code.down  { color: var(--rp-green); font-weight: 600; }  /* baisse */
+/* Alignements utiles (optionnels)
+   Ajoute ces classes à tes colonnes si besoin via summarize.py */
+.rp-td-right { text-align: right; }
+.rp-td-center { text-align: center; }
+
+/* ---------------------------
+   Emphase variations Δ
+---------------------------- */
+.rp-delta-pos { color: var(--rp-green); font-weight: 600; }
+.rp-delta-neg { color: var(--rp-red);   font-weight: 600; }
+.rp-delta-eq  { color: #57606a; }
+
+/* Compat: anciens <code class="up|down|equal"> */
+code.up    { color: var(--rp-red);   font-weight: 600; }  /* hausse (prix ↑) */
+code.down  { color: var(--rp-green); font-weight: 600; }  /* baisse (prix ↓) */
 code.equal { color: #57606a; }
+
+/* ---------------------------
+   Petits détails UI
+---------------------------- */
+.badges, .shields {
+  display: flex;
+  gap: .5rem;
+  flex-wrap: wrap;
+  margin: .5rem 0 1rem 0;
+}
+
+@media (max-width: 780px) {
+  .rp-table td, .rp-table th { padding: .5rem .6rem; }
+  .rp-table { font-size: 0.92rem; }
+}
