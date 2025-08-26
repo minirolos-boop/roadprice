@@ -30,7 +30,7 @@ title: RoadPrice — Accueil
 .dataTable-wrapper.rp-dt-unstyled .dataTable-pagination a { border-radius: .4rem; }
 .dataTable-wrapper.rp-dt-unstyled table { background: transparent; border: none; box-shadow: none; }
 
-/* Conserver ton scroll horizontal via .table-wrapper */
+/* Conserver le scroll horizontal via .table-wrapper (déjà dans custom.css) */
 .table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0 0 1.25rem 0; }
 </style>
 
@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll("table.rp-table").forEach((tbl) => {
     const dt = new simpleDatatables.DataTable(tbl, {
       searchable: true,
-      fixedHeight: false,            // important: pas de cadre/scroll interne
+      fixedHeight: false,            // pas de cadre/scroll interne
       perPage: 25,
       perPageSelect: [10,25,50,100],
       labels: {
@@ -72,13 +72,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (isMoney || isPct) {
         dt.columns().sort(idx, (a, b) => {
-          const ta = a.replace(/<[^>]*>/g, ""); // enlève HTML des cellules (badges/liens)
+          const ta = a.replace(/<[^>]*>/g, ""); // enlève HTML
           const tb = b.replace(/<[^>]*>/g, "");
           const na = isPct ? parseFloat(ta.replace("%","").replace(",",".")) : euroToNumber(ta);
           const nb = isPct ? parseFloat(tb.replace("%","").replace(",",".")) : euroToNumber(tb);
-          if (na == null && nb == null) return 0;
-          if (na == null) return -1;
-          if (nb == null) return 1;
+          if (isNaN(na) && isNaN(nb)) return 0;
+          if (isNaN(na)) return -1;
+          if (isNaN(nb)) return 1;
           return na - nb;
         });
       }
@@ -87,7 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
-![run](https://img.shields.io/badge/run-2025-08-26-blue) ![build](https://img.shields.io/badge/build-2025-08-26 20:13 UTC-success)
+![run](https://img.shields.io/badge/run-2025-08-26-blue) ![build](https://img.shields.io/badge/build-2025-08-26 20:23 UTC-success)
 
 _Historique : **2025-08-26** → **2025-08-26** (1 runs)._
 
