@@ -3,7 +3,7 @@ title: RoadPrice – Évolutions tarifaires
 ---
 
 # RoadPrice — Évolutions tarifaires
-![last_run](https://img.shields.io/badge/last_run-2025-08-26-blue) ![build](https://img.shields.io/badge/build-2025-08-26 18:55 UTC-success)
+![last_run](https://img.shields.io/badge/last_run-2025-08-26-blue) ![build](https://img.shields.io/badge/build-2025-08-26 19:05 UTC-success)
 
 **Dernier run : `2025-08-26`**  
 _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
@@ -111,8 +111,8 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td>NaN</td>
       <td></td>
       <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
-      <td>2026-03-22</td>
-      <td>2026-03-27</td>
+      <td>2025-11-02</td>
+      <td>2025-11-07</td>
       <td>https://www.weroad.fr/voyages/albanie-express-hiver</td>
     </tr>
     <tr>
@@ -149,9 +149,9 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td></td>
       <td>NaN</td>
       <td></td>
-      <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>WAITING_LIST</SPAN></span></td>
+      <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE CONFIRMED'>CONFIRMED</SPAN></span></td>
+      <td>2025-10-28</td>
       <td>2025-11-09</td>
-      <td>2025-11-21</td>
       <td>https://www.weroad.fr/voyages/patagonie-360</td>
     </tr>
     <tr>
@@ -279,9 +279,9 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td>1 699,00 €</td>
       <td>100.0</td>
       <td>590.0%</td>
-      <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
-      <td>2025-11-01</td>
-      <td>2025-11-10</td>
+      <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE ALMOST'>ALMOST</SPAN></span></td>
+      <td>2025-10-19</td>
+      <td>2025-10-28</td>
       <td>https://www.weroad.fr/voyages/cap-vert-beach-life-santiago-fogo-boa-vista</td>
     </tr>
     <tr>
@@ -306,8 +306,8 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td>NaN</td>
       <td></td>
       <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
-      <td>2026-10-18</td>
-      <td>2026-10-29</td>
+      <td>2026-11-20</td>
+      <td>2026-12-01</td>
       <td>https://www.weroad.fr/voyages/chine</td>
     </tr>
     <tr>
@@ -345,8 +345,8 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td>NaN</td>
       <td></td>
       <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
-      <td>2025-11-18</td>
-      <td>2025-11-30</td>
+      <td>2026-10-20</td>
+      <td>2026-11-01</td>
       <td>https://www.weroad.fr/voyages/costa-rica-360</td>
     </tr>
     <tr>
@@ -384,8 +384,8 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td>100.0</td>
       <td>910.0%</td>
       <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
-      <td>2025-10-25</td>
-      <td>2025-11-01</td>
+      <td>2026-02-14</td>
+      <td>2026-02-21</td>
       <td>https://www.weroad.fr/voyages/fuerteventura-surf-weroadx</td>
     </tr>
     <tr>
@@ -397,8 +397,8 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td>NaN</td>
       <td></td>
       <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
-      <td>2026-08-26</td>
-      <td>2026-08-30</td>
+      <td>2026-07-08</td>
+      <td>2026-07-12</td>
       <td>https://www.weroad.fr/voyages/gran-canaria-express-ile-soleil</td>
     </tr>
     <tr>
@@ -409,9 +409,9 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td></td>
       <td>NaN</td>
       <td></td>
-      <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
-      <td>2025-12-28</td>
-      <td>2026-01-04</td>
+      <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE ALMOST'>ALMOST</SPAN></span></td>
+      <td>2025-10-11</td>
+      <td>2025-10-18</td>
       <td>https://www.weroad.fr/voyages/fuerteventura-lanzarote-plages-volcans</td>
     </tr>
     <tr>
@@ -449,8 +449,8 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td>NaN</td>
       <td></td>
       <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
-      <td>2026-06-28</td>
-      <td>2026-07-02</td>
+      <td>2026-09-28</td>
+      <td>2026-10-02</td>
       <td>https://www.weroad.fr/voyages/auvergne-express</td>
     </tr>
     <tr>
@@ -462,8 +462,8 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td>NaN</td>
       <td></td>
       <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
-      <td>2026-07-11</td>
-      <td>2026-07-15</td>
+      <td>2026-03-07</td>
+      <td>2026-03-11</td>
       <td>https://www.weroad.fr/voyages/bordeaux-dune-du-pilat</td>
     </tr>
     <tr>
@@ -488,8 +488,8 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td>NaN</td>
       <td></td>
       <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
-      <td>2026-06-13</td>
-      <td>2026-06-17</td>
+      <td>2026-07-25</td>
+      <td>2026-07-29</td>
       <td>https://www.weroad.fr/voyages/bretagne-quiberon-belle-ile</td>
     </tr>
     <tr>
@@ -539,9 +539,9 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td></td>
       <td>NaN</td>
       <td></td>
-      <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE ALMOST'>ALMOST</SPAN></span></td>
-      <td>2025-10-11</td>
-      <td>2025-10-18</td>
+      <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>SOLD_OUT</SPAN></span></td>
+      <td>2025-09-14</td>
+      <td>2025-09-21</td>
       <td>https://www.weroad.fr/voyages/grece-360-athenes-meteores-peloponnese</td>
     </tr>
     <tr>
@@ -553,8 +553,8 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td>NaN</td>
       <td></td>
       <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE CONFIRMED'>CONFIRMED</SPAN></span></td>
-      <td>2025-12-28</td>
-      <td>2026-01-08</td>
+      <td>2025-10-01</td>
+      <td>2025-10-12</td>
       <td>https://www.weroad.fr/voyages/guatemala-volcans-nature-cultures-anciennes</td>
     </tr>
     <tr>
@@ -592,8 +592,8 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td>50.0</td>
       <td>500.0%</td>
       <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE ALMOST'>ALMOST</SPAN></span></td>
-      <td>2025-12-06</td>
-      <td>2025-12-12</td>
+      <td>2025-12-13</td>
+      <td>2025-12-19</td>
       <td>https://www.weroad.fr/voyages/prague-budapest-marches-noel-weroadx</td>
     </tr>
     <tr>
@@ -618,8 +618,8 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td>NaN</td>
       <td></td>
       <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
-      <td>2026-07-15</td>
-      <td>2026-07-22</td>
+      <td>2026-06-03</td>
+      <td>2026-06-10</td>
       <td>https://www.weroad.fr/voyages/bali-360</td>
     </tr>
     <tr>
@@ -670,8 +670,8 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td>NaN</td>
       <td></td>
       <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
-      <td>2026-04-08</td>
-      <td>2026-04-12</td>
+      <td>2026-03-11</td>
+      <td>2026-03-15</td>
       <td>https://www.weroad.fr/voyages/islande-express</td>
     </tr>
     <tr>
@@ -800,8 +800,8 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td>NaN</td>
       <td></td>
       <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE ALMOST'>ALMOST</SPAN></span></td>
-      <td>2025-10-19</td>
-      <td>2025-10-28</td>
+      <td>2025-11-23</td>
+      <td>2025-12-02</td>
       <td>https://www.weroad.fr/voyages/kenya-afrique-safari-plage-village</td>
     </tr>
     <tr>
@@ -838,9 +838,9 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td>1 249,00 €</td>
       <td>70.0</td>
       <td>560.0%</td>
-      <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
-      <td>2026-08-09</td>
-      <td>2026-08-16</td>
+      <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE CONFIRMED'>CONFIRMED</SPAN></span></td>
+      <td>2026-02-08</td>
+      <td>2026-02-15</td>
       <td>https://www.weroad.fr/voyages/maldives-beach-life-detente-snorkeling-maafushi</td>
     </tr>
     <tr>
@@ -890,9 +890,9 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td></td>
       <td>NaN</td>
       <td></td>
-      <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE ALMOST'>ALMOST</SPAN></span></td>
-      <td>2025-11-03</td>
-      <td>2025-11-10</td>
+      <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
+      <td>2026-01-03</td>
+      <td>2026-01-10</td>
       <td>https://www.weroad.fr/voyages/mexique-yucatan-beach-life</td>
     </tr>
     <tr>
@@ -956,8 +956,8 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td>NaN</td>
       <td></td>
       <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE CONFIRMED'>CONFIRMED</SPAN></span></td>
-      <td>2025-10-10</td>
-      <td>2025-10-18</td>
+      <td>2025-10-19</td>
+      <td>2025-10-27</td>
       <td>https://www.weroad.fr/voyages/nepal</td>
     </tr>
     <tr>
@@ -1008,8 +1008,8 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td>NaN</td>
       <td></td>
       <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
-      <td>2025-12-02</td>
-      <td>2025-12-14</td>
+      <td>2026-05-10</td>
+      <td>2026-05-22</td>
       <td>https://www.weroad.fr/voyages/philippines-360</td>
     </tr>
     <tr>
@@ -1034,8 +1034,8 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td>NaN</td>
       <td></td>
       <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
-      <td>2025-10-22</td>
-      <td>2025-10-26</td>
+      <td>2025-11-06</td>
+      <td>2025-11-10</td>
       <td>https://www.weroad.fr/voyages/portugal-express</td>
     </tr>
     <tr>
@@ -1059,9 +1059,9 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td></td>
       <td>NaN</td>
       <td></td>
-      <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>WAITING_LIST</SPAN></span></td>
-      <td>2025-09-17</td>
-      <td>2025-09-28</td>
+      <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>SOLD_OUT</SPAN></span></td>
+      <td>2025-09-07</td>
+      <td>2025-09-18</td>
       <td>https://www.weroad.fr/voyages/perou-360</td>
     </tr>
     <tr>
@@ -1086,8 +1086,8 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td>50.0</td>
       <td>560.0%</td>
       <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE ALMOST'>ALMOST</SPAN></span></td>
-      <td>2025-09-11</td>
-      <td>2025-09-15</td>
+      <td>2025-09-25</td>
+      <td>2025-09-29</td>
       <td>https://www.weroad.fr/voyages/Ecosse-express-edimbourg-highlands</td>
     </tr>
     <tr>
@@ -1216,8 +1216,8 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td>NaN</td>
       <td></td>
       <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
-      <td>2025-10-26</td>
-      <td>2025-11-04</td>
+      <td>2026-01-15</td>
+      <td>2026-01-24</td>
       <td>https://www.weroad.fr/voyages/thailande-plage-hiver</td>
     </tr>
     <tr>
@@ -1268,8 +1268,8 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td>NaN</td>
       <td></td>
       <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE ALMOST'>ALMOST</SPAN></span></td>
-      <td>2026-08-07</td>
-      <td>2026-08-15</td>
+      <td>2026-05-01</td>
+      <td>2026-05-09</td>
       <td>https://www.weroad.fr/voyages/turquie-istanbul-cappadoce-ephese</td>
     </tr>
     <tr>
@@ -1281,8 +1281,8 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td>NaN</td>
       <td></td>
       <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
-      <td>2026-07-14</td>
-      <td>2026-07-23</td>
+      <td>2026-03-07</td>
+      <td>2026-03-16</td>
       <td>https://www.weroad.fr/voyages/vietnam-backpack</td>
     </tr>
     <tr>
@@ -1294,8 +1294,8 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td>NaN</td>
       <td></td>
       <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
-      <td>2025-12-18</td>
-      <td>2025-12-22</td>
+      <td>2025-12-05</td>
+      <td>2025-12-09</td>
       <td>https://www.weroad.fr/voyages/le-caire-express-egypt</td>
     </tr>
     <tr>
@@ -1539,7 +1539,7 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td>799,00 €</td>
       <td></td>
       <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE CONFIRMED'>CONFIRMED</SPAN></span></td>
-      <td>2025-09-30</td>
+      <td>2025-09-17</td>
       <td>https://www.weroad.fr/voyages/maroc</td>
     </tr>
     <tr>
@@ -1561,7 +1561,7 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td>849,00 €</td>
       <td>560.0%</td>
       <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE ALMOST'>ALMOST</SPAN></span></td>
-      <td>2025-09-11</td>
+      <td>2025-09-25</td>
       <td>https://www.weroad.fr/voyages/Ecosse-express-edimbourg-highlands</td>
     </tr>
     <tr>
@@ -1610,17 +1610,6 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
     </tr>
     <tr>
       <td>2025-10</td>
-      <td>Portugal</td>
-      <td>Portugal Express</td>
-      <td>Portugal</td>
-      <td>699,00 €</td>
-      <td></td>
-      <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
-      <td>2025-10-22</td>
-      <td>https://www.weroad.fr/voyages/portugal-express</td>
-    </tr>
-    <tr>
-      <td>2025-10</td>
       <td>Tunisie</td>
       <td>Tunisie Express : Djerba, Un mélange de détente et cultures.</td>
       <td>Tunisie</td>
@@ -1649,7 +1638,7 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td>899,00 €</td>
       <td></td>
       <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
-      <td>2025-10-29</td>
+      <td>2025-10-18</td>
       <td>https://www.weroad.fr/voyages/chateaux-loire-express-blois-amboise-tours</td>
     </tr>
     <tr>
@@ -1676,14 +1665,14 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
     </tr>
     <tr>
       <td>2025-10</td>
-      <td>Grecia</td>
-      <td>Grèce 360: Athènes, les Météores et le Péloponnèse</td>
-      <td>Grèce</td>
+      <td>Italie</td>
+      <td>Italie: Rome, le Chianti, Florence, Luques et Pise</td>
+      <td>Italie</td>
       <td>999,00 €</td>
       <td></td>
-      <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE ALMOST'>ALMOST</SPAN></span></td>
-      <td>2025-10-11</td>
-      <td>https://www.weroad.fr/voyages/grece-360-athenes-meteores-peloponnese</td>
+      <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
+      <td>2025-10-26</td>
+      <td>https://www.weroad.fr/voyages/rome-chianti-florence-luques-pise</td>
     </tr>
     <tr>
       <td>2025-10</td>
@@ -1693,30 +1682,19 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td>999,00 €</td>
       <td></td>
       <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE CONFIRMED'>CONFIRMED</SPAN></span></td>
-      <td>2025-10-10</td>
+      <td>2025-10-19</td>
       <td>https://www.weroad.fr/voyages/nepal</td>
     </tr>
     <tr>
       <td>2025-10</td>
+      <td>Îles Canaries</td>
+      <td>Fuerteventura et Lanzarote  360° : entre plages et volcans</td>
       <td>Espagne</td>
-      <td>Fuerteventura Surf : aventure à la découverte de l'île</td>
-      <td>Espagne</td>
-      <td>999,00 €</td>
-      <td>910.0%</td>
-      <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
-      <td>2025-10-25</td>
-      <td>https://www.weroad.fr/voyages/fuerteventura-surf-weroadx</td>
-    </tr>
-    <tr>
-      <td>2025-10</td>
-      <td>Thaïlande</td>
-      <td>Thaïlande Beach Life Winter : Phuket, Krabi et Koh Lanta</td>
-      <td>Thaïlande</td>
       <td>999,00 €</td>
       <td></td>
-      <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
-      <td>2025-10-26</td>
-      <td>https://www.weroad.fr/voyages/thailande-plage-hiver</td>
+      <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE ALMOST'>ALMOST</SPAN></span></td>
+      <td>2025-10-11</td>
+      <td>https://www.weroad.fr/voyages/fuerteventura-lanzarote-plages-volcans</td>
     </tr>
     <tr>
       <td>2025-10</td>
@@ -1742,6 +1720,17 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
     </tr>
     <tr>
       <td>2025-10</td>
+      <td>Sicile</td>
+      <td>Sicile Beach Life : de Palerme À San Vito entre mer et temples</td>
+      <td>Italie</td>
+      <td>1 199,00 €</td>
+      <td></td>
+      <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE ALMOST'>ALMOST</SPAN></span></td>
+      <td>2025-10-04</td>
+      <td>https://www.weroad.fr/voyages/sicile-palerme-san-vito</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
       <td>Émirats Arabes Unis</td>
       <td>Émirats Arabes Unis 360° : Dubaï, Abou Dabi et le désert</td>
       <td>Émirats arabes unis</td>
@@ -1763,6 +1752,28 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td>https://www.weroad.fr/voyages/barcelone-costa-brava-360</td>
     </tr>
     <tr>
+      <td>2025-10</td>
+      <td>Islande</td>
+      <td>Islande : à la poursuite des aurores boréales</td>
+      <td>Islande</td>
+      <td>1 449,00 €</td>
+      <td></td>
+      <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE ALMOST'>ALMOST</SPAN></span></td>
+      <td>2025-10-30</td>
+      <td>https://www.weroad.fr/voyages/islande-aurores-boreales</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Albanie</td>
+      <td>Albanie Express Winter : histoire, nature et aventure</td>
+      <td>Albanie</td>
+      <td>549,00 €</td>
+      <td></td>
+      <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
+      <td>2025-11-02</td>
+      <td>https://www.weroad.fr/voyages/albanie-express-hiver</td>
+    </tr>
+    <tr>
       <td>2025-11</td>
       <td>Bourgogne</td>
       <td>Bourgogne Express : sur la route des Grands Crus</td>
@@ -1772,6 +1783,17 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
       <td>2025-11-19</td>
       <td>https://www.weroad.fr/voyages/bourgogne-express-route-grand-crus</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Portugal</td>
+      <td>Portugal Express</td>
+      <td>Portugal</td>
+      <td>699,00 €</td>
+      <td></td>
+      <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
+      <td>2025-11-06</td>
+      <td>https://www.weroad.fr/voyages/portugal-express</td>
     </tr>
     <tr>
       <td>2025-11</td>
@@ -1836,7 +1858,7 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td>1 099,00 €</td>
       <td></td>
       <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE CONFIRMED'>CONFIRMED</SPAN></span></td>
-      <td>2025-11-09</td>
+      <td>2025-11-28</td>
       <td>https://www.weroad.fr/voyages/sri-lanka-360-hiver</td>
     </tr>
     <tr>
@@ -1860,17 +1882,6 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE ALMOST'>ALMOST</SPAN></span></td>
       <td>2025-11-15</td>
       <td>https://www.weroad.fr/voyages/jordanie-trekking</td>
-    </tr>
-    <tr>
-      <td>2025-11</td>
-      <td>Thaïlande</td>
-      <td>Thaïlande Backpack Winter : Bangkok, Krabi et les îles Phi Phi</td>
-      <td>Thaïlande</td>
-      <td>1 249,00 €</td>
-      <td></td>
-      <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE CONFIRMED'>CONFIRMED</SPAN></span></td>
-      <td>2025-11-29</td>
-      <td>https://www.weroad.fr/voyages/thailande-hiver-expedition</td>
     </tr>
     <tr>
       <td>2025-11</td>
@@ -1908,24 +1919,13 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
     <tr>
       <td>2025-11</td>
       <td>Mexique</td>
-      <td>Mexique Beach Life : de Cancun à Isla Mujeres, plage et détente</td>
+      <td>Mexique 360° : à la découverte du Yucatán des Mayas</td>
       <td>Mexique</td>
-      <td>1 399,00 €</td>
+      <td>1 549,00 €</td>
       <td></td>
       <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE ALMOST'>ALMOST</SPAN></span></td>
       <td>2025-11-03</td>
-      <td>https://www.weroad.fr/voyages/mexique-yucatan-beach-life</td>
-    </tr>
-    <tr>
-      <td>2025-11</td>
-      <td>Islande</td>
-      <td>Islande : à la poursuite des aurores boréales</td>
-      <td>Islande</td>
-      <td>1 449,00 €</td>
-      <td></td>
-      <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE CONFIRMED'>CONFIRMED</SPAN></span></td>
-      <td>2025-11-09</td>
-      <td>https://www.weroad.fr/voyages/islande-aurores-boreales</td>
+      <td>https://www.weroad.fr/voyages/mexique-yucatan-maya</td>
     </tr>
     <tr>
       <td>2025-12</td>
@@ -1935,7 +1935,7 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td>499,00 €</td>
       <td></td>
       <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
-      <td>2025-12-18</td>
+      <td>2025-12-05</td>
       <td>https://www.weroad.fr/voyages/le-caire-express-egypt</td>
     </tr>
     <tr>
@@ -1979,30 +1979,8 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td>949,00 €</td>
       <td>500.0%</td>
       <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE ALMOST'>ALMOST</SPAN></span></td>
-      <td>2025-12-06</td>
+      <td>2025-12-13</td>
       <td>https://www.weroad.fr/voyages/prague-budapest-marches-noel-weroadx</td>
-    </tr>
-    <tr>
-      <td>2025-12</td>
-      <td>Italie</td>
-      <td>Italie: Rome, le Chianti, Florence, Luques et Pise</td>
-      <td>Italie</td>
-      <td>999,00 €</td>
-      <td></td>
-      <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
-      <td>2025-12-06</td>
-      <td>https://www.weroad.fr/voyages/rome-chianti-florence-luques-pise</td>
-    </tr>
-    <tr>
-      <td>2025-12</td>
-      <td>Îles Canaries</td>
-      <td>Fuerteventura et Lanzarote  360° : entre plages et volcans</td>
-      <td>Espagne</td>
-      <td>999,00 €</td>
-      <td></td>
-      <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
-      <td>2025-12-28</td>
-      <td>https://www.weroad.fr/voyages/fuerteventura-lanzarote-plages-volcans</td>
     </tr>
     <tr>
       <td>2025-12</td>
@@ -2050,28 +2028,6 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
     </tr>
     <tr>
       <td>2025-12</td>
-      <td>Guatemala</td>
-      <td>Guatemala 360° : Voyage au pays des volcans, nature sauvage et cultures anciennes</td>
-      <td>Guatemala</td>
-      <td>1 699,00 €</td>
-      <td></td>
-      <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE CONFIRMED'>CONFIRMED</SPAN></span></td>
-      <td>2025-12-28</td>
-      <td>https://www.weroad.fr/voyages/guatemala-volcans-nature-cultures-anciennes</td>
-    </tr>
-    <tr>
-      <td>2025-12</td>
-      <td>Philippines</td>
-      <td>Philippines 360° : Bohol, Coron & Palawan</td>
-      <td>Philippines</td>
-      <td>2 099,00 €</td>
-      <td></td>
-      <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
-      <td>2025-12-02</td>
-      <td>https://www.weroad.fr/voyages/philippines-360</td>
-    </tr>
-    <tr>
-      <td>2025-12</td>
       <td>Tanzanie</td>
       <td>Kilimandjaro Expedition: Lemosho route and Safari</td>
       <td>Tanzanie</td>
@@ -2080,6 +2036,28 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE ALMOST'>ALMOST</SPAN></span></td>
       <td>2025-12-26</td>
       <td>https://www.weroad.fr/voyages/kilimandjaro-trekking-lemosho-route-safari</td>
+    </tr>
+    <tr>
+      <td>2026-01</td>
+      <td>Thaïlande</td>
+      <td>Thaïlande Beach Life Winter : Phuket, Krabi et Koh Lanta</td>
+      <td>Thaïlande</td>
+      <td>999,00 €</td>
+      <td></td>
+      <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
+      <td>2026-01-15</td>
+      <td>https://www.weroad.fr/voyages/thailande-plage-hiver</td>
+    </tr>
+    <tr>
+      <td>2026-01</td>
+      <td>Mexique</td>
+      <td>Mexique Beach Life : de Cancun à Isla Mujeres, plage et détente</td>
+      <td>Mexique</td>
+      <td>1 399,00 €</td>
+      <td></td>
+      <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
+      <td>2026-01-03</td>
+      <td>https://www.weroad.fr/voyages/mexique-yucatan-beach-life</td>
     </tr>
     <tr>
       <td>2026-01</td>
@@ -2116,14 +2094,36 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
     </tr>
     <tr>
       <td>2026-02</td>
+      <td>Espagne</td>
+      <td>Fuerteventura Surf : aventure à la découverte de l'île</td>
+      <td>Espagne</td>
+      <td>999,00 €</td>
+      <td>910.0%</td>
+      <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
+      <td>2026-02-14</td>
+      <td>https://www.weroad.fr/voyages/fuerteventura-surf-weroadx</td>
+    </tr>
+    <tr>
+      <td>2026-02</td>
       <td>Ouzbékistan</td>
       <td>Ouzbékistan 360° Winter</td>
       <td>Ouzbékistan</td>
       <td>1 149,00 €</td>
       <td></td>
       <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
-      <td>2026-02-07</td>
+      <td>2026-02-23</td>
       <td>https://www.weroad.fr/voyages/ouzbekistan-hiver</td>
+    </tr>
+    <tr>
+      <td>2026-02</td>
+      <td>Maldives</td>
+      <td>Maldives Beach Life BackPack : snorkeling et détente à Maafushi</td>
+      <td>Maldives</td>
+      <td>1 179,00 €</td>
+      <td>560.0%</td>
+      <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE CONFIRMED'>CONFIRMED</SPAN></span></td>
+      <td>2026-02-08</td>
+      <td>https://www.weroad.fr/voyages/maldives-beach-life-detente-snorkeling-maafushi</td>
     </tr>
     <tr>
       <td>2026-02</td>
@@ -2138,14 +2138,25 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
     </tr>
     <tr>
       <td>2026-02</td>
-      <td>Maldives</td>
-      <td>Maldives Beach Life : aventure et découverte locale à Dharavandhoo</td>
-      <td>Maldives</td>
-      <td>1 299,00 €</td>
-      <td>710.0%</td>
+      <td>Thaïlande</td>
+      <td>Thaïlande 360° Winter : Bangkok, Chiang Mai et les îles Phi Phi</td>
+      <td>Thaïlande</td>
+      <td>1 699,00 €</td>
+      <td></td>
       <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
-      <td>2026-02-14</td>
-      <td>https://www.weroad.fr/voyages/maldives-tour-plages-paradisiaques-dauphins-weroadx</td>
+      <td>2026-02-21</td>
+      <td>https://www.weroad.fr/voyages/thailande-360-hiver</td>
+    </tr>
+    <tr>
+      <td>2026-02</td>
+      <td>Japon</td>
+      <td>Japon ski & snowboard : de Tokyo aux montagnes de Nagano</td>
+      <td>Japon</td>
+      <td>2 099,00 €</td>
+      <td></td>
+      <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
+      <td>2026-02-22</td>
+      <td>https://www.weroad.fr/voyages/japon-ski-snowboard</td>
     </tr>
     <tr>
       <td>2026-02</td>
@@ -2160,14 +2171,25 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
     </tr>
     <tr>
       <td>2026-03</td>
-      <td>Albanie</td>
-      <td>Albanie Express Winter : histoire, nature et aventure</td>
-      <td>Albanie</td>
-      <td>549,00 €</td>
+      <td>Islande</td>
+      <td>Islande Express : un aperçu de l'île de glace et de feu</td>
+      <td>Islande</td>
+      <td>899,00 €</td>
       <td></td>
       <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
-      <td>2026-03-22</td>
-      <td>https://www.weroad.fr/voyages/albanie-express-hiver</td>
+      <td>2026-03-11</td>
+      <td>https://www.weroad.fr/voyages/islande-express</td>
+    </tr>
+    <tr>
+      <td>2026-03</td>
+      <td>Bordeaux</td>
+      <td>Bordeaux Express : de la Dune du Pilat à la pointe du Cap-Ferret</td>
+      <td>France</td>
+      <td>899,00 €</td>
+      <td></td>
+      <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
+      <td>2026-03-07</td>
+      <td>https://www.weroad.fr/voyages/bordeaux-dune-du-pilat</td>
     </tr>
     <tr>
       <td>2026-03</td>
@@ -2182,6 +2204,17 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
     </tr>
     <tr>
       <td>2026-03</td>
+      <td>Vietnam</td>
+      <td>Vietnam 360° Backpack : de Hanoï à Hô Chi Minh</td>
+      <td>Viêt Nam</td>
+      <td>1 049,00 €</td>
+      <td></td>
+      <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
+      <td>2026-03-07</td>
+      <td>https://www.weroad.fr/voyages/vietnam-backpack</td>
+    </tr>
+    <tr>
+      <td>2026-03</td>
       <td>Malaisie</td>
       <td>Malaisie : nature sauvage et îles paradisiaques</td>
       <td>Malaisie</td>
@@ -2190,6 +2223,17 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE ALMOST'>ALMOST</SPAN></span></td>
       <td>2026-03-29</td>
       <td>https://www.weroad.fr/voyages/malaisie-nature-ile</td>
+    </tr>
+    <tr>
+      <td>2026-03</td>
+      <td>Thaïlande</td>
+      <td>Thaïlande Backpack Winter : Bangkok, Krabi et les îles Phi Phi</td>
+      <td>Thaïlande</td>
+      <td>1 249,00 €</td>
+      <td></td>
+      <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
+      <td>2026-03-05</td>
+      <td>https://www.weroad.fr/voyages/thailande-hiver-expedition</td>
     </tr>
     <tr>
       <td>2026-03</td>
@@ -2204,17 +2248,6 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
     </tr>
     <tr>
       <td>2026-03</td>
-      <td>Thaïlande</td>
-      <td>Thaïlande 360° Winter : Bangkok, Chiang Mai et les îles Phi Phi</td>
-      <td>Thaïlande</td>
-      <td>1 699,00 €</td>
-      <td></td>
-      <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
-      <td>2026-03-16</td>
-      <td>https://www.weroad.fr/voyages/thailande-360-hiver</td>
-    </tr>
-    <tr>
-      <td>2026-03</td>
       <td>Cambodge</td>
       <td>Laos et Cambodge : Sur les routes des temples d’Indochine</td>
       <td>Cambodge</td>
@@ -2223,17 +2256,6 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE ALMOST'>ALMOST</SPAN></span></td>
       <td>2026-03-20</td>
       <td>https://www.weroad.fr/voyages/laos-cambodge-routes-temples-indochine</td>
-    </tr>
-    <tr>
-      <td>2026-03</td>
-      <td>Japon</td>
-      <td>Japon ski & snowboard : de Tokyo aux montagnes de Nagano</td>
-      <td>Japon</td>
-      <td>2 099,00 €</td>
-      <td></td>
-      <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
-      <td>2026-03-08</td>
-      <td>https://www.weroad.fr/voyages/japon-ski-snowboard</td>
     </tr>
     <tr>
       <td>2026-04</td>
@@ -2247,17 +2269,6 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td>https://www.weroad.fr/voyages/mediterranee-express-montpellier-sete-camargue</td>
     </tr>
     <tr>
-      <td>2026-04</td>
-      <td>Islande</td>
-      <td>Islande Express : un aperçu de l'île de glace et de feu</td>
-      <td>Islande</td>
-      <td>899,00 €</td>
-      <td></td>
-      <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
-      <td>2026-04-08</td>
-      <td>https://www.weroad.fr/voyages/islande-express</td>
-    </tr>
-    <tr>
       <td>2026-05</td>
       <td>Népal</td>
       <td>Népal Trekking :  de Pokhara au camp de base de l'Annapurna</td>
@@ -2265,8 +2276,30 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td>1 019,00 €</td>
       <td></td>
       <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
-      <td>2026-05-07</td>
+      <td>2026-05-30</td>
       <td>https://www.weroad.fr/voyages/nepal-trekking</td>
+    </tr>
+    <tr>
+      <td>2026-05</td>
+      <td>Maldives</td>
+      <td>Maldives Beach Life : aventure et découverte locale à Dharavandhoo</td>
+      <td>Maldives</td>
+      <td>1 299,00 €</td>
+      <td>710.0%</td>
+      <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
+      <td>2026-05-02</td>
+      <td>https://www.weroad.fr/voyages/maldives-tour-plages-paradisiaques-dauphins-weroadx</td>
+    </tr>
+    <tr>
+      <td>2026-05</td>
+      <td>Turquie</td>
+      <td>Turquie 360° : Istanbul, Cappadoce et Éphèse</td>
+      <td>Turquie</td>
+      <td>1 349,00 €</td>
+      <td></td>
+      <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE ALMOST'>ALMOST</SPAN></span></td>
+      <td>2026-05-01</td>
+      <td>https://www.weroad.fr/voyages/turquie-istanbul-cappadoce-ephese</td>
     </tr>
     <tr>
       <td>2026-05</td>
@@ -2276,7 +2309,7 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td>1 699,00 €</td>
       <td></td>
       <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
-      <td>2026-05-08</td>
+      <td>2026-05-29</td>
       <td>https://www.weroad.fr/voyages/usa-rock-n-drive</td>
     </tr>
     <tr>
@@ -2291,26 +2324,15 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td>https://www.weroad.fr/voyages/acores-sao-miguel-faial-terceira</td>
     </tr>
     <tr>
-      <td>2026-06</td>
-      <td>Auvergne</td>
-      <td>Auvergne Express : à la découverte du Sancy</td>
-      <td>France</td>
-      <td>549,00 €</td>
+      <td>2026-05</td>
+      <td>Philippines</td>
+      <td>Philippines 360° : Bohol, Coron & Palawan</td>
+      <td>Philippines</td>
+      <td>2 099,00 €</td>
       <td></td>
       <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
-      <td>2026-06-28</td>
-      <td>https://www.weroad.fr/voyages/auvergne-express</td>
-    </tr>
-    <tr>
-      <td>2026-06</td>
-      <td>Bretagne</td>
-      <td>Bretagne Sud Beach Life : Quiberon et Belle-île-en-Mer</td>
-      <td>France</td>
-      <td>679,00 €</td>
-      <td></td>
-      <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
-      <td>2026-06-13</td>
-      <td>https://www.weroad.fr/voyages/bretagne-quiberon-belle-ile</td>
+      <td>2026-05-10</td>
+      <td>https://www.weroad.fr/voyages/philippines-360</td>
     </tr>
     <tr>
       <td>2026-06</td>
@@ -2325,47 +2347,47 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
     </tr>
     <tr>
       <td>2026-06</td>
-      <td>Thaïlande</td>
-      <td>Thaïlande Beach Life Summer : de Bangkok à Koh Tao et Koh Samui</td>
-      <td>Thaïlande</td>
-      <td>1 199,00 €</td>
-      <td></td>
-      <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
-      <td>2026-06-07</td>
-      <td>https://www.weroad.fr/voyages/thailande-ete-expedition</td>
-    </tr>
-    <tr>
-      <td>2026-07</td>
       <td>INDONÉSIE</td>
       <td>Bali 360° : entre rizières, temples et plages paradisiaques</td>
       <td>Indonésie</td>
       <td>849,00 €</td>
       <td></td>
       <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
-      <td>2026-07-15</td>
+      <td>2026-06-03</td>
       <td>https://www.weroad.fr/voyages/bali-360</td>
     </tr>
     <tr>
-      <td>2026-07</td>
-      <td>Bordeaux</td>
-      <td>Bordeaux Express : de la Dune du Pilat à la pointe du Cap-Ferret</td>
-      <td>France</td>
-      <td>899,00 €</td>
+      <td>2026-06</td>
+      <td>Thaïlande</td>
+      <td>Thaïlande Beach Life Summer : de Bangkok à Koh Tao et Koh Samui</td>
+      <td>Thaïlande</td>
+      <td>1 199,00 €</td>
       <td></td>
       <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
-      <td>2026-07-11</td>
-      <td>https://www.weroad.fr/voyages/bordeaux-dune-du-pilat</td>
+      <td>2026-06-21</td>
+      <td>https://www.weroad.fr/voyages/thailande-ete-expedition</td>
     </tr>
     <tr>
       <td>2026-07</td>
-      <td>Vietnam</td>
-      <td>Vietnam 360° Backpack : de Hanoï à Hô Chi Minh</td>
-      <td>Viêt Nam</td>
-      <td>1 049,00 €</td>
+      <td>Gran Canaria</td>
+      <td>Gran Canaria Beach Life Express : l’île du soleil</td>
+      <td>Espagne</td>
+      <td>599,00 €</td>
       <td></td>
       <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
-      <td>2026-07-14</td>
-      <td>https://www.weroad.fr/voyages/vietnam-backpack</td>
+      <td>2026-07-08</td>
+      <td>https://www.weroad.fr/voyages/gran-canaria-express-ile-soleil</td>
+    </tr>
+    <tr>
+      <td>2026-07</td>
+      <td>Bretagne</td>
+      <td>Bretagne Sud Beach Life : Quiberon et Belle-île-en-Mer</td>
+      <td>France</td>
+      <td>679,00 €</td>
+      <td></td>
+      <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
+      <td>2026-07-25</td>
+      <td>https://www.weroad.fr/voyages/bretagne-quiberon-belle-ile</td>
     </tr>
     <tr>
       <td>2026-07</td>
@@ -2379,47 +2401,36 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td>https://www.weroad.fr/voyages/namibie</td>
     </tr>
     <tr>
-      <td>2026-08</td>
-      <td>Gran Canaria</td>
-      <td>Gran Canaria Beach Life Express : l’île du soleil</td>
-      <td>Espagne</td>
-      <td>599,00 €</td>
+      <td>2026-09</td>
+      <td>Auvergne</td>
+      <td>Auvergne Express : à la découverte du Sancy</td>
+      <td>France</td>
+      <td>549,00 €</td>
       <td></td>
       <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
-      <td>2026-08-26</td>
-      <td>https://www.weroad.fr/voyages/gran-canaria-express-ile-soleil</td>
-    </tr>
-    <tr>
-      <td>2026-08</td>
-      <td>Maldives</td>
-      <td>Maldives Beach Life BackPack : snorkeling et détente à Maafushi</td>
-      <td>Maldives</td>
-      <td>1 179,00 €</td>
-      <td>560.0%</td>
-      <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
-      <td>2026-08-09</td>
-      <td>https://www.weroad.fr/voyages/maldives-beach-life-detente-snorkeling-maafushi</td>
-    </tr>
-    <tr>
-      <td>2026-08</td>
-      <td>Turquie</td>
-      <td>Turquie 360° : Istanbul, Cappadoce et Éphèse</td>
-      <td>Turquie</td>
-      <td>1 349,00 €</td>
-      <td></td>
-      <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE ALMOST'>ALMOST</SPAN></span></td>
-      <td>2026-08-07</td>
-      <td>https://www.weroad.fr/voyages/turquie-istanbul-cappadoce-ephese</td>
+      <td>2026-09-28</td>
+      <td>https://www.weroad.fr/voyages/auvergne-express</td>
     </tr>
     <tr>
       <td>2026-10</td>
+      <td>Costa Rica</td>
+      <td>Costa Rica 360° : pura vida parmi les forêts tropicales</td>
+      <td>Costa Rica</td>
+      <td>1 799,00 €</td>
+      <td></td>
+      <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
+      <td>2026-10-20</td>
+      <td>https://www.weroad.fr/voyages/costa-rica-360</td>
+    </tr>
+    <tr>
+      <td>2026-11</td>
       <td>Chine</td>
       <td>Chine 360° : Pékin, Shanghai et la Grande Muraille</td>
       <td>Chine</td>
       <td>1 899,00 €</td>
       <td></td>
       <td><span class='rp-badge default'><SPAN CLASS='RP-BADGE DEFAULT'>PLANNED</SPAN></span></td>
-      <td>2026-10-18</td>
+      <td>2026-11-20</td>
       <td>https://www.weroad.fr/voyages/chine</td>
     </tr>
   </tbody>
@@ -2573,6 +2584,13 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
     </tr>
     <tr>
       <td>2025-09</td>
+      <td>Grecia</td>
+      <td>999,00 €</td>
+      <td>999,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
       <td>Inde</td>
       <td>949,00 €</td>
       <td>949,00 €</td>
@@ -2722,8 +2740,8 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td>2025-09</td>
       <td>Sicile</td>
       <td>949,00 €</td>
-      <td>1 074,00 €</td>
-      <td>2</td>
+      <td>949,00 €</td>
+      <td>1</td>
     </tr>
     <tr>
       <td>2025-09</td>
@@ -2804,6 +2822,13 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
     </tr>
     <tr>
       <td>2025-10</td>
+      <td>Cap-Vert</td>
+      <td>1 599,00 €</td>
+      <td>1 599,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
       <td>Chili et Bolivie</td>
       <td>1 999,00 €</td>
       <td>1 999,00 €</td>
@@ -2826,9 +2851,9 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
     <tr>
       <td>2025-10</td>
       <td>Espagne</td>
-      <td>999,00 €</td>
-      <td>1 049,00 €</td>
-      <td>2</td>
+      <td>1 099,00 €</td>
+      <td>1 099,00 €</td>
+      <td>1</td>
     </tr>
     <tr>
       <td>2025-10</td>
@@ -2839,9 +2864,9 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
     </tr>
     <tr>
       <td>2025-10</td>
-      <td>Grecia</td>
-      <td>999,00 €</td>
-      <td>999,00 €</td>
+      <td>Guatemala</td>
+      <td>1 699,00 €</td>
+      <td>1 699,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -2853,16 +2878,23 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
     </tr>
     <tr>
       <td>2025-10</td>
-      <td>Kazakhstan</td>
-      <td>1 599,00 €</td>
-      <td>1 599,00 €</td>
+      <td>Islande</td>
+      <td>1 449,00 €</td>
+      <td>1 449,00 €</td>
       <td>1</td>
     </tr>
     <tr>
       <td>2025-10</td>
-      <td>Kenya</td>
-      <td>1 789,00 €</td>
-      <td>1 789,00 €</td>
+      <td>Italie</td>
+      <td>999,00 €</td>
+      <td>999,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>Kazakhstan</td>
+      <td>1 599,00 €</td>
+      <td>1 599,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -2881,6 +2913,13 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
     </tr>
     <tr>
       <td>2025-10</td>
+      <td>Patagonie</td>
+      <td>2 999,00 €</td>
+      <td>2 999,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
       <td>Pays Baltes</td>
       <td>899,00 €</td>
       <td>899,00 €</td>
@@ -2888,9 +2927,9 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
     </tr>
     <tr>
       <td>2025-10</td>
-      <td>Portugal</td>
-      <td>699,00 €</td>
-      <td>699,00 €</td>
+      <td>Sicile</td>
+      <td>1 199,00 €</td>
+      <td>1 199,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -2902,23 +2941,9 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
     </tr>
     <tr>
       <td>2025-10</td>
-      <td>Suède</td>
-      <td>1 599,00 €</td>
-      <td>1 599,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>2025-10</td>
       <td>Tchéquie</td>
       <td>849,00 €</td>
       <td>849,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>2025-10</td>
-      <td>Thaïlande</td>
-      <td>999,00 €</td>
-      <td>999,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -2950,6 +2975,20 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td>1</td>
     </tr>
     <tr>
+      <td>2025-10</td>
+      <td>Îles Canaries</td>
+      <td>999,00 €</td>
+      <td>999,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Albanie</td>
+      <td>549,00 €</td>
+      <td>549,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
       <td>2025-11</td>
       <td>Autriche</td>
       <td>799,00 €</td>
@@ -2972,13 +3011,6 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
     </tr>
     <tr>
       <td>2025-11</td>
-      <td>Cap-Vert</td>
-      <td>1 599,00 €</td>
-      <td>1 599,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>2025-11</td>
       <td>Chili & Bolivie</td>
       <td>2 499,00 €</td>
       <td>2 499,00 €</td>
@@ -2996,13 +3028,6 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td>Colombie</td>
       <td>2 199,00 €</td>
       <td>2 199,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>2025-11</td>
-      <td>Costa Rica</td>
-      <td>1 799,00 €</td>
-      <td>1 799,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -3035,13 +3060,6 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
     </tr>
     <tr>
       <td>2025-11</td>
-      <td>Islande</td>
-      <td>1 449,00 €</td>
-      <td>1 449,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>2025-11</td>
       <td>Jordanie</td>
       <td>1 249,00 €</td>
       <td>1 249,00 €</td>
@@ -3049,10 +3067,17 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
     </tr>
     <tr>
       <td>2025-11</td>
+      <td>Kenya</td>
+      <td>1 789,00 €</td>
+      <td>1 789,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
       <td>Mexique</td>
-      <td>1 399,00 €</td>
-      <td>1 515,67 €</td>
-      <td>3</td>
+      <td>1 549,00 €</td>
+      <td>1 574,00 €</td>
+      <td>2</td>
     </tr>
     <tr>
       <td>2025-11</td>
@@ -3070,9 +3095,9 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
     </tr>
     <tr>
       <td>2025-11</td>
-      <td>Patagonie</td>
-      <td>2 999,00 €</td>
-      <td>2 999,00 €</td>
+      <td>Portugal</td>
+      <td>699,00 €</td>
+      <td>699,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -3084,16 +3109,16 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
     </tr>
     <tr>
       <td>2025-11</td>
-      <td>Sénégal</td>
-      <td>1 950,00 €</td>
-      <td>1 950,00 €</td>
+      <td>Suède</td>
+      <td>1 599,00 €</td>
+      <td>1 599,00 €</td>
       <td>1</td>
     </tr>
     <tr>
       <td>2025-11</td>
-      <td>Thaïlande</td>
-      <td>1 249,00 €</td>
-      <td>1 249,00 €</td>
+      <td>Sénégal</td>
+      <td>1 950,00 €</td>
+      <td>1 950,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -3126,13 +3151,6 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
     </tr>
     <tr>
       <td>2025-12</td>
-      <td>Guatemala</td>
-      <td>1 699,00 €</td>
-      <td>1 699,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>2025-12</td>
       <td>Géorgie</td>
       <td>899,00 €</td>
       <td>899,00 €</td>
@@ -3147,13 +3165,6 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
     </tr>
     <tr>
       <td>2025-12</td>
-      <td>Italie</td>
-      <td>999,00 €</td>
-      <td>999,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>2025-12</td>
       <td>Norvège</td>
       <td>1 449,00 €</td>
       <td>1 449,00 €</td>
@@ -3164,13 +3175,6 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td>Panamá</td>
       <td>1 566,00 €</td>
       <td>1 566,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>2025-12</td>
-      <td>Philippines</td>
-      <td>2 099,00 €</td>
-      <td>2 099,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -3202,13 +3206,6 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td>1</td>
     </tr>
     <tr>
-      <td>2025-12</td>
-      <td>Îles Canaries</td>
-      <td>999,00 €</td>
-      <td>999,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
       <td>2026-01</td>
       <td>Finlande</td>
       <td>1 549,00 €</td>
@@ -3217,9 +3214,23 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
     </tr>
     <tr>
       <td>2026-01</td>
+      <td>Mexique</td>
+      <td>1 399,00 €</td>
+      <td>1 399,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-01</td>
       <td>Nicaragua</td>
       <td>1 429,00 €</td>
       <td>1 429,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-01</td>
+      <td>Thaïlande</td>
+      <td>999,00 €</td>
+      <td>999,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -3231,6 +3242,13 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
     </tr>
     <tr>
       <td>2026-02</td>
+      <td>Espagne</td>
+      <td>999,00 €</td>
+      <td>999,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-02</td>
       <td>Italie</td>
       <td>949,00 €</td>
       <td>949,00 €</td>
@@ -3238,9 +3256,16 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
     </tr>
     <tr>
       <td>2026-02</td>
+      <td>Japon</td>
+      <td>2 099,00 €</td>
+      <td>2 099,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-02</td>
       <td>Maldives</td>
-      <td>1 299,00 €</td>
-      <td>1 299,00 €</td>
+      <td>1 179,00 €</td>
+      <td>1 179,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -3258,10 +3283,17 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td>1</td>
     </tr>
     <tr>
+      <td>2026-02</td>
+      <td>Thaïlande</td>
+      <td>1 699,00 €</td>
+      <td>1 699,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
       <td>2026-03</td>
-      <td>Albanie</td>
-      <td>549,00 €</td>
-      <td>549,00 €</td>
+      <td>Bordeaux</td>
+      <td>899,00 €</td>
+      <td>899,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -3280,9 +3312,9 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
     </tr>
     <tr>
       <td>2026-03</td>
-      <td>Japon</td>
-      <td>2 099,00 €</td>
-      <td>2 099,00 €</td>
+      <td>Islande</td>
+      <td>899,00 €</td>
+      <td>899,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -3295,8 +3327,15 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
     <tr>
       <td>2026-03</td>
       <td>Thaïlande</td>
-      <td>1 699,00 €</td>
-      <td>1 699,00 €</td>
+      <td>1 249,00 €</td>
+      <td>1 249,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-03</td>
+      <td>Vietnam</td>
+      <td>1 049,00 €</td>
+      <td>1 049,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -3307,10 +3346,10 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td>1</td>
     </tr>
     <tr>
-      <td>2026-04</td>
-      <td>Islande</td>
-      <td>899,00 €</td>
-      <td>899,00 €</td>
+      <td>2026-05</td>
+      <td>Maldives</td>
+      <td>1 299,00 €</td>
+      <td>1 299,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -3322,9 +3361,23 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
     </tr>
     <tr>
       <td>2026-05</td>
+      <td>Philippines</td>
+      <td>2 099,00 €</td>
+      <td>2 099,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-05</td>
       <td>Portugal</td>
       <td>1 699,00 €</td>
       <td>1 699,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-05</td>
+      <td>Turquie</td>
+      <td>1 349,00 €</td>
+      <td>1 349,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -3336,23 +3389,16 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
     </tr>
     <tr>
       <td>2026-06</td>
-      <td>Auvergne</td>
-      <td>549,00 €</td>
-      <td>549,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>2026-06</td>
-      <td>Bretagne</td>
-      <td>679,00 €</td>
-      <td>679,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>2026-06</td>
       <td>France</td>
       <td>789,00 €</td>
       <td>789,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-06</td>
+      <td>INDONÉSIE</td>
+      <td>849,00 €</td>
+      <td>849,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -3364,16 +3410,16 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
     </tr>
     <tr>
       <td>2026-07</td>
-      <td>Bordeaux</td>
-      <td>899,00 €</td>
-      <td>899,00 €</td>
+      <td>Bretagne</td>
+      <td>679,00 €</td>
+      <td>679,00 €</td>
       <td>1</td>
     </tr>
     <tr>
       <td>2026-07</td>
-      <td>INDONÉSIE</td>
-      <td>849,00 €</td>
-      <td>849,00 €</td>
+      <td>Gran Canaria</td>
+      <td>599,00 €</td>
+      <td>599,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -3384,35 +3430,21 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td>1</td>
     </tr>
     <tr>
-      <td>2026-07</td>
-      <td>Vietnam</td>
-      <td>1 049,00 €</td>
-      <td>1 049,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>2026-08</td>
-      <td>Gran Canaria</td>
-      <td>599,00 €</td>
-      <td>599,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>2026-08</td>
-      <td>Maldives</td>
-      <td>1 179,00 €</td>
-      <td>1 179,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>2026-08</td>
-      <td>Turquie</td>
-      <td>1 349,00 €</td>
-      <td>1 349,00 €</td>
+      <td>2026-09</td>
+      <td>Auvergne</td>
+      <td>549,00 €</td>
+      <td>549,00 €</td>
       <td>1</td>
     </tr>
     <tr>
       <td>2026-10</td>
+      <td>Costa Rica</td>
+      <td>1 799,00 €</td>
+      <td>1 799,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-11</td>
       <td>Chine</td>
       <td>1 899,00 €</td>
       <td>1 899,00 €</td>
@@ -3514,6 +3546,13 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
     </tr>
     <tr>
       <td>2025-09</td>
+      <td>Grecia</td>
+      <td>999,00 €</td>
+      <td>999,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
       <td>Inde</td>
       <td>949,00 €</td>
       <td>949,00 €</td>
@@ -3663,8 +3702,8 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td>2025-09</td>
       <td>Sicile</td>
       <td>949,00 €</td>
-      <td>1 074,00 €</td>
-      <td>2</td>
+      <td>949,00 €</td>
+      <td>1</td>
     </tr>
     <tr>
       <td>2025-09</td>
@@ -3745,6 +3784,13 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
     </tr>
     <tr>
       <td>2025-10</td>
+      <td>Cap-Vert</td>
+      <td>1 599,00 €</td>
+      <td>1 599,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
       <td>Chili et Bolivie</td>
       <td>1 999,00 €</td>
       <td>1 999,00 €</td>
@@ -3767,9 +3813,9 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
     <tr>
       <td>2025-10</td>
       <td>Espagne</td>
-      <td>999,00 €</td>
-      <td>1 049,00 €</td>
-      <td>2</td>
+      <td>1 099,00 €</td>
+      <td>1 099,00 €</td>
+      <td>1</td>
     </tr>
     <tr>
       <td>2025-10</td>
@@ -3780,9 +3826,9 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
     </tr>
     <tr>
       <td>2025-10</td>
-      <td>Grecia</td>
-      <td>999,00 €</td>
-      <td>999,00 €</td>
+      <td>Guatemala</td>
+      <td>1 699,00 €</td>
+      <td>1 699,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -3794,16 +3840,23 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
     </tr>
     <tr>
       <td>2025-10</td>
-      <td>Kazakhstan</td>
-      <td>1 599,00 €</td>
-      <td>1 599,00 €</td>
+      <td>Islande</td>
+      <td>1 449,00 €</td>
+      <td>1 449,00 €</td>
       <td>1</td>
     </tr>
     <tr>
       <td>2025-10</td>
-      <td>Kenya</td>
-      <td>1 789,00 €</td>
-      <td>1 789,00 €</td>
+      <td>Italie</td>
+      <td>999,00 €</td>
+      <td>999,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>Kazakhstan</td>
+      <td>1 599,00 €</td>
+      <td>1 599,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -3822,6 +3875,13 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
     </tr>
     <tr>
       <td>2025-10</td>
+      <td>Patagonie</td>
+      <td>2 999,00 €</td>
+      <td>2 999,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
       <td>Pays Baltes</td>
       <td>899,00 €</td>
       <td>899,00 €</td>
@@ -3829,9 +3889,9 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
     </tr>
     <tr>
       <td>2025-10</td>
-      <td>Portugal</td>
-      <td>699,00 €</td>
-      <td>699,00 €</td>
+      <td>Sicile</td>
+      <td>1 199,00 €</td>
+      <td>1 199,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -3843,23 +3903,9 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
     </tr>
     <tr>
       <td>2025-10</td>
-      <td>Suède</td>
-      <td>1 599,00 €</td>
-      <td>1 599,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>2025-10</td>
       <td>Tchéquie</td>
       <td>849,00 €</td>
       <td>849,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>2025-10</td>
-      <td>Thaïlande</td>
-      <td>999,00 €</td>
-      <td>999,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -3891,6 +3937,20 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td>1</td>
     </tr>
     <tr>
+      <td>2025-10</td>
+      <td>Îles Canaries</td>
+      <td>999,00 €</td>
+      <td>999,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Albanie</td>
+      <td>549,00 €</td>
+      <td>549,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
       <td>2025-11</td>
       <td>Autriche</td>
       <td>799,00 €</td>
@@ -3913,13 +3973,6 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
     </tr>
     <tr>
       <td>2025-11</td>
-      <td>Cap-Vert</td>
-      <td>1 599,00 €</td>
-      <td>1 599,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>2025-11</td>
       <td>Chili & Bolivie</td>
       <td>2 499,00 €</td>
       <td>2 499,00 €</td>
@@ -3937,13 +3990,6 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td>Colombie</td>
       <td>2 199,00 €</td>
       <td>2 199,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>2025-11</td>
-      <td>Costa Rica</td>
-      <td>1 799,00 €</td>
-      <td>1 799,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -3976,13 +4022,6 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
     </tr>
     <tr>
       <td>2025-11</td>
-      <td>Islande</td>
-      <td>1 449,00 €</td>
-      <td>1 449,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>2025-11</td>
       <td>Jordanie</td>
       <td>1 249,00 €</td>
       <td>1 249,00 €</td>
@@ -3990,10 +4029,17 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
     </tr>
     <tr>
       <td>2025-11</td>
+      <td>Kenya</td>
+      <td>1 789,00 €</td>
+      <td>1 789,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
       <td>Mexique</td>
-      <td>1 399,00 €</td>
-      <td>1 515,67 €</td>
-      <td>3</td>
+      <td>1 549,00 €</td>
+      <td>1 574,00 €</td>
+      <td>2</td>
     </tr>
     <tr>
       <td>2025-11</td>
@@ -4011,9 +4057,9 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
     </tr>
     <tr>
       <td>2025-11</td>
-      <td>Patagonie</td>
-      <td>2 999,00 €</td>
-      <td>2 999,00 €</td>
+      <td>Portugal</td>
+      <td>699,00 €</td>
+      <td>699,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -4025,16 +4071,16 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
     </tr>
     <tr>
       <td>2025-11</td>
-      <td>Sénégal</td>
-      <td>1 950,00 €</td>
-      <td>1 950,00 €</td>
+      <td>Suède</td>
+      <td>1 599,00 €</td>
+      <td>1 599,00 €</td>
       <td>1</td>
     </tr>
     <tr>
       <td>2025-11</td>
-      <td>Thaïlande</td>
-      <td>1 249,00 €</td>
-      <td>1 249,00 €</td>
+      <td>Sénégal</td>
+      <td>1 950,00 €</td>
+      <td>1 950,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -4067,13 +4113,6 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
     </tr>
     <tr>
       <td>2025-12</td>
-      <td>Guatemala</td>
-      <td>1 699,00 €</td>
-      <td>1 699,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>2025-12</td>
       <td>Géorgie</td>
       <td>899,00 €</td>
       <td>899,00 €</td>
@@ -4088,13 +4127,6 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
     </tr>
     <tr>
       <td>2025-12</td>
-      <td>Italie</td>
-      <td>999,00 €</td>
-      <td>999,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>2025-12</td>
       <td>Norvège</td>
       <td>1 449,00 €</td>
       <td>1 449,00 €</td>
@@ -4105,13 +4137,6 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td>Panamá</td>
       <td>1 566,00 €</td>
       <td>1 566,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>2025-12</td>
-      <td>Philippines</td>
-      <td>2 099,00 €</td>
-      <td>2 099,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -4143,13 +4168,6 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td>1</td>
     </tr>
     <tr>
-      <td>2025-12</td>
-      <td>Îles Canaries</td>
-      <td>999,00 €</td>
-      <td>999,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
       <td>2026-01</td>
       <td>Finlande</td>
       <td>1 549,00 €</td>
@@ -4158,9 +4176,23 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
     </tr>
     <tr>
       <td>2026-01</td>
+      <td>Mexique</td>
+      <td>1 399,00 €</td>
+      <td>1 399,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-01</td>
       <td>Nicaragua</td>
       <td>1 429,00 €</td>
       <td>1 429,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-01</td>
+      <td>Thaïlande</td>
+      <td>999,00 €</td>
+      <td>999,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -4172,6 +4204,13 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
     </tr>
     <tr>
       <td>2026-02</td>
+      <td>Espagne</td>
+      <td>999,00 €</td>
+      <td>999,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-02</td>
       <td>Italie</td>
       <td>949,00 €</td>
       <td>949,00 €</td>
@@ -4179,9 +4218,16 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
     </tr>
     <tr>
       <td>2026-02</td>
+      <td>Japon</td>
+      <td>2 099,00 €</td>
+      <td>2 099,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-02</td>
       <td>Maldives</td>
-      <td>1 299,00 €</td>
-      <td>1 299,00 €</td>
+      <td>1 179,00 €</td>
+      <td>1 179,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -4199,10 +4245,17 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td>1</td>
     </tr>
     <tr>
+      <td>2026-02</td>
+      <td>Thaïlande</td>
+      <td>1 699,00 €</td>
+      <td>1 699,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
       <td>2026-03</td>
-      <td>Albanie</td>
-      <td>549,00 €</td>
-      <td>549,00 €</td>
+      <td>Bordeaux</td>
+      <td>899,00 €</td>
+      <td>899,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -4221,9 +4274,9 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
     </tr>
     <tr>
       <td>2026-03</td>
-      <td>Japon</td>
-      <td>2 099,00 €</td>
-      <td>2 099,00 €</td>
+      <td>Islande</td>
+      <td>899,00 €</td>
+      <td>899,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -4236,8 +4289,15 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
     <tr>
       <td>2026-03</td>
       <td>Thaïlande</td>
-      <td>1 699,00 €</td>
-      <td>1 699,00 €</td>
+      <td>1 249,00 €</td>
+      <td>1 249,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-03</td>
+      <td>Vietnam</td>
+      <td>1 049,00 €</td>
+      <td>1 049,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -4248,10 +4308,10 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td>1</td>
     </tr>
     <tr>
-      <td>2026-04</td>
-      <td>Islande</td>
-      <td>899,00 €</td>
-      <td>899,00 €</td>
+      <td>2026-05</td>
+      <td>Maldives</td>
+      <td>1 299,00 €</td>
+      <td>1 299,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -4263,9 +4323,23 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
     </tr>
     <tr>
       <td>2026-05</td>
+      <td>Philippines</td>
+      <td>2 099,00 €</td>
+      <td>2 099,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-05</td>
       <td>Portugal</td>
       <td>1 699,00 €</td>
       <td>1 699,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-05</td>
+      <td>Turquie</td>
+      <td>1 349,00 €</td>
+      <td>1 349,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -4277,23 +4351,16 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
     </tr>
     <tr>
       <td>2026-06</td>
-      <td>Auvergne</td>
-      <td>549,00 €</td>
-      <td>549,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>2026-06</td>
-      <td>Bretagne</td>
-      <td>679,00 €</td>
-      <td>679,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>2026-06</td>
       <td>France</td>
       <td>789,00 €</td>
       <td>789,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-06</td>
+      <td>INDONÉSIE</td>
+      <td>849,00 €</td>
+      <td>849,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -4305,16 +4372,16 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
     </tr>
     <tr>
       <td>2026-07</td>
-      <td>Bordeaux</td>
-      <td>899,00 €</td>
-      <td>899,00 €</td>
+      <td>Bretagne</td>
+      <td>679,00 €</td>
+      <td>679,00 €</td>
       <td>1</td>
     </tr>
     <tr>
       <td>2026-07</td>
-      <td>INDONÉSIE</td>
-      <td>849,00 €</td>
-      <td>849,00 €</td>
+      <td>Gran Canaria</td>
+      <td>599,00 €</td>
+      <td>599,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -4325,35 +4392,21 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
       <td>1</td>
     </tr>
     <tr>
-      <td>2026-07</td>
-      <td>Vietnam</td>
-      <td>1 049,00 €</td>
-      <td>1 049,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>2026-08</td>
-      <td>Gran Canaria</td>
-      <td>599,00 €</td>
-      <td>599,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>2026-08</td>
-      <td>Maldives</td>
-      <td>1 179,00 €</td>
-      <td>1 179,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>2026-08</td>
-      <td>Turquie</td>
-      <td>1 349,00 €</td>
-      <td>1 349,00 €</td>
+      <td>2026-09</td>
+      <td>Auvergne</td>
+      <td>549,00 €</td>
+      <td>549,00 €</td>
       <td>1</td>
     </tr>
     <tr>
       <td>2026-10</td>
+      <td>Costa Rica</td>
+      <td>1 799,00 €</td>
+      <td>1 799,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-11</td>
       <td>Chine</td>
       <td>1 899,00 €</td>
       <td>1 899,00 €</td>
