@@ -7,14 +7,14 @@
   --rp-gray:   #6e7781;
 }
 
-/* Wrapper pour scroll horizontal si table large */
+/* Wrapper scroll horizontal */
 .table-wrapper {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   margin: 0 0 1.25rem 0;
 }
 
-/* Tables générées par pandas.to_html */
+/* Tables pandas */
 .rp-table {
   width: 100%;
   border-collapse: collapse;
@@ -36,22 +36,22 @@
   padding: .55rem .7rem;
   border-bottom: 1px solid #e5e7eb;
   vertical-align: top;
-  white-space: nowrap; /* évite le wrap, mais table-wrapper permet le scroll */
+  white-space: nowrap;
 }
 .rp-table tbody tr:hover { background: #fafbfc; }
 .rp-table a { text-decoration: none; color: #0969da; font-weight: 500; }
 .rp-table a:hover { text-decoration: underline; }
 
-/* Variations (deltas) */
+/* Delta (variations) */
 .rp-delta-pos { color: var(--rp-green); font-weight: 600; }
 .rp-delta-neg { color: var(--rp-red);   font-weight: 600; }
 .rp-delta-eq  { color: #57606a; }
 
-code.up    { color: var(--rp-red);   font-weight: 600; }   /* ↑ hausse prix */
-code.down  { color: var(--rp-green); font-weight: 600; }   /* ↓ baisse prix */
-code.equal { color: #57606a; }                             /* = stable */
+code.up    { color: var(--rp-red);   font-weight: 600; }   /* ↑ prix */
+code.down  { color: var(--rp-green); font-weight: 600; }   /* ↓ prix */
+code.equal { color: #57606a; }
 
-/* Badges (sales_status, etc.) */
+/* Badges statut */
 .rp-badge {
   display: inline-block;
   padding: .25em .6em;
@@ -68,61 +68,27 @@ code.equal { color: #57606a; }                             /* = stable */
 .rp-badge.on-sale    { background-color: var(--rp-purple); }
 .rp-badge.default    { background-color: var(--rp-gray); }
 
-/* Adaptations mobile */
+/* 🔹 Supprimer le rectangle ajouté par Simple-DataTables */
+.dataTable-wrapper,
+.dataTable-wrapper .dataTable-container {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+/* 🔹 Ajuster la barre de recherche/pagination */
+.dataTable-top,
+.dataTable-bottom {
+  background: transparent !important;
+  border: none !important;
+  padding: 0.3rem 0 !important;
+  font-size: 0.85rem;
+  color: #444;
+}
+
+/* Petites adaptations mobile */
 @media (max-width: 780px) {
   .rp-table td, .rp-table th { padding: .5rem .6rem; }
   .rp-table { font-size: 0.92rem; }
-}
-
-
-/* --- Simple-DataTables : enlever le look "carte/rectangle" --- */
-.dataTable-wrapper.rp-dt-unstyled {
-  background: transparent;
-  border: none;
-  box-shadow: none;
-  padding: 0;
-}
-
-.dataTable-wrapper.rp-dt-unstyled .dataTable-container {
-  /* plus de hauteur fixe ni de scroll vertical interne */
-  max-height: none !important;
-  overflow: visible !important;
-  background: transparent;
-  border: none;
-  box-shadow: none;
-}
-
-.dataTable-wrapper.rp-dt-unstyled .dataTable-top,
-.dataTable-wrapper.rp-dt-unstyled .dataTable-bottom {
-  background: transparent;
-  border: none;
-  box-shadow: none;
-  padding: .25rem 0; /* compact */
-}
-
-/* pagination / info plus discrets */
-.dataTable-wrapper.rp-dt-unstyled .dataTable-info,
-.dataTable-wrapper.rp-dt-unstyled .dataTable-pagination,
-.dataTable-wrapper.rp-dt-unstyled .dataTable-dropdown,
-.dataTable-wrapper.rp-dt-unstyled .dataTable-search {
-  margin: .35rem 0;
-  font-size: 0.95rem;
-}
-
-.dataTable-wrapper.rp-dt-unstyled .dataTable-pagination a {
-  border-radius: .4rem;
-}
-
-/* la table conserve ton style */
-.dataTable-wrapper.rp-dt-unstyled table {
-  background: transparent;
-  border: none;
-  box-shadow: none;
-}
-
-/* conserve ton scroll horizontal via .table-wrapper autour de la table */
-.table-wrapper {
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  margin: 0 0 1.25rem 0;
 }
