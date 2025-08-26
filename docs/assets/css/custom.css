@@ -73,3 +73,56 @@ code.equal { color: #57606a; }                             /* = stable */
   .rp-table td, .rp-table th { padding: .5rem .6rem; }
   .rp-table { font-size: 0.92rem; }
 }
+
+
+/* --- Simple-DataTables : enlever le look "carte/rectangle" --- */
+.dataTable-wrapper.rp-dt-unstyled {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+}
+
+.dataTable-wrapper.rp-dt-unstyled .dataTable-container {
+  /* plus de hauteur fixe ni de scroll vertical interne */
+  max-height: none !important;
+  overflow: visible !important;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.dataTable-wrapper.rp-dt-unstyled .dataTable-top,
+.dataTable-wrapper.rp-dt-unstyled .dataTable-bottom {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: .25rem 0; /* compact */
+}
+
+/* pagination / info plus discrets */
+.dataTable-wrapper.rp-dt-unstyled .dataTable-info,
+.dataTable-wrapper.rp-dt-unstyled .dataTable-pagination,
+.dataTable-wrapper.rp-dt-unstyled .dataTable-dropdown,
+.dataTable-wrapper.rp-dt-unstyled .dataTable-search {
+  margin: .35rem 0;
+  font-size: 0.95rem;
+}
+
+.dataTable-wrapper.rp-dt-unstyled .dataTable-pagination a {
+  border-radius: .4rem;
+}
+
+/* la table conserve ton style */
+.dataTable-wrapper.rp-dt-unstyled table {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+/* conserve ton scroll horizontal via .table-wrapper autour de la table */
+.table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 0 0 1.25rem 0;
+}
