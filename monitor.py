@@ -68,6 +68,13 @@ def normalize(travels):
     rows = []
     for t in travels:
         bt = t.get("bestTour") or {}
+        slug = t.get("slug")
+        tour_id = g(bt, ["id"])
+
+        # URL destination + URL départ précis
+        base_url = f"https://www.weroad.fr/destinations/{slug}" if slug else None
+        precise_url = f"{base_url}/{tour_id}" if base_url and tour_id else base_url
+
         price = num(g(bt, ["price", "EUR"]))
         base = num(g(bt, ["basePrice", "EUR"]))
 
@@ -90,9 +97,10 @@ def normalize(travels):
             {
                 "id": t.get("id"),
                 "code": t.get("code"),
-                "slug": t.get("slug"),
-                "url": f"https://www.weroad.fr/voyages/{t.get('slug')}" if t.get("slug") else None,
-                "title": t.get("title") or t.get("destinationLabel") or t.get("slug"),
+                "slug": slug,
+                "url": base_url,
+                "url_precise": precise_url,
+                "title": t.get("title") or t.get("destinationLabel") or slug,
                 "destination_label": t.get("destinationLabel"),
                 "country_name": g(t, ["primaryDestination", "name"]),
                 "continent": g(t, ["primaryDestination", "primaryContinent", "name"]),
@@ -101,12 +109,10 @@ def normalize(travels):
                 "isBookable": t.get("isBookable"),
                 "days": t.get("numberOfDays"),
                 "style": g(t, ["travelStyle", "displayName"]),
-                "types": ", ".join(
-                    [x.get("displayName") for x in t.get("travelTypes", []) if x.get("displayName")]
-                ),
+                "types": ", ".join([x.get("displayName") for x in t.get("travelTypes", []) if x.get("displayName")]),
 
-                # Best tour (on capture des identifiants si présents pour clé stable)
-                "best_tour_id": g(bt, ["id"]),
+                # Best tour (identifiants robustes)
+                "best_tour_id": tour_id,
                 "best_tour_code": g(bt, ["code"]),
                 "best_starting_date": g(bt, ["startingDate"]),
                 "best_ending_date": g(bt, ["endingDate"]),
@@ -131,7 +137,7 @@ def normalize(travels):
     df = pd.DataFrame(rows)
     df["month"] = df["best_starting_date"].map(to_month)
 
-    # 🔴 Filtre : retirer voyages sans sales_status défini
+    # Retirer voyages sans sales_status défini
     if not df.empty:
         df = df.dropna(subset=["sales_status"])
         df = df[df["sales_status"].astype(str).str.strip() != ""]
@@ -154,7 +160,6 @@ def weekly_kpis(df: pd.DataFrame) -> dict:
     out["count_promos"] = int(df["discount_pct"].notna().sum())
     out["promo_share_pct"] = round(100 * out["count_promos"] / out["count_total"], 1) if out["count_total"] else 0.0
 
-    # dict -> JSON pour SQLite
     s = df["month"].dropna()
     depart_by_month = s.value_counts().sort_index().to_dict()
     out["depart_by_month"] = json.dumps(depart_by_month, ensure_ascii=False)
@@ -226,47 +231,43 @@ def find_alerts(weekly_diff_df: pd.DataFrame, pct_threshold=0.10, abs_threshold=
     return x[x["flag"]].sort_values(["delta_pct", "delta_abs"], ascending=[False, False])[cols]
 
 
-# -------------------- NEW: Changement de prix sur même date --------------------
-def same_date_price_changes(df_curr: pd.DataFrame, df_prev: pd.DataFrame | None) -> pd.DataFrame:
-    """
-    Compare le run courant et le run précédent sur la *même date de départ*
-    (clé composite: slug + best_starting_date). Renvoie uniquement les lignes
-    où le prix a changé.
-    """
+# -------------------- Same-date changes (clé: best_tour_id) --------------------
+def same_date_price_changes(df_curr: pd.DataFrame, df_prev: pd.DataFrame | None, min_abs_change: float = 0.0) -> pd.DataFrame:
+    """Compare run courant vs précédent sur le *même départ* (clé prioritaire: best_tour_id)."""
     if df_prev is None or df_prev.empty or df_curr.empty:
         return pd.DataFrame()
 
-    key_cols = ["slug", "best_starting_date"]
+    # Clé primaire: best_tour_id; fallback si absent => (slug, best_starting_date)
+    key_cols = ["best_tour_id", "best_starting_date"]
+    alt_key_cols = ["slug", "best_starting_date"]
+
+    # On essaie d'abord best_tour_id complet
+    if df_curr["best_tour_id"].notna().any() and df_prev["best_tour_id"].notna().any():
+        left_keys = key_cols
+        right_keys = key_cols
+    else:
+        left_keys = alt_key_cols
+        right_keys = alt_key_cols
+
     L = df_curr[
-        key_cols
+        left_keys
         + [
-            "title",
-            "destination_label",
-            "country_name",
-            "price_eur",
-            "base_price_eur",
-            "sales_status",
-            "url",
+            "title", "destination_label", "country_name",
+            "price_eur", "base_price_eur", "sales_status",
+            "url", "url_precise"
         ]
     ].copy()
     R = df_prev[
-        key_cols
-        + [
-            "price_eur",
-            "base_price_eur",
-        ]
+        right_keys
+        + ["price_eur", "base_price_eur"]
     ].copy()
 
     merged = pd.merge(
-        L,
-        R,
-        on=key_cols,
-        how="inner",
-        suffixes=("_curr", "_prev"),
-        validate="one_to_one",
+        L, R,
+        left_on=left_keys, right_on=right_keys,
+        how="inner", suffixes=("_curr", "_prev"), validate="one_to_one"
     )
 
-    # cast numérique
     for c in ["price_eur_curr", "price_eur_prev", "base_price_eur_curr", "base_price_eur_prev"]:
         if c in merged.columns:
             merged[c] = pd.to_numeric(merged[c], errors="coerce")
@@ -275,28 +276,27 @@ def same_date_price_changes(df_curr: pd.DataFrame, df_prev: pd.DataFrame | None)
     merged["delta_pct"] = merged["delta_abs"] / merged["price_eur_prev"]
     merged.replace([np.inf, -np.inf], np.nan, inplace=True)
 
-    # On ne garde que les changements réels (delta != 0 et non-NaN)
+    # Filtre variations réelles + seuil absolu
     out = merged[(merged["delta_abs"].notna()) & (merged["delta_abs"] != 0)].copy()
+    if min_abs_change and min_abs_change > 0:
+        out = out[out["delta_abs"].abs() >= float(min_abs_change)]
 
     out["movement"] = out["delta_abs"].apply(
         lambda v: "↓" if (pd.notna(v) and v < 0) else ("↑" if (pd.notna(v) and v > 0) else "=")
     )
 
-    # Colonnes finales lisibles
+    # Colonnes finales
+    base_cols = []
+    for k in left_keys:
+        if k in out.columns:
+            base_cols.append(k)
+
     out = out[
-        [
-            "slug",
-            "title",
-            "destination_label",
-            "country_name",
-            "best_starting_date",
-            "price_eur_prev",
-            "price_eur_curr",
-            "delta_abs",
-            "delta_pct",
-            "movement",
-            "sales_status",
-            "url",
+        base_cols
+        + [
+            "title", "destination_label", "country_name", "best_starting_date",
+            "price_eur_prev", "price_eur_curr", "delta_abs", "delta_pct",
+            "movement", "sales_status", "url", "url_precise"
         ]
     ].sort_values(["best_starting_date", "destination_label", "title"])
 
@@ -323,7 +323,7 @@ def export_excel(
         alerts.to_excel(w, index=False, sheet_name="Alerts")
         mo_kpis.to_excel(w, index=False, sheet_name="Monthly_KPIs")
         mo_diff.to_excel(w, index=False, sheet_name="Monthly_Diff")
-        same_date_diff.to_excel(w, index=False, sheet_name="SameDate_Changes")  # NEW
+        same_date_diff.to_excel(w, index=False, sheet_name="SameDate_Changes")
     logging.info("Exporté: %s", out)
 
 
@@ -349,7 +349,7 @@ def persist_sqlite(
         mo_kpis.assign(run_date=run_date).to_sql("monthly_kpis", conn, if_exists="append", index=False)
         mo_diff.assign(run_date=run_date).to_sql("monthly_diff", conn, if_exists="append", index=False)
         alerts.assign(run_date=run_date).to_sql("alerts", conn, if_exists="append", index=False)
-        same_date_diff.assign(run_date=run_date).to_sql("same_date_diff", conn, if_exists="append", index=False)  # NEW
+        same_date_diff.assign(run_date=run_date).to_sql("same_date_diff", conn, if_exists="append", index=False)
     finally:
         conn.close()
     logging.info("Persisté SQLite: %s", db_path)
@@ -362,6 +362,8 @@ def main():
     ap.add_argument("--sqlite", default="data/weroad.db", help="Chemin de la base SQLite (ou vide pour désactiver)")
     ap.add_argument("--alert-pct", type=float, default=float(os.getenv("ALERT_PCT", 0.10)), help="Seuil variation % (0.10=10%)")
     ap.add_argument("--alert-eur", type=float, default=float(os.getenv("ALERT_EUR", 150.0)), help="Seuil variation absolue €")
+    ap.add_argument("--same-date-min-eur", type=float, default=float(os.getenv("SAME_DATE_MIN_EUR", 0.0)),
+                    help="Ignorer les changements (même date) si |Δ€| < seuil")
     args = ap.parse_args()
 
     run_date = datetime.now().strftime("%Y-%m-%d")
@@ -370,7 +372,7 @@ def main():
     items = fetch_travels()
     df_curr = normalize(items)
 
-    # Charger dernier snapshot pour le diff hebdo si DB existe
+    # Charger précédent snapshot si DB existe
     df_prev = None
     if args.sqlite and Path(args.sqlite).exists():
         conn = sqlite3.connect(args.sqlite)
@@ -388,8 +390,7 @@ def main():
     mo_d = monthly_diff(mo_k)
     alerts = find_alerts(wk_d, pct_threshold=args.alert_pct, abs_threshold=args.alert_eur)
 
-    # NEW: changements de prix sur même date (dernier vs précédent)
-    sdd = same_date_price_changes(df_curr, df_prev)
+    sdd = same_date_price_changes(df_curr, df_prev, min_abs_change=args.same_date_min_eur)
 
     export_excel(df_curr, wk_k, wk_d, mo_k, mo_d, alerts, sdd, out=args.out)
 
