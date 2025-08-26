@@ -14,7 +14,7 @@
   margin: 0 0 1.25rem 0;
 }
 
-/* Tables pandas */
+/* Tables générées par pandas.to_html */
 .rp-table {
   width: 100%;
   border-collapse: collapse;
@@ -36,22 +36,22 @@
   padding: .55rem .7rem;
   border-bottom: 1px solid #e5e7eb;
   vertical-align: top;
-  white-space: nowrap; /* + wrapper => scroll */
+  white-space: nowrap; /* évite le wrap, mais table-wrapper permet le scroll */
 }
 .rp-table tbody tr:hover { background: #fafbfc; }
 .rp-table a { text-decoration: none; color: #0969da; font-weight: 500; }
 .rp-table a:hover { text-decoration: underline; }
 
-/* Delta (variations) */
+/* Variations (deltas) */
 .rp-delta-pos { color: var(--rp-green); font-weight: 600; }
 .rp-delta-neg { color: var(--rp-red);   font-weight: 600; }
 .rp-delta-eq  { color: #57606a; }
 
-code.up    { color: var(--rp-red);   font-weight: 600; }   /* ↑ prix */
-code.down  { color: var(--rp-green); font-weight: 600; }   /* ↓ prix */
-code.equal { color: #57606a; }
+code.up    { color: var(--rp-red);   font-weight: 600; }   /* ↑ hausse prix */
+code.down  { color: var(--rp-green); font-weight: 600; }   /* ↓ baisse prix */
+code.equal { color: #57606a; }                             /* = stable */
 
-/* Badges statut */
+/* Badges (sales_status, etc.) */
 .rp-badge {
   display: inline-block;
   padding: .25em .6em;
@@ -68,7 +68,7 @@ code.equal { color: #57606a; }
 .rp-badge.on-sale    { background-color: var(--rp-purple); }
 .rp-badge.default    { background-color: var(--rp-gray); }
 
-/* Petites adaptations mobile */
+/* Adaptations mobile */
 @media (max-width: 780px) {
   .rp-table td, .rp-table th { padding: .5rem .6rem; }
   .rp-table { font-size: 0.92rem; }
