@@ -2,15 +2,16 @@ name: Weekly Prices Monitor
 
 on:
   schedule:
-    - cron: "0 5 * * 2"   # Chaque mardi à 05:00 UTC (07:00 Paris en été)
+    # Chaque mardi à 05:00 UTC ≈ 07:00 Europe/Paris (selon DST)
+    - cron: "0 5 * * 2"
   workflow_dispatch: {}
 
 jobs:
   run:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
-      pages: write        # ✅ Autorisation déploiement GitHub Pages
+      contents: write   # nécessaire pour commit auto
+      pages: write      # pour GitHub Pages
       id-token: write
 
     steps:
@@ -29,8 +30,8 @@ jobs:
 
       - name: Run weekly monitor
         env:
-          ALERT_PCT: "0.10"
-          ALERT_EUR: "150"
+          ALERT_PCT: "0.10"    # 10 %
+          ALERT_EUR: "150"     # 150 €
           WEROAD_TOKEN: ${{ secrets.WEROAD_TOKEN }}
         run: |
           python monitor.py --out weekly_report.xlsx --sqlite data/weroad.db
@@ -38,7 +39,12 @@ jobs:
       - name: Build Markdown dashboard
         run: python summarize.py
 
-      # 📦 Sauvegarde artefacts (Excel + SQLite)
+      - name: Commit dashboard to main (docs/*.md)
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: update dashboards"
+          file_pattern: docs/*.md
+
       - name: Upload Excel artifact
         uses: actions/upload-artifact@v4
         with:
@@ -53,18 +59,11 @@ jobs:
           path: data/weroad.db
           retention-days: 90
 
-      # ======================
-      # 🔥 Déploiement Jekyll
-      # ======================
-      - name: Configure Pages
-        uses: actions/configure-pages@v5
-
+      # ----------- BUILD + DEPLOY PAGES -----------
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.3'
-          bundler-cache: true
-          working-directory: docs
+          ruby-version: "3.1"
 
       - name: Install Jekyll deps
         working-directory: docs
@@ -73,6 +72,7 @@ jobs:
       - name: Build site with Jekyll
         env:
           JEKYLL_ENV: production
+          PAGES_REPO_NWO: ${{ github.repository }}
         working-directory: docs
         run: bundle exec jekyll build -d ../_site
 
