@@ -2,15 +2,14 @@ name: Weekly Prices Monitor
 
 on:
   schedule:
-    # Chaque mardi à 05:00 UTC ≈ 07:00 Europe/Paris (selon DST)
-    - cron: "0 5 * * 2"
+    - cron: "0 5 * * 2"  # mardi 05:00 UTC
   workflow_dispatch: {}
 
 jobs:
   run:
     runs-on: ubuntu-latest
     permissions:
-      contents: write   # nécessaire pour le commit auto dans le dépôt
+      contents: write
 
     steps:
       - name: Checkout
@@ -28,13 +27,18 @@ jobs:
 
       - name: Run weekly monitor
         env:
-          # Seuils d’alertes (tu peux ajuster)
-          ALERT_PCT: "0.10"    # 10 %
-          ALERT_EUR: "150"     # 150 €
-          # Optionnel: si l'API redevient protégée
+          ALERT_PCT: "0.10"
+          ALERT_EUR: "150"
           WEROAD_TOKEN: ${{ secrets.WEROAD_TOKEN }}
         run: |
           python monitor.py --out weekly_report.xlsx --sqlite data/weroad.db
+
+      - name: Debug list files
+        run: |
+          pwd
+          ls -lah
+          echo "--- data dir ---"
+          ls -lah data || true
 
       - name: Build Markdown dashboard
         run: |
@@ -51,6 +55,7 @@ jobs:
         with:
           name: weekly_report
           path: weekly_report.xlsx
+          if-no-files-found: error
           retention-days: 30
 
       - name: Upload SQLite artifact
@@ -58,4 +63,5 @@ jobs:
         with:
           name: sqlite_snapshot
           path: data/weroad.db
+          if-no-files-found: error
           retention-days: 90
