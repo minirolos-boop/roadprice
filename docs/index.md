@@ -1,5 +1,6 @@
 ---
-title: RoadPrice — Accueil
+title: RoadPrice – Accueil
+layout: default
 ---
 
 {% include nav.html %}
