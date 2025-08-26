@@ -3,7 +3,7 @@ title: RoadPrice – Évolutions tarifaires
 ---
 
 # RoadPrice — Évolutions tarifaires
-![last_run](https://img.shields.io/badge/last_run-2025-08-26-blue) ![build](https://img.shields.io/badge/build-2025-08-26 18:01 UTC-success)
+![last_run](https://img.shields.io/badge/last_run-2025-08-26-blue) ![build](https://img.shields.io/badge/build-2025-08-26 18:09 UTC-success)
 
 **Dernier run : `2025-08-26`**  
 _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
@@ -13,314 +13,1983 @@ _Historique des runs : du **2025-08-26** au **2025-08-26** (1 exécutions)._
 ---
 
 ## Indicateurs clés — Dernier run
-| price_eur_min   | price_eur_med   | price_eur_avg   |   count_total |   count_promos | promo_share_pct   |
-|:----------------|:----------------|:----------------|--------------:|---------------:|:------------------|
-| 469,00 €        | 1 149,00 €      | 1 288,17 €      |           186 |             51 | 2740.0%           |
+<table border="1" class="dataframe rp-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>price_eur_min</th>
+      <th>price_eur_med</th>
+      <th>price_eur_avg</th>
+      <th>count_total</th>
+      <th>count_promos</th>
+      <th>promo_share_pct</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>469,00 €</td>
+      <td>1 149,00 €</td>
+      <td>1 288,17 €</td>
+      <td>186</td>
+      <td>51</td>
+      <td>2740.0%</td>
+    </tr>
+  </tbody>
+</table>
 
 ---
 
 ## Historique des KPIs hebdo (tous les runs)
-| run_date   | price_eur_min   | price_eur_med   | price_eur_avg   |   count_total |   count_promos | promo_share_pct   |
-|:-----------|:----------------|:----------------|:----------------|--------------:|---------------:|:------------------|
-| 2025-08-26 | 469,00 €        | 1 149,00 €      | 1 288,17 €      |           186 |             51 | 2740.0%           |
+<table border="1" class="dataframe rp-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>run_date</th>
+      <th>price_eur_min</th>
+      <th>price_eur_med</th>
+      <th>price_eur_avg</th>
+      <th>count_total</th>
+      <th>count_promos</th>
+      <th>promo_share_pct</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>2025-08-26</td>
+      <td>469,00 €</td>
+      <td>1 149,00 €</td>
+      <td>1 288,17 €</td>
+      <td>186</td>
+      <td>51</td>
+      <td>2740.0%</td>
+    </tr>
+  </tbody>
+</table>
 
 ---
 
-## Top **hausses** (Δ% — dernier run)
-_Aucune donnée_
+## Top <strong>hausses</strong> (Δ% — dernier run)
+<p><em>Aucune donnée</em></p>
 
 ---
 
-## Top **baisses** (Δ% — dernier run)
-_Aucune donnée_
+## Top <strong>baisses</strong> (Δ% — dernier run)
+<p><em>Aucune donnée</em></p>
 
 ---
 
 ## KPIs mensuels — Vue complète (toutes années)
-| month   | destination_label            | prix_min   | prix_avg   |   nb_depart |
-|:--------|:-----------------------------|:-----------|:-----------|------------:|
-| 2025-08 | Islande                      | 999,00 €   | 1 239,00 € |           2 |
-| 2025-09 | Afrique du Sud               | 1 899,00 € | 1 899,00 € |           1 |
-| 2025-09 | Albanie                      | 639,00 €   | 639,00 €   |           1 |
-| 2025-09 | Argentine                    | 1 899,00 € | 1 899,00 € |           1 |
-| 2025-09 | Australie                    | 2 019,00 € | 2 019,00 € |           1 |
-| 2025-09 | Brésil                       | 1 899,00 € | 1 899,00 € |           1 |
-| 2025-09 | Canada                       | 1 389,00 € | 1 839,50 € |           2 |
-| 2025-09 | Corfou                       | 739,00 €   | 739,00 €   |           1 |
-| 2025-09 | Crète                        | 999,00 €   | 999,00 €   |           1 |
-| 2025-09 | Cuba                         | 969,00 €   | 969,00 €   |           1 |
-| 2025-09 | Dolomites                    | 919,00 €   | 919,00 €   |           1 |
-| 2025-09 | Inde                         | 949,00 €   | 949,00 €   |           1 |
-| 2025-09 | Indonesie                    | 899,00 €   | 899,00 €   |           1 |
-| 2025-09 | Indonésie                    | 1 699,00 € | 1 699,00 € |           1 |
-| 2025-09 | Istanbul                     | 569,00 €   | 569,00 €   |           1 |
-| 2025-09 | Istanbul & Cappadoce         | 949,00 €   | 949,00 €   |           1 |
-| 2025-09 | Japon                        | 1 499,00 € | 1 499,00 € |           1 |
-| 2025-09 | Jordanie                     | 899,00 €   | 899,00 €   |           1 |
-| 2025-09 | Kenya                        | 2 299,00 € | 2 299,00 € |           1 |
-| 2025-09 | Kirghizistan                 | 1 049,00 € | 1 269,50 € |           2 |
-| 2025-09 | Madère                       | 1 299,00 € | 1 299,00 € |           1 |
-| 2025-09 | Malaisie                     | 1 359,00 € | 1 359,00 € |           1 |
-| 2025-09 | Malte                        | 639,00 €   | 639,00 €   |           1 |
-| 2025-09 | Maroc                        | 479,00 €   | 614,00 €   |           4 |
-| 2025-09 | Naples & la côte Amalfitaine | 489,00 €   | 489,00 €   |           1 |
-| 2025-09 | New York                     | 799,00 €   | 799,00 €   |           1 |
-| 2025-09 | Ouzbékistan                  | 899,00 €   | 899,00 €   |           1 |
-| 2025-09 | Pouilles                     | 1 079,00 € | 1 079,00 € |           1 |
-| 2025-09 | Pérou                        | 1 699,00 € | 1 699,00 € |           1 |
-| 2025-09 | Romania                      | 469,00 €   | 469,00 €   |           1 |
-| 2025-09 | Route 66                     | 1 899,00 € | 1 899,00 € |           1 |
-| 2025-09 | Sardaigne                    | 949,00 €   | 949,00 €   |           1 |
-| 2025-09 | Sicile                       | 949,00 €   | 1 074,00 € |           2 |
-| 2025-09 | Slovénie                     | 1 049,00 € | 1 049,00 € |           1 |
-| 2025-09 | Sri Lanka                    | 899,00 €   | 899,00 €   |           1 |
-| 2025-09 | Thailande                    | 1 099,00 € | 1 099,00 € |           1 |
-| 2025-09 | Vietnam                      | 1 059,00 € | 1 059,00 € |           1 |
-| 2025-09 | le Portugal                  | 1 119,00 € | 1 119,00 € |           1 |
-| 2025-09 | Écosse                       | 849,00 €   | 849,00 €   |           1 |
-| 2025-09 | Égypte                       | 1 079,00 € | 1 079,00 € |           1 |
-| 2025-09 | Équateur                     | 2 709,00 € | 2 709,00 € |           1 |
-| 2025-10 | Barcelone & Costa Brava      | 1 299,00 € | 1 299,00 € |           1 |
-| 2025-10 | Belize                       | 1 499,00 € | 1 499,00 € |           1 |
-| 2025-10 | Brésil                       | 1 599,00 € | 1 599,00 € |           1 |
-| 2025-10 | Chili et Bolivie             | 1 999,00 € | 1 999,00 € |           1 |
-| 2025-10 | Colombie                     | 2 299,00 € | 2 299,00 € |           1 |
-| 2025-10 | Corée du Sud                 | 1 499,00 € | 1 499,00 € |           1 |
-| 2025-10 | Espagne                      | 999,00 €   | 1 049,00 € |           2 |
-| 2025-10 | France                       | 899,00 €   | 899,00 €   |           1 |
-| 2025-10 | Grecia                       | 999,00 €   | 999,00 €   |           1 |
-| 2025-10 | Hongrie                      | 599,00 €   | 599,00 €   |           1 |
-| 2025-10 | Kazakhstan                   | 1 599,00 € | 1 599,00 € |           1 |
-| 2025-10 | Kenya                        | 1 789,00 € | 1 789,00 € |           1 |
-| 2025-10 | Maroc                        | 1 099,00 € | 1 099,00 € |           1 |
-| 2025-10 | Népal                        | 999,00 €   | 999,00 €   |           1 |
-| 2025-10 | Pays Baltes                  | 899,00 €   | 899,00 €   |           1 |
-| 2025-10 | Portugal                     | 699,00 €   | 699,00 €   |           1 |
-| 2025-10 | Suisse                       | 949,00 €   | 949,00 €   |           1 |
-| 2025-10 | Suède                        | 1 599,00 € | 1 599,00 € |           1 |
-| 2025-10 | Tchéquie                     | 849,00 €   | 849,00 €   |           1 |
-| 2025-10 | Thaïlande                    | 999,00 €   | 999,00 €   |           1 |
-| 2025-10 | Tunisie                      | 789,00 €   | 789,00 €   |           1 |
-| 2025-10 | Turquie                      | 1 699,00 € | 1 699,00 € |           1 |
-| 2025-10 | Émirats Arabes Unis          | 1 199,00 € | 1 199,00 € |           1 |
-| 2025-10 | États-Unis                   | 1 599,00 € | 1 599,00 € |           1 |
-| 2025-11 | Autriche                     | 799,00 €   | 799,00 €   |           1 |
-| 2025-11 | Belgique                     | 789,00 €   | 789,00 €   |           1 |
-| 2025-11 | Bourgogne                    | 599,00 €   | 599,00 €   |           1 |
-| 2025-11 | Cap-Vert                     | 1 599,00 € | 1 599,00 € |           1 |
-| 2025-11 | Chili & Bolivie              | 2 499,00 € | 2 499,00 € |           1 |
-| 2025-11 | Chine                        | 1 899,00 € | 1 899,00 € |           1 |
-| 2025-11 | Colombie                     | 2 199,00 € | 2 199,00 € |           1 |
-| 2025-11 | Costa Rica                   | 1 799,00 € | 1 799,00 € |           1 |
-| 2025-11 | Floride                      | 1 599,00 € | 1 599,00 € |           1 |
-| 2025-11 | France                       | 699,00 €   | 749,00 €   |           2 |
-| 2025-11 | Inde                         | 1 299,00 € | 1 299,00 € |           1 |
-| 2025-11 | Indonésie                    | 889,00 €   | 1 119,00 € |           2 |
-| 2025-11 | Islande                      | 1 449,00 € | 1 449,00 € |           1 |
-| 2025-11 | Jordanie                     | 1 249,00 € | 1 249,00 € |           1 |
-| 2025-11 | Mexique                      | 1 399,00 € | 1 515,67 € |           3 |
-| 2025-11 | Nouvelle-Zélande             | 2 549,00 € | 2 549,00 € |           1 |
-| 2025-11 | Oman                         | 1 149,00 € | 1 149,00 € |           1 |
-| 2025-11 | Patagonie                    | 2 999,00 € | 2 999,00 € |           1 |
-| 2025-11 | Sri Lanka                    | 1 099,00 € | 1 099,00 € |           1 |
-| 2025-11 | Sénégal                      | 1 950,00 € | 1 950,00 € |           1 |
-| 2025-11 | Thaïlande                    | 1 249,00 € | 1 249,00 € |           1 |
-| 2025-11 | Vietnam                      | 1 849,00 € | 1 849,00 € |           1 |
-| 2025-11 | Équateur & Amazonie          | 1 299,00 € | 1 299,00 € |           1 |
-| 2025-12 | Allemagne                    | 649,00 €   | 649,00 €   |           1 |
-| 2025-12 | Bulgarie                     | 890,00 €   | 890,00 €   |           1 |
-| 2025-12 | Guatemala                    | 1 699,00 € | 1 699,00 € |           1 |
-| 2025-12 | Géorgie                      | 899,00 €   | 899,00 €   |           1 |
-| 2025-12 | Hungary                      | 949,00 €   | 949,00 €   |           1 |
-| 2025-12 | Italie                       | 999,00 €   | 999,00 €   |           1 |
-| 2025-12 | Norvège                      | 1 449,00 € | 1 449,00 € |           1 |
-| 2025-12 | Panamá                       | 1 566,00 € | 1 566,00 € |           1 |
-| 2025-12 | Philippines                  | 2 099,00 € | 2 099,00 € |           1 |
-| 2025-12 | Réunion                      | 1 390,00 € | 1 390,00 € |           1 |
-| 2025-12 | Suède                        | 1 549,00 € | 1 549,00 € |           1 |
-| 2025-12 | Tanzanie                     | 3 499,00 € | 3 499,00 € |           1 |
-| 2025-12 | Égypte                       | 499,00 €   | 499,00 €   |           1 |
-| 2025-12 | Îles Canaries                | 999,00 €   | 999,00 €   |           1 |
-| 2026-01 | Finlande                     | 1 549,00 € | 1 549,00 € |           1 |
-| 2026-01 | Nicaragua                    | 1 429,00 € | 1 429,00 € |           1 |
-| 2026-02 | Brésil                       | 2 929,00 € | 2 929,00 € |           1 |
-| 2026-02 | Italie                       | 949,00 €   | 949,00 €   |           1 |
-| 2026-02 | Maldives                     | 1 299,00 € | 1 299,00 € |           1 |
-| 2026-02 | Maurice                      | 1 199,00 € | 1 199,00 € |           1 |
-| 2026-02 | Ouzbékistan                  | 1 149,00 € | 1 149,00 € |           1 |
-| 2026-03 | Albanie                      | 549,00 €   | 549,00 €   |           1 |
-| 2026-03 | Cambodge                     | 1 900,00 € | 1 900,00 € |           1 |
-| 2026-03 | Irlande                      | 999,00 €   | 1 149,00 € |           2 |
-| 2026-03 | Japon                        | 2 099,00 € | 2 099,00 € |           1 |
-| 2026-03 | Malaisie                     | 1 105,00 € | 1 105,00 € |           1 |
-| 2026-03 | Thaïlande                    | 1 699,00 € | 1 699,00 € |           1 |
-| 2026-04 | France                       | 599,00 €   | 599,00 €   |           1 |
-| 2026-04 | Islande                      | 899,00 €   | 899,00 €   |           1 |
-| 2026-05 | Népal                        | 1 019,00 € | 1 019,00 € |           1 |
-| 2026-05 | Portugal                     | 1 699,00 € | 1 699,00 € |           1 |
-| 2026-05 | États-Unis                   | 1 699,00 € | 1 699,00 € |           1 |
-| 2026-06 | Auvergne                     | 549,00 €   | 549,00 €   |           1 |
-| 2026-06 | Bretagne                     | 679,00 €   | 679,00 €   |           1 |
-| 2026-06 | France                       | 789,00 €   | 789,00 €   |           1 |
-| 2026-06 | Thaïlande                    | 1 199,00 € | 1 199,00 € |           1 |
-| 2026-07 | Bordeaux                     | 899,00 €   | 899,00 €   |           1 |
-| 2026-07 | INDONÉSIE                    | 849,00 €   | 849,00 €   |           1 |
-| 2026-07 | Namibie                      | 2 299,00 € | 2 299,00 € |           1 |
-| 2026-07 | Vietnam                      | 1 049,00 € | 1 049,00 € |           1 |
-| 2026-08 | Gran Canaria                 | 599,00 €   | 599,00 €   |           1 |
-| 2026-08 | Maldives                     | 1 179,00 € | 1 179,00 € |           1 |
-| 2026-08 | Turquie                      | 1 349,00 € | 1 349,00 € |           1 |
-| 2026-10 | Chine                        | 1 899,00 € | 1 899,00 € |           1 |
+<table border="1" class="dataframe rp-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>month</th>
+      <th>destination_label</th>
+      <th>prix_min</th>
+      <th>prix_avg</th>
+      <th>nb_depart</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>2025-08</td>
+      <td>Islande</td>
+      <td>999,00 €</td>
+      <td>1 239,00 €</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Afrique du Sud</td>
+      <td>1 899,00 €</td>
+      <td>1 899,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Albanie</td>
+      <td>639,00 €</td>
+      <td>639,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Argentine</td>
+      <td>1 899,00 €</td>
+      <td>1 899,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Australie</td>
+      <td>2 019,00 €</td>
+      <td>2 019,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Brésil</td>
+      <td>1 899,00 €</td>
+      <td>1 899,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Canada</td>
+      <td>1 389,00 €</td>
+      <td>1 839,50 €</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Corfou</td>
+      <td>739,00 €</td>
+      <td>739,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Crète</td>
+      <td>999,00 €</td>
+      <td>999,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Cuba</td>
+      <td>969,00 €</td>
+      <td>969,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Dolomites</td>
+      <td>919,00 €</td>
+      <td>919,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Inde</td>
+      <td>949,00 €</td>
+      <td>949,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Indonesie</td>
+      <td>899,00 €</td>
+      <td>899,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Indonésie</td>
+      <td>1 699,00 €</td>
+      <td>1 699,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Istanbul</td>
+      <td>569,00 €</td>
+      <td>569,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Istanbul & Cappadoce</td>
+      <td>949,00 €</td>
+      <td>949,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Japon</td>
+      <td>1 499,00 €</td>
+      <td>1 499,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Jordanie</td>
+      <td>899,00 €</td>
+      <td>899,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Kenya</td>
+      <td>2 299,00 €</td>
+      <td>2 299,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Kirghizistan</td>
+      <td>1 049,00 €</td>
+      <td>1 269,50 €</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Madère</td>
+      <td>1 299,00 €</td>
+      <td>1 299,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Malaisie</td>
+      <td>1 359,00 €</td>
+      <td>1 359,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Malte</td>
+      <td>639,00 €</td>
+      <td>639,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Maroc</td>
+      <td>479,00 €</td>
+      <td>614,00 €</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Naples & la côte Amalfitaine</td>
+      <td>489,00 €</td>
+      <td>489,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>New York</td>
+      <td>799,00 €</td>
+      <td>799,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Ouzbékistan</td>
+      <td>899,00 €</td>
+      <td>899,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Pouilles</td>
+      <td>1 079,00 €</td>
+      <td>1 079,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Pérou</td>
+      <td>1 699,00 €</td>
+      <td>1 699,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Romania</td>
+      <td>469,00 €</td>
+      <td>469,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Route 66</td>
+      <td>1 899,00 €</td>
+      <td>1 899,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Sardaigne</td>
+      <td>949,00 €</td>
+      <td>949,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Sicile</td>
+      <td>949,00 €</td>
+      <td>1 074,00 €</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Slovénie</td>
+      <td>1 049,00 €</td>
+      <td>1 049,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Sri Lanka</td>
+      <td>899,00 €</td>
+      <td>899,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Thailande</td>
+      <td>1 099,00 €</td>
+      <td>1 099,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Vietnam</td>
+      <td>1 059,00 €</td>
+      <td>1 059,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>le Portugal</td>
+      <td>1 119,00 €</td>
+      <td>1 119,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Écosse</td>
+      <td>849,00 €</td>
+      <td>849,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Égypte</td>
+      <td>1 079,00 €</td>
+      <td>1 079,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Équateur</td>
+      <td>2 709,00 €</td>
+      <td>2 709,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>Barcelone & Costa Brava</td>
+      <td>1 299,00 €</td>
+      <td>1 299,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>Belize</td>
+      <td>1 499,00 €</td>
+      <td>1 499,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>Brésil</td>
+      <td>1 599,00 €</td>
+      <td>1 599,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>Chili et Bolivie</td>
+      <td>1 999,00 €</td>
+      <td>1 999,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>Colombie</td>
+      <td>2 299,00 €</td>
+      <td>2 299,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>Corée du Sud</td>
+      <td>1 499,00 €</td>
+      <td>1 499,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>Espagne</td>
+      <td>999,00 €</td>
+      <td>1 049,00 €</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>France</td>
+      <td>899,00 €</td>
+      <td>899,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>Grecia</td>
+      <td>999,00 €</td>
+      <td>999,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>Hongrie</td>
+      <td>599,00 €</td>
+      <td>599,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>Kazakhstan</td>
+      <td>1 599,00 €</td>
+      <td>1 599,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>Kenya</td>
+      <td>1 789,00 €</td>
+      <td>1 789,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>Maroc</td>
+      <td>1 099,00 €</td>
+      <td>1 099,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>Népal</td>
+      <td>999,00 €</td>
+      <td>999,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>Pays Baltes</td>
+      <td>899,00 €</td>
+      <td>899,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>Portugal</td>
+      <td>699,00 €</td>
+      <td>699,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>Suisse</td>
+      <td>949,00 €</td>
+      <td>949,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>Suède</td>
+      <td>1 599,00 €</td>
+      <td>1 599,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>Tchéquie</td>
+      <td>849,00 €</td>
+      <td>849,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>Thaïlande</td>
+      <td>999,00 €</td>
+      <td>999,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>Tunisie</td>
+      <td>789,00 €</td>
+      <td>789,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>Turquie</td>
+      <td>1 699,00 €</td>
+      <td>1 699,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>Émirats Arabes Unis</td>
+      <td>1 199,00 €</td>
+      <td>1 199,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>États-Unis</td>
+      <td>1 599,00 €</td>
+      <td>1 599,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Autriche</td>
+      <td>799,00 €</td>
+      <td>799,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Belgique</td>
+      <td>789,00 €</td>
+      <td>789,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Bourgogne</td>
+      <td>599,00 €</td>
+      <td>599,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Cap-Vert</td>
+      <td>1 599,00 €</td>
+      <td>1 599,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Chili & Bolivie</td>
+      <td>2 499,00 €</td>
+      <td>2 499,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Chine</td>
+      <td>1 899,00 €</td>
+      <td>1 899,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Colombie</td>
+      <td>2 199,00 €</td>
+      <td>2 199,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Costa Rica</td>
+      <td>1 799,00 €</td>
+      <td>1 799,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Floride</td>
+      <td>1 599,00 €</td>
+      <td>1 599,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>France</td>
+      <td>699,00 €</td>
+      <td>749,00 €</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Inde</td>
+      <td>1 299,00 €</td>
+      <td>1 299,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Indonésie</td>
+      <td>889,00 €</td>
+      <td>1 119,00 €</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Islande</td>
+      <td>1 449,00 €</td>
+      <td>1 449,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Jordanie</td>
+      <td>1 249,00 €</td>
+      <td>1 249,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Mexique</td>
+      <td>1 399,00 €</td>
+      <td>1 515,67 €</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Nouvelle-Zélande</td>
+      <td>2 549,00 €</td>
+      <td>2 549,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Oman</td>
+      <td>1 149,00 €</td>
+      <td>1 149,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Patagonie</td>
+      <td>2 999,00 €</td>
+      <td>2 999,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Sri Lanka</td>
+      <td>1 099,00 €</td>
+      <td>1 099,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Sénégal</td>
+      <td>1 950,00 €</td>
+      <td>1 950,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Thaïlande</td>
+      <td>1 249,00 €</td>
+      <td>1 249,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Vietnam</td>
+      <td>1 849,00 €</td>
+      <td>1 849,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Équateur & Amazonie</td>
+      <td>1 299,00 €</td>
+      <td>1 299,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-12</td>
+      <td>Allemagne</td>
+      <td>649,00 €</td>
+      <td>649,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-12</td>
+      <td>Bulgarie</td>
+      <td>890,00 €</td>
+      <td>890,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-12</td>
+      <td>Guatemala</td>
+      <td>1 699,00 €</td>
+      <td>1 699,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-12</td>
+      <td>Géorgie</td>
+      <td>899,00 €</td>
+      <td>899,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-12</td>
+      <td>Hungary</td>
+      <td>949,00 €</td>
+      <td>949,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-12</td>
+      <td>Italie</td>
+      <td>999,00 €</td>
+      <td>999,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-12</td>
+      <td>Norvège</td>
+      <td>1 449,00 €</td>
+      <td>1 449,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-12</td>
+      <td>Panamá</td>
+      <td>1 566,00 €</td>
+      <td>1 566,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-12</td>
+      <td>Philippines</td>
+      <td>2 099,00 €</td>
+      <td>2 099,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-12</td>
+      <td>Réunion</td>
+      <td>1 390,00 €</td>
+      <td>1 390,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-12</td>
+      <td>Suède</td>
+      <td>1 549,00 €</td>
+      <td>1 549,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-12</td>
+      <td>Tanzanie</td>
+      <td>3 499,00 €</td>
+      <td>3 499,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-12</td>
+      <td>Égypte</td>
+      <td>499,00 €</td>
+      <td>499,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-12</td>
+      <td>Îles Canaries</td>
+      <td>999,00 €</td>
+      <td>999,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-01</td>
+      <td>Finlande</td>
+      <td>1 549,00 €</td>
+      <td>1 549,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-01</td>
+      <td>Nicaragua</td>
+      <td>1 429,00 €</td>
+      <td>1 429,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-02</td>
+      <td>Brésil</td>
+      <td>2 929,00 €</td>
+      <td>2 929,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-02</td>
+      <td>Italie</td>
+      <td>949,00 €</td>
+      <td>949,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-02</td>
+      <td>Maldives</td>
+      <td>1 299,00 €</td>
+      <td>1 299,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-02</td>
+      <td>Maurice</td>
+      <td>1 199,00 €</td>
+      <td>1 199,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-02</td>
+      <td>Ouzbékistan</td>
+      <td>1 149,00 €</td>
+      <td>1 149,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-03</td>
+      <td>Albanie</td>
+      <td>549,00 €</td>
+      <td>549,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-03</td>
+      <td>Cambodge</td>
+      <td>1 900,00 €</td>
+      <td>1 900,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-03</td>
+      <td>Irlande</td>
+      <td>999,00 €</td>
+      <td>1 149,00 €</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>2026-03</td>
+      <td>Japon</td>
+      <td>2 099,00 €</td>
+      <td>2 099,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-03</td>
+      <td>Malaisie</td>
+      <td>1 105,00 €</td>
+      <td>1 105,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-03</td>
+      <td>Thaïlande</td>
+      <td>1 699,00 €</td>
+      <td>1 699,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-04</td>
+      <td>France</td>
+      <td>599,00 €</td>
+      <td>599,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-04</td>
+      <td>Islande</td>
+      <td>899,00 €</td>
+      <td>899,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-05</td>
+      <td>Népal</td>
+      <td>1 019,00 €</td>
+      <td>1 019,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-05</td>
+      <td>Portugal</td>
+      <td>1 699,00 €</td>
+      <td>1 699,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-05</td>
+      <td>États-Unis</td>
+      <td>1 699,00 €</td>
+      <td>1 699,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-06</td>
+      <td>Auvergne</td>
+      <td>549,00 €</td>
+      <td>549,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-06</td>
+      <td>Bretagne</td>
+      <td>679,00 €</td>
+      <td>679,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-06</td>
+      <td>France</td>
+      <td>789,00 €</td>
+      <td>789,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-06</td>
+      <td>Thaïlande</td>
+      <td>1 199,00 €</td>
+      <td>1 199,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-07</td>
+      <td>Bordeaux</td>
+      <td>899,00 €</td>
+      <td>899,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-07</td>
+      <td>INDONÉSIE</td>
+      <td>849,00 €</td>
+      <td>849,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-07</td>
+      <td>Namibie</td>
+      <td>2 299,00 €</td>
+      <td>2 299,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-07</td>
+      <td>Vietnam</td>
+      <td>1 049,00 €</td>
+      <td>1 049,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-08</td>
+      <td>Gran Canaria</td>
+      <td>599,00 €</td>
+      <td>599,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-08</td>
+      <td>Maldives</td>
+      <td>1 179,00 €</td>
+      <td>1 179,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-08</td>
+      <td>Turquie</td>
+      <td>1 349,00 €</td>
+      <td>1 349,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-10</td>
+      <td>Chine</td>
+      <td>1 899,00 €</td>
+      <td>1 899,00 €</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
 
 ---
 
 ## KPIs mensuels — Aperçu 24 derniers mois
-| month   | destination_label            | prix_min   | prix_avg   |   nb_depart |
-|:--------|:-----------------------------|:-----------|:-----------|------------:|
-| 2025-08 | Islande                      | 999,00 €   | 1 239,00 € |           2 |
-| 2025-09 | Afrique du Sud               | 1 899,00 € | 1 899,00 € |           1 |
-| 2025-09 | Albanie                      | 639,00 €   | 639,00 €   |           1 |
-| 2025-09 | Argentine                    | 1 899,00 € | 1 899,00 € |           1 |
-| 2025-09 | Australie                    | 2 019,00 € | 2 019,00 € |           1 |
-| 2025-09 | Brésil                       | 1 899,00 € | 1 899,00 € |           1 |
-| 2025-09 | Canada                       | 1 389,00 € | 1 839,50 € |           2 |
-| 2025-09 | Corfou                       | 739,00 €   | 739,00 €   |           1 |
-| 2025-09 | Crète                        | 999,00 €   | 999,00 €   |           1 |
-| 2025-09 | Cuba                         | 969,00 €   | 969,00 €   |           1 |
-| 2025-09 | Dolomites                    | 919,00 €   | 919,00 €   |           1 |
-| 2025-09 | Inde                         | 949,00 €   | 949,00 €   |           1 |
-| 2025-09 | Indonesie                    | 899,00 €   | 899,00 €   |           1 |
-| 2025-09 | Indonésie                    | 1 699,00 € | 1 699,00 € |           1 |
-| 2025-09 | Istanbul                     | 569,00 €   | 569,00 €   |           1 |
-| 2025-09 | Istanbul & Cappadoce         | 949,00 €   | 949,00 €   |           1 |
-| 2025-09 | Japon                        | 1 499,00 € | 1 499,00 € |           1 |
-| 2025-09 | Jordanie                     | 899,00 €   | 899,00 €   |           1 |
-| 2025-09 | Kenya                        | 2 299,00 € | 2 299,00 € |           1 |
-| 2025-09 | Kirghizistan                 | 1 049,00 € | 1 269,50 € |           2 |
-| 2025-09 | Madère                       | 1 299,00 € | 1 299,00 € |           1 |
-| 2025-09 | Malaisie                     | 1 359,00 € | 1 359,00 € |           1 |
-| 2025-09 | Malte                        | 639,00 €   | 639,00 €   |           1 |
-| 2025-09 | Maroc                        | 479,00 €   | 614,00 €   |           4 |
-| 2025-09 | Naples & la côte Amalfitaine | 489,00 €   | 489,00 €   |           1 |
-| 2025-09 | New York                     | 799,00 €   | 799,00 €   |           1 |
-| 2025-09 | Ouzbékistan                  | 899,00 €   | 899,00 €   |           1 |
-| 2025-09 | Pouilles                     | 1 079,00 € | 1 079,00 € |           1 |
-| 2025-09 | Pérou                        | 1 699,00 € | 1 699,00 € |           1 |
-| 2025-09 | Romania                      | 469,00 €   | 469,00 €   |           1 |
-| 2025-09 | Route 66                     | 1 899,00 € | 1 899,00 € |           1 |
-| 2025-09 | Sardaigne                    | 949,00 €   | 949,00 €   |           1 |
-| 2025-09 | Sicile                       | 949,00 €   | 1 074,00 € |           2 |
-| 2025-09 | Slovénie                     | 1 049,00 € | 1 049,00 € |           1 |
-| 2025-09 | Sri Lanka                    | 899,00 €   | 899,00 €   |           1 |
-| 2025-09 | Thailande                    | 1 099,00 € | 1 099,00 € |           1 |
-| 2025-09 | Vietnam                      | 1 059,00 € | 1 059,00 € |           1 |
-| 2025-09 | le Portugal                  | 1 119,00 € | 1 119,00 € |           1 |
-| 2025-09 | Écosse                       | 849,00 €   | 849,00 €   |           1 |
-| 2025-09 | Égypte                       | 1 079,00 € | 1 079,00 € |           1 |
-| 2025-09 | Équateur                     | 2 709,00 € | 2 709,00 € |           1 |
-| 2025-10 | Barcelone & Costa Brava      | 1 299,00 € | 1 299,00 € |           1 |
-| 2025-10 | Belize                       | 1 499,00 € | 1 499,00 € |           1 |
-| 2025-10 | Brésil                       | 1 599,00 € | 1 599,00 € |           1 |
-| 2025-10 | Chili et Bolivie             | 1 999,00 € | 1 999,00 € |           1 |
-| 2025-10 | Colombie                     | 2 299,00 € | 2 299,00 € |           1 |
-| 2025-10 | Corée du Sud                 | 1 499,00 € | 1 499,00 € |           1 |
-| 2025-10 | Espagne                      | 999,00 €   | 1 049,00 € |           2 |
-| 2025-10 | France                       | 899,00 €   | 899,00 €   |           1 |
-| 2025-10 | Grecia                       | 999,00 €   | 999,00 €   |           1 |
-| 2025-10 | Hongrie                      | 599,00 €   | 599,00 €   |           1 |
-| 2025-10 | Kazakhstan                   | 1 599,00 € | 1 599,00 € |           1 |
-| 2025-10 | Kenya                        | 1 789,00 € | 1 789,00 € |           1 |
-| 2025-10 | Maroc                        | 1 099,00 € | 1 099,00 € |           1 |
-| 2025-10 | Népal                        | 999,00 €   | 999,00 €   |           1 |
-| 2025-10 | Pays Baltes                  | 899,00 €   | 899,00 €   |           1 |
-| 2025-10 | Portugal                     | 699,00 €   | 699,00 €   |           1 |
-| 2025-10 | Suisse                       | 949,00 €   | 949,00 €   |           1 |
-| 2025-10 | Suède                        | 1 599,00 € | 1 599,00 € |           1 |
-| 2025-10 | Tchéquie                     | 849,00 €   | 849,00 €   |           1 |
-| 2025-10 | Thaïlande                    | 999,00 €   | 999,00 €   |           1 |
-| 2025-10 | Tunisie                      | 789,00 €   | 789,00 €   |           1 |
-| 2025-10 | Turquie                      | 1 699,00 € | 1 699,00 € |           1 |
-| 2025-10 | Émirats Arabes Unis          | 1 199,00 € | 1 199,00 € |           1 |
-| 2025-10 | États-Unis                   | 1 599,00 € | 1 599,00 € |           1 |
-| 2025-11 | Autriche                     | 799,00 €   | 799,00 €   |           1 |
-| 2025-11 | Belgique                     | 789,00 €   | 789,00 €   |           1 |
-| 2025-11 | Bourgogne                    | 599,00 €   | 599,00 €   |           1 |
-| 2025-11 | Cap-Vert                     | 1 599,00 € | 1 599,00 € |           1 |
-| 2025-11 | Chili & Bolivie              | 2 499,00 € | 2 499,00 € |           1 |
-| 2025-11 | Chine                        | 1 899,00 € | 1 899,00 € |           1 |
-| 2025-11 | Colombie                     | 2 199,00 € | 2 199,00 € |           1 |
-| 2025-11 | Costa Rica                   | 1 799,00 € | 1 799,00 € |           1 |
-| 2025-11 | Floride                      | 1 599,00 € | 1 599,00 € |           1 |
-| 2025-11 | France                       | 699,00 €   | 749,00 €   |           2 |
-| 2025-11 | Inde                         | 1 299,00 € | 1 299,00 € |           1 |
-| 2025-11 | Indonésie                    | 889,00 €   | 1 119,00 € |           2 |
-| 2025-11 | Islande                      | 1 449,00 € | 1 449,00 € |           1 |
-| 2025-11 | Jordanie                     | 1 249,00 € | 1 249,00 € |           1 |
-| 2025-11 | Mexique                      | 1 399,00 € | 1 515,67 € |           3 |
-| 2025-11 | Nouvelle-Zélande             | 2 549,00 € | 2 549,00 € |           1 |
-| 2025-11 | Oman                         | 1 149,00 € | 1 149,00 € |           1 |
-| 2025-11 | Patagonie                    | 2 999,00 € | 2 999,00 € |           1 |
-| 2025-11 | Sri Lanka                    | 1 099,00 € | 1 099,00 € |           1 |
-| 2025-11 | Sénégal                      | 1 950,00 € | 1 950,00 € |           1 |
-| 2025-11 | Thaïlande                    | 1 249,00 € | 1 249,00 € |           1 |
-| 2025-11 | Vietnam                      | 1 849,00 € | 1 849,00 € |           1 |
-| 2025-11 | Équateur & Amazonie          | 1 299,00 € | 1 299,00 € |           1 |
-| 2025-12 | Allemagne                    | 649,00 €   | 649,00 €   |           1 |
-| 2025-12 | Bulgarie                     | 890,00 €   | 890,00 €   |           1 |
-| 2025-12 | Guatemala                    | 1 699,00 € | 1 699,00 € |           1 |
-| 2025-12 | Géorgie                      | 899,00 €   | 899,00 €   |           1 |
-| 2025-12 | Hungary                      | 949,00 €   | 949,00 €   |           1 |
-| 2025-12 | Italie                       | 999,00 €   | 999,00 €   |           1 |
-| 2025-12 | Norvège                      | 1 449,00 € | 1 449,00 € |           1 |
-| 2025-12 | Panamá                       | 1 566,00 € | 1 566,00 € |           1 |
-| 2025-12 | Philippines                  | 2 099,00 € | 2 099,00 € |           1 |
-| 2025-12 | Réunion                      | 1 390,00 € | 1 390,00 € |           1 |
-| 2025-12 | Suède                        | 1 549,00 € | 1 549,00 € |           1 |
-| 2025-12 | Tanzanie                     | 3 499,00 € | 3 499,00 € |           1 |
-| 2025-12 | Égypte                       | 499,00 €   | 499,00 €   |           1 |
-| 2025-12 | Îles Canaries                | 999,00 €   | 999,00 €   |           1 |
-| 2026-01 | Finlande                     | 1 549,00 € | 1 549,00 € |           1 |
-| 2026-01 | Nicaragua                    | 1 429,00 € | 1 429,00 € |           1 |
-| 2026-02 | Brésil                       | 2 929,00 € | 2 929,00 € |           1 |
-| 2026-02 | Italie                       | 949,00 €   | 949,00 €   |           1 |
-| 2026-02 | Maldives                     | 1 299,00 € | 1 299,00 € |           1 |
-| 2026-02 | Maurice                      | 1 199,00 € | 1 199,00 € |           1 |
-| 2026-02 | Ouzbékistan                  | 1 149,00 € | 1 149,00 € |           1 |
-| 2026-03 | Albanie                      | 549,00 €   | 549,00 €   |           1 |
-| 2026-03 | Cambodge                     | 1 900,00 € | 1 900,00 € |           1 |
-| 2026-03 | Irlande                      | 999,00 €   | 1 149,00 € |           2 |
-| 2026-03 | Japon                        | 2 099,00 € | 2 099,00 € |           1 |
-| 2026-03 | Malaisie                     | 1 105,00 € | 1 105,00 € |           1 |
-| 2026-03 | Thaïlande                    | 1 699,00 € | 1 699,00 € |           1 |
-| 2026-04 | France                       | 599,00 €   | 599,00 €   |           1 |
-| 2026-04 | Islande                      | 899,00 €   | 899,00 €   |           1 |
-| 2026-05 | Népal                        | 1 019,00 € | 1 019,00 € |           1 |
-| 2026-05 | Portugal                     | 1 699,00 € | 1 699,00 € |           1 |
-| 2026-05 | États-Unis                   | 1 699,00 € | 1 699,00 € |           1 |
-| 2026-06 | Auvergne                     | 549,00 €   | 549,00 €   |           1 |
-| 2026-06 | Bretagne                     | 679,00 €   | 679,00 €   |           1 |
-| 2026-06 | France                       | 789,00 €   | 789,00 €   |           1 |
-| 2026-06 | Thaïlande                    | 1 199,00 € | 1 199,00 € |           1 |
-| 2026-07 | Bordeaux                     | 899,00 €   | 899,00 €   |           1 |
-| 2026-07 | INDONÉSIE                    | 849,00 €   | 849,00 €   |           1 |
-| 2026-07 | Namibie                      | 2 299,00 € | 2 299,00 € |           1 |
-| 2026-07 | Vietnam                      | 1 049,00 € | 1 049,00 € |           1 |
-| 2026-08 | Gran Canaria                 | 599,00 €   | 599,00 €   |           1 |
-| 2026-08 | Maldives                     | 1 179,00 € | 1 179,00 € |           1 |
-| 2026-08 | Turquie                      | 1 349,00 € | 1 349,00 € |           1 |
-| 2026-10 | Chine                        | 1 899,00 € | 1 899,00 € |           1 |
+<table border="1" class="dataframe rp-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>month</th>
+      <th>destination_label</th>
+      <th>prix_min</th>
+      <th>prix_avg</th>
+      <th>nb_depart</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>2025-08</td>
+      <td>Islande</td>
+      <td>999,00 €</td>
+      <td>1 239,00 €</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Afrique du Sud</td>
+      <td>1 899,00 €</td>
+      <td>1 899,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Albanie</td>
+      <td>639,00 €</td>
+      <td>639,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Argentine</td>
+      <td>1 899,00 €</td>
+      <td>1 899,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Australie</td>
+      <td>2 019,00 €</td>
+      <td>2 019,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Brésil</td>
+      <td>1 899,00 €</td>
+      <td>1 899,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Canada</td>
+      <td>1 389,00 €</td>
+      <td>1 839,50 €</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Corfou</td>
+      <td>739,00 €</td>
+      <td>739,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Crète</td>
+      <td>999,00 €</td>
+      <td>999,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Cuba</td>
+      <td>969,00 €</td>
+      <td>969,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Dolomites</td>
+      <td>919,00 €</td>
+      <td>919,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Inde</td>
+      <td>949,00 €</td>
+      <td>949,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Indonesie</td>
+      <td>899,00 €</td>
+      <td>899,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Indonésie</td>
+      <td>1 699,00 €</td>
+      <td>1 699,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Istanbul</td>
+      <td>569,00 €</td>
+      <td>569,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Istanbul & Cappadoce</td>
+      <td>949,00 €</td>
+      <td>949,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Japon</td>
+      <td>1 499,00 €</td>
+      <td>1 499,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Jordanie</td>
+      <td>899,00 €</td>
+      <td>899,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Kenya</td>
+      <td>2 299,00 €</td>
+      <td>2 299,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Kirghizistan</td>
+      <td>1 049,00 €</td>
+      <td>1 269,50 €</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Madère</td>
+      <td>1 299,00 €</td>
+      <td>1 299,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Malaisie</td>
+      <td>1 359,00 €</td>
+      <td>1 359,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Malte</td>
+      <td>639,00 €</td>
+      <td>639,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Maroc</td>
+      <td>479,00 €</td>
+      <td>614,00 €</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Naples & la côte Amalfitaine</td>
+      <td>489,00 €</td>
+      <td>489,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>New York</td>
+      <td>799,00 €</td>
+      <td>799,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Ouzbékistan</td>
+      <td>899,00 €</td>
+      <td>899,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Pouilles</td>
+      <td>1 079,00 €</td>
+      <td>1 079,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Pérou</td>
+      <td>1 699,00 €</td>
+      <td>1 699,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Romania</td>
+      <td>469,00 €</td>
+      <td>469,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Route 66</td>
+      <td>1 899,00 €</td>
+      <td>1 899,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Sardaigne</td>
+      <td>949,00 €</td>
+      <td>949,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Sicile</td>
+      <td>949,00 €</td>
+      <td>1 074,00 €</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Slovénie</td>
+      <td>1 049,00 €</td>
+      <td>1 049,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Sri Lanka</td>
+      <td>899,00 €</td>
+      <td>899,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Thailande</td>
+      <td>1 099,00 €</td>
+      <td>1 099,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Vietnam</td>
+      <td>1 059,00 €</td>
+      <td>1 059,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>le Portugal</td>
+      <td>1 119,00 €</td>
+      <td>1 119,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Écosse</td>
+      <td>849,00 €</td>
+      <td>849,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Égypte</td>
+      <td>1 079,00 €</td>
+      <td>1 079,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Équateur</td>
+      <td>2 709,00 €</td>
+      <td>2 709,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>Barcelone & Costa Brava</td>
+      <td>1 299,00 €</td>
+      <td>1 299,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>Belize</td>
+      <td>1 499,00 €</td>
+      <td>1 499,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>Brésil</td>
+      <td>1 599,00 €</td>
+      <td>1 599,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>Chili et Bolivie</td>
+      <td>1 999,00 €</td>
+      <td>1 999,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>Colombie</td>
+      <td>2 299,00 €</td>
+      <td>2 299,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>Corée du Sud</td>
+      <td>1 499,00 €</td>
+      <td>1 499,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>Espagne</td>
+      <td>999,00 €</td>
+      <td>1 049,00 €</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>France</td>
+      <td>899,00 €</td>
+      <td>899,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>Grecia</td>
+      <td>999,00 €</td>
+      <td>999,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>Hongrie</td>
+      <td>599,00 €</td>
+      <td>599,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>Kazakhstan</td>
+      <td>1 599,00 €</td>
+      <td>1 599,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>Kenya</td>
+      <td>1 789,00 €</td>
+      <td>1 789,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>Maroc</td>
+      <td>1 099,00 €</td>
+      <td>1 099,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>Népal</td>
+      <td>999,00 €</td>
+      <td>999,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>Pays Baltes</td>
+      <td>899,00 €</td>
+      <td>899,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>Portugal</td>
+      <td>699,00 €</td>
+      <td>699,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>Suisse</td>
+      <td>949,00 €</td>
+      <td>949,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>Suède</td>
+      <td>1 599,00 €</td>
+      <td>1 599,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>Tchéquie</td>
+      <td>849,00 €</td>
+      <td>849,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>Thaïlande</td>
+      <td>999,00 €</td>
+      <td>999,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>Tunisie</td>
+      <td>789,00 €</td>
+      <td>789,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>Turquie</td>
+      <td>1 699,00 €</td>
+      <td>1 699,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>Émirats Arabes Unis</td>
+      <td>1 199,00 €</td>
+      <td>1 199,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>États-Unis</td>
+      <td>1 599,00 €</td>
+      <td>1 599,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Autriche</td>
+      <td>799,00 €</td>
+      <td>799,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Belgique</td>
+      <td>789,00 €</td>
+      <td>789,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Bourgogne</td>
+      <td>599,00 €</td>
+      <td>599,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Cap-Vert</td>
+      <td>1 599,00 €</td>
+      <td>1 599,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Chili & Bolivie</td>
+      <td>2 499,00 €</td>
+      <td>2 499,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Chine</td>
+      <td>1 899,00 €</td>
+      <td>1 899,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Colombie</td>
+      <td>2 199,00 €</td>
+      <td>2 199,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Costa Rica</td>
+      <td>1 799,00 €</td>
+      <td>1 799,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Floride</td>
+      <td>1 599,00 €</td>
+      <td>1 599,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>France</td>
+      <td>699,00 €</td>
+      <td>749,00 €</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Inde</td>
+      <td>1 299,00 €</td>
+      <td>1 299,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Indonésie</td>
+      <td>889,00 €</td>
+      <td>1 119,00 €</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Islande</td>
+      <td>1 449,00 €</td>
+      <td>1 449,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Jordanie</td>
+      <td>1 249,00 €</td>
+      <td>1 249,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Mexique</td>
+      <td>1 399,00 €</td>
+      <td>1 515,67 €</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Nouvelle-Zélande</td>
+      <td>2 549,00 €</td>
+      <td>2 549,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Oman</td>
+      <td>1 149,00 €</td>
+      <td>1 149,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Patagonie</td>
+      <td>2 999,00 €</td>
+      <td>2 999,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Sri Lanka</td>
+      <td>1 099,00 €</td>
+      <td>1 099,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Sénégal</td>
+      <td>1 950,00 €</td>
+      <td>1 950,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Thaïlande</td>
+      <td>1 249,00 €</td>
+      <td>1 249,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Vietnam</td>
+      <td>1 849,00 €</td>
+      <td>1 849,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Équateur & Amazonie</td>
+      <td>1 299,00 €</td>
+      <td>1 299,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-12</td>
+      <td>Allemagne</td>
+      <td>649,00 €</td>
+      <td>649,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-12</td>
+      <td>Bulgarie</td>
+      <td>890,00 €</td>
+      <td>890,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-12</td>
+      <td>Guatemala</td>
+      <td>1 699,00 €</td>
+      <td>1 699,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-12</td>
+      <td>Géorgie</td>
+      <td>899,00 €</td>
+      <td>899,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-12</td>
+      <td>Hungary</td>
+      <td>949,00 €</td>
+      <td>949,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-12</td>
+      <td>Italie</td>
+      <td>999,00 €</td>
+      <td>999,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-12</td>
+      <td>Norvège</td>
+      <td>1 449,00 €</td>
+      <td>1 449,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-12</td>
+      <td>Panamá</td>
+      <td>1 566,00 €</td>
+      <td>1 566,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-12</td>
+      <td>Philippines</td>
+      <td>2 099,00 €</td>
+      <td>2 099,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-12</td>
+      <td>Réunion</td>
+      <td>1 390,00 €</td>
+      <td>1 390,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-12</td>
+      <td>Suède</td>
+      <td>1 549,00 €</td>
+      <td>1 549,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-12</td>
+      <td>Tanzanie</td>
+      <td>3 499,00 €</td>
+      <td>3 499,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-12</td>
+      <td>Égypte</td>
+      <td>499,00 €</td>
+      <td>499,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-12</td>
+      <td>Îles Canaries</td>
+      <td>999,00 €</td>
+      <td>999,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-01</td>
+      <td>Finlande</td>
+      <td>1 549,00 €</td>
+      <td>1 549,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-01</td>
+      <td>Nicaragua</td>
+      <td>1 429,00 €</td>
+      <td>1 429,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-02</td>
+      <td>Brésil</td>
+      <td>2 929,00 €</td>
+      <td>2 929,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-02</td>
+      <td>Italie</td>
+      <td>949,00 €</td>
+      <td>949,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-02</td>
+      <td>Maldives</td>
+      <td>1 299,00 €</td>
+      <td>1 299,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-02</td>
+      <td>Maurice</td>
+      <td>1 199,00 €</td>
+      <td>1 199,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-02</td>
+      <td>Ouzbékistan</td>
+      <td>1 149,00 €</td>
+      <td>1 149,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-03</td>
+      <td>Albanie</td>
+      <td>549,00 €</td>
+      <td>549,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-03</td>
+      <td>Cambodge</td>
+      <td>1 900,00 €</td>
+      <td>1 900,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-03</td>
+      <td>Irlande</td>
+      <td>999,00 €</td>
+      <td>1 149,00 €</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>2026-03</td>
+      <td>Japon</td>
+      <td>2 099,00 €</td>
+      <td>2 099,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-03</td>
+      <td>Malaisie</td>
+      <td>1 105,00 €</td>
+      <td>1 105,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-03</td>
+      <td>Thaïlande</td>
+      <td>1 699,00 €</td>
+      <td>1 699,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-04</td>
+      <td>France</td>
+      <td>599,00 €</td>
+      <td>599,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-04</td>
+      <td>Islande</td>
+      <td>899,00 €</td>
+      <td>899,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-05</td>
+      <td>Népal</td>
+      <td>1 019,00 €</td>
+      <td>1 019,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-05</td>
+      <td>Portugal</td>
+      <td>1 699,00 €</td>
+      <td>1 699,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-05</td>
+      <td>États-Unis</td>
+      <td>1 699,00 €</td>
+      <td>1 699,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-06</td>
+      <td>Auvergne</td>
+      <td>549,00 €</td>
+      <td>549,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-06</td>
+      <td>Bretagne</td>
+      <td>679,00 €</td>
+      <td>679,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-06</td>
+      <td>France</td>
+      <td>789,00 €</td>
+      <td>789,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-06</td>
+      <td>Thaïlande</td>
+      <td>1 199,00 €</td>
+      <td>1 199,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-07</td>
+      <td>Bordeaux</td>
+      <td>899,00 €</td>
+      <td>899,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-07</td>
+      <td>INDONÉSIE</td>
+      <td>849,00 €</td>
+      <td>849,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-07</td>
+      <td>Namibie</td>
+      <td>2 299,00 €</td>
+      <td>2 299,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-07</td>
+      <td>Vietnam</td>
+      <td>1 049,00 €</td>
+      <td>1 049,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-08</td>
+      <td>Gran Canaria</td>
+      <td>599,00 €</td>
+      <td>599,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-08</td>
+      <td>Maldives</td>
+      <td>1 179,00 €</td>
+      <td>1 179,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-08</td>
+      <td>Turquie</td>
+      <td>1 349,00 €</td>
+      <td>1 349,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-10</td>
+      <td>Chine</td>
+      <td>1 899,00 €</td>
+      <td>1 899,00 €</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
 
 ---
 
 ## Synthèse par année (depuis monthly_kpis)
-|   year |   nb_rows | prix_avg_moyen   | prix_min_moyen   |   nb_depart_total |
-|-------:|----------:|:-----------------|:-----------------|------------------:|
-|   2025 |       102 | 1 315,35 €       | 1 299,49 €       |               114 |
-|   2026 |        30 | 1 275,23 €       | 1 270,23 €       |                31 |
+<table border="1" class="dataframe rp-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>year</th>
+      <th>nb_rows</th>
+      <th>prix_avg_moyen</th>
+      <th>prix_min_moyen</th>
+      <th>nb_depart_total</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>2025</td>
+      <td>102</td>
+      <td>1 315,35 €</td>
+      <td>1 299,49 €</td>
+      <td>114</td>
+    </tr>
+    <tr>
+      <td>2026</td>
+      <td>30</td>
+      <td>1 275,23 €</td>
+      <td>1 270,23 €</td>
+      <td>31</td>
+    </tr>
+  </tbody>
+</table>
 
 ---
 
 ### Légende
-- **Δ%** : variation relative vs snapshot précédent.  
-- **Δ€** : variation absolue en euros.  
+- <strong>Δ%</strong> : variation relative vs snapshot précédent.  
+- <strong>Δ€</strong> : variation absolue en euros.  
 - Les liens mènent à la page WeRoad de l’offre (si disponible).
