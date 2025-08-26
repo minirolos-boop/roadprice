@@ -1,0 +1,35 @@
+:root {
+  --rp-accent: #1f6feb;
+  --rp-green: #2da44e;
+  --rp-red: #d73a49;
+}
+
+/* Tables HTML générées par pandas.to_html */
+.rp-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0 2rem 0;
+  font-variant-numeric: tabular-nums;
+  font-size: 0.95rem;
+}
+.rp-table thead th {
+  background: #f6f8fa;
+  border-bottom: 2px solid #d0d7de;
+  text-align: left;
+  padding: .6rem .7rem;
+}
+.rp-table td {
+  padding: .55rem .7rem;
+  border-bottom: 1px solid #e5e7eb;
+  vertical-align: top;
+}
+.rp-table tbody tr:hover {
+  background: #fafbfc;
+}
+.rp-table a { text-decoration: none; }
+.rp-table a:hover { text-decoration: underline; }
+
+/* Emphase des mouvements */
+code.up    { color: var(--rp-red);   font-weight: 600; }  /* hausse */
+code.down  { color: var(--rp-green); font-weight: 600; }  /* baisse */
+code.equal { color: #57606a; }
