@@ -2,7 +2,7 @@ name: Weekly Prices Monitor
 
 on:
   schedule:
-    - cron: "0 5 * * 2"  # mardi 05:00 UTC
+    - cron: "0 5 * * 2"   # Chaque mardi à 05:00 UTC (07:00 Paris en été)
   workflow_dispatch: {}
 
 jobs:
@@ -10,6 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      pages: write        # ✅ Autorisation déploiement GitHub Pages
+      id-token: write
 
     steps:
       - name: Checkout
@@ -33,29 +35,15 @@ jobs:
         run: |
           python monitor.py --out weekly_report.xlsx --sqlite data/weroad.db
 
-      - name: Debug list files
-        run: |
-          pwd
-          ls -lah
-          echo "--- data dir ---"
-          ls -lah data || true
-
       - name: Build Markdown dashboard
-        run: |
-          python summarize.py
+        run: python summarize.py
 
-      - name: Commit dashboard to main (docs/index.md)
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "chore: update dashboard (docs/index.md)"
-          file_pattern: docs/index.md
-
+      # 📦 Sauvegarde artefacts (Excel + SQLite)
       - name: Upload Excel artifact
         uses: actions/upload-artifact@v4
         with:
           name: weekly_report
           path: weekly_report.xlsx
-          if-no-files-found: error
           retention-days: 30
 
       - name: Upload SQLite artifact
@@ -63,5 +51,36 @@ jobs:
         with:
           name: sqlite_snapshot
           path: data/weroad.db
-          if-no-files-found: error
           retention-days: 90
+
+      # ======================
+      # 🔥 Déploiement Jekyll
+      # ======================
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+          bundler-cache: true
+          working-directory: docs
+
+      - name: Install Jekyll deps
+        working-directory: docs
+        run: bundle install --path vendor/bundle
+
+      - name: Build site with Jekyll
+        env:
+          JEKYLL_ENV: production
+        working-directory: docs
+        run: bundle exec jekyll build -d ../_site
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
