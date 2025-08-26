@@ -1,21 +1,20 @@
 :root {
   --rp-accent: #1f6feb;
-  --rp-green: #2da44e;
-  --rp-red:   #d73a49;
-  --rp-orange:#d97706;
-  --rp-purple:#8250df;
-  --rp-gray:  #6e7781;
+  --rp-green:  #2da44e;
+  --rp-red:    #d73a49;
+  --rp-orange: #d97706;
+  --rp-purple: #8250df;
+  --rp-gray:   #6e7781;
 }
 
-/* ---------------------------
-   Tables (pandas.to_html)
----------------------------- */
+/* Wrapper pour scroll horizontal si table large */
 .table-wrapper {
-  overflow-x: auto;          /* scroll horizontal si table large */
+  overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   margin: 0 0 1.25rem 0;
 }
 
+/* Tables pandas */
 .rp-table {
   width: 100%;
   border-collapse: collapse;
@@ -24,7 +23,6 @@
   font-size: 0.95rem;
   background: #fff;
 }
-
 .rp-table thead th {
   background: #f6f8fa;
   border-bottom: 2px solid #d0d7de;
@@ -34,40 +32,26 @@
   top: 0;
   z-index: 1;
 }
-
 .rp-table td {
   padding: .55rem .7rem;
   border-bottom: 1px solid #e5e7eb;
   vertical-align: top;
-  white-space: nowrap;
+  white-space: nowrap; /* + wrapper => scroll */
 }
-
-.rp-table tbody tr:hover {
-  background: #fafbfc;
-}
-
-.rp-table a { text-decoration: none; color: #0969da; }
+.rp-table tbody tr:hover { background: #fafbfc; }
+.rp-table a { text-decoration: none; color: #0969da; font-weight: 500; }
 .rp-table a:hover { text-decoration: underline; }
 
-/* Alignements utiles */
-.rp-td-right { text-align: right; }
-.rp-td-center { text-align: center; }
-
-/* ---------------------------
-   Emphase variations Δ
----------------------------- */
+/* Delta (variations) */
 .rp-delta-pos { color: var(--rp-green); font-weight: 600; }
 .rp-delta-neg { color: var(--rp-red);   font-weight: 600; }
 .rp-delta-eq  { color: #57606a; }
 
-/* Compat anciens <code class="up|down|equal"> */
-code.up    { color: var(--rp-red);   font-weight: 600; }
-code.down  { color: var(--rp-green); font-weight: 600; }
+code.up    { color: var(--rp-red);   font-weight: 600; }   /* ↑ prix */
+code.down  { color: var(--rp-green); font-weight: 600; }   /* ↓ prix */
 code.equal { color: #57606a; }
 
-/* ---------------------------
-   Badges Statuts
----------------------------- */
+/* Badges statut */
 .rp-badge {
   display: inline-block;
   padding: .25em .6em;
@@ -78,23 +62,13 @@ code.equal { color: #57606a; }
   line-height: 1.2;
   white-space: nowrap;
 }
-
 .rp-badge.almost     { background-color: var(--rp-orange); }
 .rp-badge.confirmed  { background-color: var(--rp-green); }
 .rp-badge.guaranteed { background-color: var(--rp-accent); }
 .rp-badge.on-sale    { background-color: var(--rp-purple); }
 .rp-badge.default    { background-color: var(--rp-gray); }
 
-/* ---------------------------
-   Divers
----------------------------- */
-.badges, .shields {
-  display: flex;
-  gap: .5rem;
-  flex-wrap: wrap;
-  margin: .5rem 0 1rem 0;
-}
-
+/* Petites adaptations mobile */
 @media (max-width: 780px) {
   .rp-table td, .rp-table th { padding: .5rem .6rem; }
   .rp-table { font-size: 0.92rem; }
