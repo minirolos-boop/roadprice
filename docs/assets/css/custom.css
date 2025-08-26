@@ -2,6 +2,9 @@
   --rp-accent: #1f6feb;
   --rp-green: #2da44e;
   --rp-red:   #d73a49;
+  --rp-orange:#d97706;
+  --rp-purple:#8250df;
+  --rp-gray:  #6e7781;
 }
 
 /* ---------------------------
@@ -28,7 +31,7 @@
   text-align: left;
   padding: .6rem .7rem;
   position: sticky;
-  top: 0;                    /* en-tête collant dans le wrapper */
+  top: 0;
   z-index: 1;
 }
 
@@ -36,7 +39,7 @@
   padding: .55rem .7rem;
   border-bottom: 1px solid #e5e7eb;
   vertical-align: top;
-  white-space: nowrap;       /* lisible en horizontal + scroll */
+  white-space: nowrap;
 }
 
 .rp-table tbody tr:hover {
@@ -46,8 +49,7 @@
 .rp-table a { text-decoration: none; color: #0969da; }
 .rp-table a:hover { text-decoration: underline; }
 
-/* Alignements utiles (optionnels)
-   Ajoute ces classes à tes colonnes si besoin via summarize.py */
+/* Alignements utiles */
 .rp-td-right { text-align: right; }
 .rp-td-center { text-align: center; }
 
@@ -58,13 +60,33 @@
 .rp-delta-neg { color: var(--rp-red);   font-weight: 600; }
 .rp-delta-eq  { color: #57606a; }
 
-/* Compat: anciens <code class="up|down|equal"> */
-code.up    { color: var(--rp-red);   font-weight: 600; }  /* hausse (prix ↑) */
-code.down  { color: var(--rp-green); font-weight: 600; }  /* baisse (prix ↓) */
+/* Compat anciens <code class="up|down|equal"> */
+code.up    { color: var(--rp-red);   font-weight: 600; }
+code.down  { color: var(--rp-green); font-weight: 600; }
 code.equal { color: #57606a; }
 
 /* ---------------------------
-   Petits détails UI
+   Badges Statuts
+---------------------------- */
+.rp-badge {
+  display: inline-block;
+  padding: .25em .6em;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: .4em;
+  color: #fff;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.rp-badge.almost     { background-color: var(--rp-orange); }
+.rp-badge.confirmed  { background-color: var(--rp-green); }
+.rp-badge.guaranteed { background-color: var(--rp-accent); }
+.rp-badge.on-sale    { background-color: var(--rp-purple); }
+.rp-badge.default    { background-color: var(--rp-gray); }
+
+/* ---------------------------
+   Divers
 ---------------------------- */
 .badges, .shields {
   display: flex;
