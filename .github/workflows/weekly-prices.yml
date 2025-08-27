@@ -2,7 +2,7 @@ name: Weekly Prices Monitor
 
 on:
   schedule:
-    - cron: "0 5 * * 2"   # chaque mardi 05:00 UTC
+    - cron: "0 10 * * *"   # chaque mardi 05:00 UTC
   workflow_dispatch: {}
 
 jobs:
