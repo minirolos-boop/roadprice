@@ -74,7 +74,7 @@ code.up{color:#d73a49;font-weight:600;} code.down{color:#2da44e;font-weight:600;
 
 **Dernier run : `2025-08-27` — 141 voyages disponibles**  
 _Historique : **2025-08-27** → **2025-08-27** (1 runs)._  
-_Build : 2025-08-27 16:45 UTC_
+_Build : 2025-08-27 17:32 UTC_
 
 > Astuce : utilise la recherche au-dessus de chaque tableau et clique sur les en-têtes pour trier.
 
