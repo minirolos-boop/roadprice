@@ -1,8 +1,11 @@
-# summarize.py — Page unique (docs/index.md) avec tables interactives
-# - Pourcentages normalisés
-# - URLs weRoad correctes (url + url_precise)
-# - Section "Same-date changes" basée sur best_tour_id
-# - Sparklines SVG d’historique de prix par départ
+# summarize.py — Génère plusieurs pages Markdown dans docs/
+# - Page d'accueil + 7 sous-pages : same-date, movers, best-dates, top-by-month, watchlist, kpi-weekly, kpi-monthly, countries
+# - Tri/recherche/pagination via Simple-DataTables (injecté sur chaque page)
+# - Pourcentages normalisés (>1 => /100)
+# - Liens WeRoad corrects (url + url_precise)
+# - Section same-date basée sur best_tour_id (avec seuil SAME_DATE_MIN_EUR si fourni)
+# - Affiche sur l'accueil le nombre de voyages disponibles (len(df_curr))
+# - Aucun badge externe (suppression des shields)
 
 from pathlib import Path
 from datetime import datetime, timezone
@@ -11,18 +14,17 @@ import sqlite3
 import pandas as pd
 import html
 
-DOCS_DIR = Path("docs")
-OUT = DOCS_DIR / "index.md"
+DOCS = Path("docs")
 DB = Path("data/weroad.db")
 
+# Réglages
 RECENT_MONTHS = 24
-ALERT_PCT = float(os.getenv("ALERT_PCT", "0.10"))
-ALERT_EUR = float(os.getenv("ALERT_EUR", "150"))
+ALERT_PCT = float(os.getenv("ALERT_PCT", "0.10"))     # 10%
+ALERT_EUR = float(os.getenv("ALERT_EUR", "150"))      # 150 €
 SAME_DATE_MIN_EUR = float(os.getenv("SAME_DATE_MIN_EUR", "0.0"))
 
 # ---------------- Assets (Simple-DataTables + style anti-"rectangle") ----------------
-def tables_enhancer_assets() -> str:
-    return """
+ASSETS = """
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-datatables@9.0.3/dist/style.min.css">
 <script src="https://cdn.jsdelivr.net/npm/simple-datatables@9.0.3"></script>
 <style>
@@ -31,6 +33,19 @@ def tables_enhancer_assets() -> str:
 .dataTable-info, .dataTable-pagination, .dataTable-dropdown, .dataTable-search { margin: .35rem 0 !important; font-size: .95rem !important; }
 .dataTable-pagination a { border-radius: .4rem !important; }
 .table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0 0 1.25rem 0; }
+
+/* tables .rp-table (reprend le style “ancien design”) */
+.rp-table { width: 100%; border-collapse: collapse; margin: 0.25rem 0 1.25rem 0; font-variant-numeric: tabular-nums; font-size: 0.95rem; background: #fff; }
+.rp-table thead th { background: #f6f8fa; border-bottom: 2px solid #d0d7de; text-align: left; padding: .6rem .7rem; position: sticky; top: 0; z-index: 1; }
+.rp-table td { padding: .55rem .7rem; border-bottom: 1px solid #e5e7eb; vertical-align: top; white-space: nowrap; }
+.rp-table tbody tr:hover { background: #fafbfc; }
+.rp-table a { text-decoration: none; color: #0969da; font-weight: 500; }
+.rp-table a:hover { text-decoration: underline; }
+
+/* badges + variations */
+.rp-badge { display:inline-block; padding:.25em .6em; font-size:.8rem; font-weight:600; border-radius:.4em; color:#fff; line-height:1.2; white-space:nowrap; }
+.rp-badge.almost{background:#d97706;} .rp-badge.confirmed{background:#2da44e;} .rp-badge.guaranteed{background:#1f6feb;} .rp-badge.on-sale{background:#8250df;} .rp-badge.default{background:#6e7781;}
+code.up{color:#d73a49;font-weight:600;} code.down{color:#2da44e;font-weight:600;} code.equal{color:#57606a;}
 </style>
 <script>
 (function() {
@@ -40,50 +55,43 @@ def tables_enhancer_assets() -> str:
   };
   const euroToNumber = (txt) => {
     if (!txt) return null;
-    const s = String(txt).replace(/\\s/g, "").replace("€","").replace(/\\u00A0/g,"").replace(",",".");
+    const s = String(txt).replace(/\\s/g,"").replace("€","").replace(/\\u00A0/g,"").replace(",",".");
     const v = parseFloat(s); return isNaN(v) ? null : v;
   };
   ready(() => {
-    const tables = document.querySelectorAll("table.rp-table");
-    tables.forEach((tbl, tIndex) => {
+    document.querySelectorAll("table.rp-table").forEach((tbl, i) => {
       try {
         const dt = new simpleDatatables.DataTable(tbl, {
           searchable: true, fixedHeight: false,
-          perPage: 25, perPageSelect: [10, 25, 50, 100],
+          perPage: 25, perPageSelect: [10,25,50,100],
           labels: { placeholder: "Rechercher…", perPage: "{select} lignes par page", noRows: "Aucune donnée", info: "Affiche {start}–{end} sur {rows} lignes" },
         });
         try {
           dt.columns().each((idx) => {
-            const header = tbl.tHead && tbl.tHead.rows && tbl.tHead.rows[0] && tbl.tHead.rows[0].cells ? tbl.tHead.rows[0].cells[idx] : null;
-            if (!header) return;
+            const header = tbl.tHead?.rows?.[0]?.cells?.[idx]; if (!header) return;
             const htxt = (header.textContent || "").toLowerCase();
             const isMoney = /(€|price|prix|delta_abs)/.test(htxt);
             const isPct   = /(pct|%)/.test(htxt);
             if (isMoney || isPct) {
-              dt.columns().sort(idx, (a, b) => {
-                const ta = a.replace(/<[^>]*>/g, "");
-                const tb = b.replace(/<[^>]*>/g, "");
+              dt.columns().sort(idx, (a,b) => {
+                const ta = a.replace(/<[^>]*>/g,""), tb = b.replace(/<[^>]*>/g,"");
                 const na = isPct ? parseFloat(ta.replace("%","").replace(",",".")) : euroToNumber(ta);
                 const nb = isPct ? parseFloat(tb.replace("%","").replace(",",".")) : euroToNumber(tb);
-                if (na == null && nb == null) return 0;
-                if (na == null) return -1;
-                if (nb == null) return 1;
-                return na - nb;
+                if (na==null && nb==null) return 0; if (na==null) return -1; if (nb==null) return 1; return na - nb;
               });
             }
           });
-        } catch(e) { console.warn("Sorter setup error on table", tIndex, e); }
-      } catch (e) { console.warn("DataTable init failed on table", tIndex, e); }
+        } catch(e) { console.warn("Sorter setup error", i, e); }
+      } catch(e) { console.warn("DataTable init failed", i, e); }
     });
   });
 })();
 </script>
 """
 
-
-# ---------------- Utils rendu ----------------
+# ---------------- utilitaires rendu ----------------
 def ensure_docs():
-    DOCS_DIR.mkdir(parents=True, exist_ok=True)
+    DOCS.mkdir(parents=True, exist_ok=True)
 
 def safe_sql(conn, q, params=()):
     try:
@@ -138,7 +146,7 @@ def decorate_movement(df: pd.DataFrame) -> pd.DataFrame:
     return out
 
 def html_table(df: pd.DataFrame, max_rows=200) -> str:
-    """Table HTML stylable via custom.css. Normalise *_pct (>1 => /100)."""
+    """Table HTML stylable via .rp-table. Normalise *_pct (>1 => /100)."""
     if df is None or df.empty:
         return "<p><em>Aucune donnée</em></p>"
     df = df.copy().head(max_rows)
@@ -146,6 +154,7 @@ def html_table(df: pd.DataFrame, max_rows=200) -> str:
     def has_html(s: pd.Series) -> bool:
         return s.dtype == "object" and s.astype(str).str.contains("<", regex=False).any()
 
+    # Pourcentages
     pct_cols = [c for c in df.columns if c.endswith("_pct") or c in ("delta_pct", "promo_share_pct")]
     for c in pct_cols:
         if c in df.columns and not has_html(df[c]):
@@ -159,6 +168,7 @@ def html_table(df: pd.DataFrame, max_rows=200) -> str:
                     return ""
             df[c] = df[c].map(fmt_pct)
 
+    # Montants €
     money_cols = [c for c in df.columns if any(k in c for k in ["price", "prix", "delta_abs"])]
     for c in money_cols:
         if c in df.columns and not has_html(df[c]):
@@ -166,33 +176,41 @@ def html_table(df: pd.DataFrame, max_rows=200) -> str:
 
     return "<div class='table-wrapper'>\n" + df.to_html(index=False, classes="rp-table", escape=False) + "\n</div>"
 
+# ---------------- nav + wrappers ----------------
+PAGES = [
+    ("index.md",        "Accueil"),
+    ("same-date.md",    "Changements (même date)"),
+    ("movers.md",       "Gros mouvements"),
+    ("best-dates.md",   "Meilleures dates"),
+    ("top-by-month.md", "Top par mois"),
+    ("watchlist.md",    "Watchlist"),
+    ("kpi-weekly.md",   "KPIs hebdo"),
+    ("kpi-monthly.md",  "KPIs mensuels"),
+    ("countries.md",    "Pays"),
+]
 
-# ---------------- Sparklines ----------------
-def sparkline_svg(values: list[float], width: int = 120, height: int = 28, stroke="#1f6feb") -> str:
-    """Inline SVG sparkline pour une série de prix (None ignorés)."""
-    pts = [v for v in values if v is not None]
-    if len(pts) <= 1:
-        return ""
-    vmin, vmax = min(pts), max(pts)
-    if vmin == vmax:
-        vmin -= 1; vmax += 1
-    # coords
-    n = len(values)
-    step = width / max(1, n - 1)
-    def y_map(v):  # y inversé (haut = prix élevé visuellement)
-        return height - ( (v - vmin) / (vmax - vmin) * height )
-    path = []
-    for i, v in enumerate(values):
-        if v is None:
-            continue
-        x = i * step
-        y = y_map(v)
-        path.append(f"{x:.1f},{y:.1f}")
-    title = f"min:{vmin:.0f}€  max:{vmax:.0f}€"
-    return f"<svg width='{width}' height='{height}' viewBox='0 0 {width} {height}' xmlns='http://www.w3.org/2000/svg'><title>{html.escape(title)}</title><polyline fill='none' stroke='{stroke}' stroke-width='1.5' points='" + " ".join(path) + "'/></svg>"
+def nav_bar(active: str) -> str:
+    items = []
+    for fn, label in PAGES:
+        if fn == active:
+            items.append(f"<strong>{label}</strong>")
+        else:
+            items.append(f"<a href=\"./{fn}\">{label}</a>")
+    return " | ".join(items)
 
+def page_wrap(front_title: str, active_file: str, body_html: str) -> str:
+    ts = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+    header = f"""---
+title: RoadPrice — {front_title}
+---
 
-# ---------------- Blocs d’analyse pour affichage ----------------
+{ASSETS}
+<div style="margin:0 0 1rem 0; font-size:.95rem;">{nav_bar(active_file)}</div>
+<div style="margin:0 0 1rem 0; color:#57606a;">Build: {ts}</div>
+"""
+    return header + body_html + "\n"
+
+# ---------------- analyses (structures) ----------------
 def best_dates(df: pd.DataFrame) -> pd.DataFrame:
     base = df.dropna(subset=["destination_label", "price_eur"]).copy()
     if base.empty: return pd.DataFrame()
@@ -208,8 +226,7 @@ def best_dates(df: pd.DataFrame) -> pd.DataFrame:
         "best_starting_date":"date_debut",
         "best_ending_date":"date_fin"
     }, inplace=True)
-    if "sales_status" in out.columns:
-        out["sales_status"] = out["sales_status"].map(style_status_badge)
+    out["sales_status"] = out["sales_status"].map(style_status_badge)
     out = linkify_url_col(out, prefer_precise=True)
     return out
 
@@ -224,8 +241,7 @@ def cheapest_by_month(df: pd.DataFrame, top_n=15) -> pd.DataFrame:
         "price_eur","discount_pct","sales_status","best_starting_date","url_precise","url"
     ]]
     out.rename(columns={"price_eur":"price_eur_min_month"}, inplace=True)
-    if "sales_status" in out.columns:
-        out["sales_status"] = out["sales_status"].map(style_status_badge)
+    out["sales_status"] = out["sales_status"].map(style_status_badge)
     out = linkify_url_col(out, prefer_precise=True)
     return out.reset_index(drop=True)
 
@@ -246,24 +262,18 @@ def country_summary(df: pd.DataFrame) -> pd.DataFrame:
 def promo_watchlist(df: pd.DataFrame) -> pd.DataFrame:
     if df.empty: return pd.DataFrame()
     x = df[df["sales_status"].isin(["ALMOST_CONFIRMED","CONFIRMED","GUARANTEED"])].copy()
-    x = x.sort_values(
-        by=["sales_status","best_starting_date","seatsToConfirm","price_eur"],
-        ascending=[True, True, True, True],
-        na_position="last"
-    )
-    cols = [
-        "sales_status","best_starting_date","best_ending_date",
-        "title","destination_label","country_name",
-        "price_eur","discount_pct","seatsToConfirm","maxPax","weroadersCount","url_precise","url"
-    ]
+    x = x.sort_values(by=["sales_status","best_starting_date","seatsToConfirm","price_eur"],
+                      ascending=[True, True, True, True], na_position="last")
+    cols = ["sales_status","best_starting_date","best_ending_date","title","destination_label","country_name",
+            "price_eur","discount_pct","seatsToConfirm","maxPax","weroadersCount","url_precise","url"]
     x = x[cols].reset_index(drop=True)
     x["sales_status"] = x["sales_status"].map(style_status_badge)
     x = linkify_url_col(x, prefer_precise=True)
     return x
 
-def big_movers(wk_diff: pd.DataFrame) -> pd.DataFrame:
-    if wk_diff.empty: return pd.DataFrame()
-    x = wk_diff.copy()
+def big_movers(wd: pd.DataFrame) -> pd.DataFrame:
+    if wd.empty: return pd.DataFrame()
+    x = wd.copy()
     for c in ("delta_pct","delta_abs","price_eur_prev","price_eur_curr"):
         if c in x.columns:
             x[c] = pd.to_numeric(x[c], errors="coerce")
@@ -271,81 +281,59 @@ def big_movers(wk_diff: pd.DataFrame) -> pd.DataFrame:
     cols = ["destination_label","title_curr","price_eur_prev","price_eur_curr","delta_abs","delta_pct","movement","url","url_precise"]
     cols = [c for c in cols if c in x.columns]
     out = x[x["flag"]].sort_values(["delta_pct","delta_abs"], ascending=[False, False])[cols].reset_index(drop=True)
-    if "delta_pct" in out.columns:
-        out["delta_pct"] = out["delta_pct"].map(
-            lambda v: "" if pd.isna(v) else (f"<span class='rp-delta-pos'>+{v:.1%}</span>" if v>0
-                                             else (f"<span class='rp-delta-neg'>{v:.1%}</span>" if v<0
-                                                   else "<span class='rp-delta-eq'>0%</span>")))
     out = decorate_movement(out)
     out = linkify_url_col(out, prefer_precise=False)
     return out
 
-
-# ---------------- Main ----------------
+# ---------------- main ----------------
 def main():
     ensure_docs()
-
     if not DB.exists():
-        OUT.write_text("# RoadPrice\n\n_Base SQLite absente : `data/weroad.db`_", encoding="utf-8")
+        (DOCS / "index.md").write_text("# RoadPrice\n\n_Base SQLite absente : `data/weroad.db`_", encoding="utf-8")
         return
 
     conn = sqlite3.connect(DB)
     try:
         runs = safe_sql(conn, "SELECT DISTINCT run_date FROM weekly_kpis ORDER BY run_date")
         if runs.empty:
-            OUT.write_text("# RoadPrice\n\n_Aucune donnée disponible_", encoding="utf-8")
+            (DOCS / "index.md").write_text("# RoadPrice\n\n_Aucune donnée disponible_", encoding="utf-8")
             return
 
         last = runs["run_date"].iloc[-1]
         prev = runs["run_date"].iloc[-2] if len(runs) > 1 else None
-        start_run = runs["run_date"].iloc[0]
-        end_run   = last
 
+        # Snapshots courant / précédent
         df_curr = safe_sql(conn, "SELECT * FROM snapshots WHERE run_date = ?", (last,))
         df_prev = safe_sql(conn, "SELECT * FROM snapshots WHERE run_date = ?", (prev,)) if prev else pd.DataFrame()
 
-        kpi_last = safe_sql(conn, "SELECT * FROM weekly_kpis WHERE run_date = ?", (last,))
-        kpi_hist = safe_sql(conn, "SELECT run_date, price_eur_min, price_eur_med, price_eur_avg, count_total, count_promos, promo_share_pct FROM weekly_kpis ORDER BY run_date")
+        # Nombre total d'offres du run courant
+        nb_offres = len(df_curr)
 
+        # KPIs
+        kpi_last = safe_sql(conn, "SELECT * FROM weekly_kpis WHERE run_date = ?", (last,))
+        kpi_hist = safe_sql(conn,
+            "SELECT run_date, price_eur_min, price_eur_med, price_eur_avg, count_total, count_promos, promo_share_pct "
+            "FROM weekly_kpis ORDER BY run_date"
+        )
+
+        # Weekly diff (movers base)
         wd = safe_sql(conn, "SELECT * FROM weekly_diff WHERE run_date = ?", (last,))
         if not wd.empty:
             wd["url"] = choose_url_col(wd)
             wd = wd[[c for c in ["destination_label","title_curr","price_eur_prev","price_eur_curr","delta_abs","delta_pct","movement","url","url_precise"] if c in wd.columns]]
 
-        # Same-date changes (dernier run) - avec sparkline d’historique
-        same_date = safe_sql(
-            conn,
+        # Same-date changes (dernier run) — déjà filtrés au run par SAME_DATE_MIN_EUR
+        same_date = safe_sql(conn,
             "SELECT best_tour_id, slug, title, destination_label, country_name, best_starting_date, "
             "price_eur_prev, price_eur_curr, delta_abs, delta_pct, movement, sales_status, url_precise, url "
             "FROM same_date_diff WHERE run_date = ? "
             "ORDER BY ABS(delta_abs) DESC, ABS(delta_pct) DESC, best_starting_date",
             (last,)
         )
-
-        # Ajout sparkline par ligne (historique des prix de ce départ)
         if not same_date.empty:
-            def hist_spark(row):
-                bid = row.get("best_tour_id")
-                bsd = row.get("best_starting_date")
-                if pd.isna(bid) or pd.isna(bsd):
-                    # fallback slug+date si pas d'id
-                    slug = row.get("slug")
-                    q = ("SELECT run_date, price_eur FROM snapshots "
-                         "WHERE slug = ? AND best_starting_date = ? ORDER BY run_date")
-                    hist = safe_sql(conn, q, (slug, bsd))
-                else:
-                    q = ("SELECT run_date, price_eur FROM snapshots "
-                         "WHERE best_tour_id = ? AND best_starting_date = ? ORDER BY run_date")
-                    hist = safe_sql(conn, q, (bid, bsd))
-
-                if hist.empty:
-                    return ""
-                vals = [float(v) if pd.notna(v) else None for v in hist["price_eur"].tolist()]
-                return sparkline_svg(vals)
-
-            same_date["history"] = same_date.apply(hist_spark, axis=1)
             same_date = linkify_url_col(same_date, prefer_precise=True)
 
+        # Mensuel
         mo_all = safe_sql(conn, "SELECT month, destination_label, prix_min, prix_avg, nb_depart FROM monthly_kpis ORDER BY month, destination_label")
         mo_recent = pd.DataFrame()
         if not mo_all.empty:
@@ -353,32 +341,36 @@ def main():
             keep = months[-RECENT_MONTHS:] if len(months) > RECENT_MONTHS else months
             mo_recent = mo_all[mo_all["month"].isin(keep)].copy()
 
+        # Dérivés
         bd      = best_dates(df_curr)
         topm    = cheapest_by_month(df_curr, top_n=15)
         ctry    = country_summary(df_curr)
         watch   = promo_watchlist(df_curr)
         movers  = big_movers(wd) if not wd.empty else pd.DataFrame()
 
+        # Couverture
+        start_run = runs["run_date"].iloc[0]
+        end_run   = last
+        coverage  = f"_Historique : **{start_run}** → **{end_run}** ({len(runs)} runs)._"
+
     finally:
         conn.close()
 
-    ts = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
-    badge_run   = f"![run](https://img.shields.io/badge/run-{last}-blue)"
-    badge_build = f"![build](https://img.shields.io/badge/build-{ts}-success)"
-    coverage = f"_Historique : **{start_run}** → **{end_run}** ({len(runs)} runs)._"
+    # --- Écriture des pages ---
+    # Accueil
+    home = f"""
+# RoadPrice — Accueil
 
-    # Page
-    content = f"""---
-title: RoadPrice — Accueil
----
-
-# RoadPrice — synthèse
-{tables_enhancer_assets()}
-{badge_run} {badge_build}
-
+**Dernier run : `{end_run}` — {nb_offres} voyages disponibles**  
 {coverage}
 
-**Astuce :** utilisez la **recherche** au-dessus de chaque tableau, et cliquez sur les **entêtes** pour trier.
+- **Changements (même date)** : variations de prix pour un *même départ* (clé `best_tour_id`) entre les deux derniers runs.
+- **Gros mouvements** : variations fortes sur le panier “meilleur prix par destination”.
+- **Meilleures dates** : prix minimum par destination au run courant.
+- **Top par mois** : meilleures offres mensuelles.
+- **Watchlist** : départs ALMOST/CONFIRMED/GUARANTEED.
+- **KPIs** : historiques hebdo et mensuels.
+- **Pays** : synthèse par pays.
 
 ---
 
@@ -387,45 +379,89 @@ title: RoadPrice — Accueil
 
 ---
 
-## Changements de prix (même date) — dernier vs précédent  (seuil: |Δ€| ≥ {SAME_DATE_MIN_EUR:.0f})
-{html_table(same_date, max_rows=800)}
-
----
-
-## Gros mouvements de prix (Δ% ≥ {ALERT_PCT*100:.0f}% ou Δ€ ≥ {ALERT_EUR:.0f}€)
-{html_table(movers, max_rows=250)}
-
----
-
-## Meilleures dates à réserver (prix mini par destination)
-{html_table(bd, max_rows=800)}
-
----
-
-## Top offres par mois (les moins chères)
-{html_table(topm, max_rows=800)}
-
----
-
-## Watchlist — départs proches / confirmés
-{html_table(watch, max_rows=800)}
-
----
-
-## KPIs hebdo — Historique des runs
-{html_table(kpi_hist, max_rows=1000)}
-
----
-
-## KPIs mensuels — Vue complète
-{html_table(mo_all, max_rows=2000)}
-
-## KPIs mensuels — Aperçu {RECENT_MONTHS} derniers mois
-{html_table(mo_recent, max_rows=1000)}
+## Lien rapides
+- [Changements (même date)](./same-date.md)
+- [Gros mouvements](./movers.md)
+- [Meilleures dates](./best-dates.md)
+- [Top par mois](./top-by-month.md)
+- [Watchlist](./watchlist.md)
+- [KPIs hebdo](./kpi-weekly.md)
+- [KPIs mensuels](./kpi-monthly.md)
+- [Pays](./countries.md)
 """
-    OUT.write_text(content, encoding="utf-8")
-    print(f"Wrote {OUT}")
+    (DOCS / "index.md").write_text(page_wrap("Accueil", "index.md", home), encoding="utf-8")
 
+    # Same-date
+    same_body = f"""
+# Changements de prix (même date)
+Seuil d’affichage : |Δ€| ≥ **{SAME_DATE_MIN_EUR:.0f}**
+
+{html_table(same_date, max_rows=1500)}
+"""
+    (DOCS / "same-date.md").write_text(page_wrap("Changements (même date)", "same-date.md", same_body), encoding="utf-8")
+
+    # Movers
+    movers_body = f"""
+# Gros mouvements de prix
+Critères : Δ% ≥ **{ALERT_PCT*100:.0f}%** ou Δ€ ≥ **{ALERT_EUR:.0f}€**
+
+{html_table(movers, max_rows=800)}
+"""
+    (DOCS / "movers.md").write_text(page_wrap("Gros mouvements", "movers.md", movers_body), encoding="utf-8")
+
+    # Best dates
+    bd_body = f"""
+# Meilleures dates à réserver
+Prix minimum par destination (run courant).
+
+{html_table(bd, max_rows=2000)}
+"""
+    (DOCS / "best-dates.md").write_text(page_wrap("Meilleures dates", "best-dates.md", bd_body), encoding="utf-8")
+
+    # Top by month
+    topm_body = f"""
+# Top offres par mois
+Les offres les moins chères par mois.
+
+{html_table(topm, max_rows=2000)}
+"""
+    (DOCS / "top-by-month.md").write_text(page_wrap("Top par mois", "top-by-month.md", topm_body), encoding="utf-8")
+
+    # Watchlist
+    watch_body = f"""
+# Watchlist — départs proches / confirmés
+ALMOST / CONFIRMED / GUARANTEED.
+
+{html_table(watch, max_rows=2000)}
+"""
+    (DOCS / "watchlist.md").write_text(page_wrap("Watchlist", "watchlist.md", watch_body), encoding="utf-8")
+
+    # KPI weekly
+    kpiw_body = f"""
+# KPIs hebdo — Historique des runs
+{html_table(kpi_hist, max_rows=5000)}
+"""
+    (DOCS / "kpi-weekly.md").write_text(page_wrap("KPIs hebdo", "kpi-weekly.md", kpiw_body), encoding="utf-8")
+
+    # KPI monthly
+    kpim_body = f"""
+# KPIs mensuels — Vue complète
+{html_table(mo_all, max_rows=5000)}
+
+## Aperçu {RECENT_MONTHS} derniers mois
+{html_table(mo_recent, max_rows=2000)}
+"""
+    (DOCS / "kpi-monthly.md").write_text(page_wrap("KPIs mensuels", "kpi-monthly.md", kpim_body), encoding="utf-8")
+
+    # Countries
+    countries_body = f"""
+# Pays — synthèse
+{html_table(ctry, max_rows=3000)}
+"""
+    (DOCS / "countries.md").write_text(page_wrap("Pays", "countries.md", countries_body), encoding="utf-8")
+
+    print("Wrote multi-pages in docs/")
+    
 
 if __name__ == "__main__":
     main()
