@@ -1,11 +1,10 @@
-# summarize.py — Génère plusieurs pages Markdown dans docs/
-# - Page d'accueil + 7 sous-pages : same-date, movers, best-dates, top-by-month, watchlist, kpi-weekly, kpi-monthly, countries
-# - Tri/recherche/pagination via Simple-DataTables (injecté sur chaque page)
-# - Pourcentages normalisés (>1 => /100)
-# - Liens WeRoad corrects (url + url_precise)
-# - Section same-date basée sur best_tour_id (avec seuil SAME_DATE_MIN_EUR si fourni)
-# - Affiche sur l'accueil le nombre de voyages disponibles (len(df_curr))
-# - Aucun badge externe (suppression des shields)
+# summarize.py — Génère UNE SEULE PAGE docs/index.md avec toutes les sections
+# - Recherche/tri/pagination via Simple-DataTables
+# - Normalisation des pourcentages (>1 => /100)
+# - Compteur de voyages disponibles en tête
+# - Liens WeRoad (url globale + url précise par date)
+# - Changements "même date" basés sur best_tour_id (table same_date_diff)
+# - Pas de badges externes
 
 from pathlib import Path
 from datetime import datetime, timezone
@@ -19,22 +18,25 @@ DB = Path("data/weroad.db")
 
 # Réglages
 RECENT_MONTHS = 24
-ALERT_PCT = float(os.getenv("ALERT_PCT", "0.10"))     # 10%
-ALERT_EUR = float(os.getenv("ALERT_EUR", "150"))      # 150 €
+ALERT_PCT = float(os.getenv("ALERT_PCT", "0.10"))         # 10%
+ALERT_EUR = float(os.getenv("ALERT_EUR", "150"))          # 150 €
 SAME_DATE_MIN_EUR = float(os.getenv("SAME_DATE_MIN_EUR", "0.0"))
 
-# ---------------- Assets (Simple-DataTables + style anti-"rectangle") ----------------
+# ---------------- Assets (Simple-DataTables + style sans "rectangle") ----------------
 ASSETS = """
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-datatables@9.0.3/dist/style.min.css">
 <script src="https://cdn.jsdelivr.net/npm/simple-datatables@9.0.3"></script>
 <style>
+/* neutraliser l'encapsulation par défaut du plugin */
 .dataTable-wrapper, .dataTable-wrapper .dataTable-container { background: transparent !important; border: 0 !important; box-shadow: none !important; padding: 0 !important; }
 .dataTable-top, .dataTable-bottom { background: transparent !important; border: none !important; box-shadow: none !important; padding: .25rem 0 !important; }
 .dataTable-info, .dataTable-pagination, .dataTable-dropdown, .dataTable-search { margin: .35rem 0 !important; font-size: .95rem !important; }
 .dataTable-pagination a { border-radius: .4rem !important; }
+
+/* wrapper scroll horizontal */
 .table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0 0 1.25rem 0; }
 
-/* tables .rp-table (reprend le style “ancien design”) */
+/* table style "ancien design" */
 .rp-table { width: 100%; border-collapse: collapse; margin: 0.25rem 0 1.25rem 0; font-variant-numeric: tabular-nums; font-size: 0.95rem; background: #fff; }
 .rp-table thead th { background: #f6f8fa; border-bottom: 2px solid #d0d7de; text-align: left; padding: .6rem .7rem; position: sticky; top: 0; z-index: 1; }
 .rp-table td { padding: .55rem .7rem; border-bottom: 1px solid #e5e7eb; vertical-align: top; white-space: nowrap; }
@@ -106,7 +108,6 @@ def to_month(s):
         return None
 
 def choose_url_col(df: pd.DataFrame) -> pd.Series:
-    # priorité: url_precise (date) > url_curr > url (globale) > url_prev
     for c in ("url_precise", "url_curr", "url", "url_prev"):
         if c in df.columns:
             s = df[c].copy(); s.name = "url"; return s
@@ -176,41 +177,7 @@ def html_table(df: pd.DataFrame, max_rows=200) -> str:
 
     return "<div class='table-wrapper'>\n" + df.to_html(index=False, classes="rp-table", escape=False) + "\n</div>"
 
-# ---------------- nav + wrappers ----------------
-PAGES = [
-    ("index.md",        "Accueil"),
-    ("same-date.md",    "Changements (même date)"),
-    ("movers.md",       "Gros mouvements"),
-    ("best-dates.md",   "Meilleures dates"),
-    ("top-by-month.md", "Top par mois"),
-    ("watchlist.md",    "Watchlist"),
-    ("kpi-weekly.md",   "KPIs hebdo"),
-    ("kpi-monthly.md",  "KPIs mensuels"),
-    ("countries.md",    "Pays"),
-]
-
-def nav_bar(active: str) -> str:
-    items = []
-    for fn, label in PAGES:
-        if fn == active:
-            items.append(f"<strong>{label}</strong>")
-        else:
-            items.append(f"<a href=\"./{fn}\">{label}</a>")
-    return " | ".join(items)
-
-def page_wrap(front_title: str, active_file: str, body_html: str) -> str:
-    ts = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
-    header = f"""---
-title: RoadPrice — {front_title}
----
-
-{ASSETS}
-<div style="margin:0 0 1rem 0; font-size:.95rem;">{nav_bar(active_file)}</div>
-<div style="margin:0 0 1rem 0; color:#57606a;">Build: {ts}</div>
-"""
-    return header + body_html + "\n"
-
-# ---------------- analyses (structures) ----------------
+# ---------------- dérivés ----------------
 def best_dates(df: pd.DataFrame) -> pd.DataFrame:
     base = df.dropna(subset=["destination_label", "price_eur"]).copy()
     if base.empty: return pd.DataFrame()
@@ -285,29 +252,28 @@ def big_movers(wd: pd.DataFrame) -> pd.DataFrame:
     out = linkify_url_col(out, prefer_precise=False)
     return out
 
-# ---------------- main ----------------
+# ---------------- main (une seule page) ----------------
 def main():
     ensure_docs()
+    out_file = DOCS / "index.md"
+
     if not DB.exists():
-        (DOCS / "index.md").write_text("# RoadPrice\n\n_Base SQLite absente : `data/weroad.db`_", encoding="utf-8")
-        return
+        out_file.write_text("# RoadPrice — Évolutions tarifaires\n\n_Base SQLite absente : `data/weroad.db`_", encoding="utf-8"); return
 
     conn = sqlite3.connect(DB)
     try:
         runs = safe_sql(conn, "SELECT DISTINCT run_date FROM weekly_kpis ORDER BY run_date")
         if runs.empty:
-            (DOCS / "index.md").write_text("# RoadPrice\n\n_Aucune donnée disponible_", encoding="utf-8")
-            return
+            out_file.write_text("# RoadPrice — Évolutions tarifaires\n\n_Aucune donnée disponible_", encoding="utf-8"); return
 
         last = runs["run_date"].iloc[-1]
         prev = runs["run_date"].iloc[-2] if len(runs) > 1 else None
 
-        # Snapshots courant / précédent
+        # Snapshots
         df_curr = safe_sql(conn, "SELECT * FROM snapshots WHERE run_date = ?", (last,))
         df_prev = safe_sql(conn, "SELECT * FROM snapshots WHERE run_date = ?", (prev,)) if prev else pd.DataFrame()
 
-        # Nombre total d'offres du run courant
-        nb_offres = len(df_curr)
+        nb_offres = len(df_curr)  # compteur
 
         # KPIs
         kpi_last = safe_sql(conn, "SELECT * FROM weekly_kpis WHERE run_date = ?", (last,))
@@ -316,13 +282,13 @@ def main():
             "FROM weekly_kpis ORDER BY run_date"
         )
 
-        # Weekly diff (movers base)
+        # Weekly diff pour "movers"
         wd = safe_sql(conn, "SELECT * FROM weekly_diff WHERE run_date = ?", (last,))
         if not wd.empty:
             wd["url"] = choose_url_col(wd)
             wd = wd[[c for c in ["destination_label","title_curr","price_eur_prev","price_eur_curr","delta_abs","delta_pct","movement","url","url_precise"] if c in wd.columns]]
 
-        # Same-date changes (dernier run) — déjà filtrés au run par SAME_DATE_MIN_EUR
+        # Same-date (table produite par monitor.py)
         same_date = safe_sql(conn,
             "SELECT best_tour_id, slug, title, destination_label, country_name, best_starting_date, "
             "price_eur_prev, price_eur_curr, delta_abs, delta_pct, movement, sales_status, url_precise, url "
@@ -332,6 +298,7 @@ def main():
         )
         if not same_date.empty:
             same_date = linkify_url_col(same_date, prefer_precise=True)
+            same_date["sales_status"] = same_date["sales_status"].map(style_status_badge)
 
         # Mensuel
         mo_all = safe_sql(conn, "SELECT month, destination_label, prix_min, prix_avg, nb_depart FROM monthly_kpis ORDER BY month, destination_label")
@@ -342,35 +309,35 @@ def main():
             mo_recent = mo_all[mo_all["month"].isin(keep)].copy()
 
         # Dérivés
-        bd      = best_dates(df_curr)
-        topm    = cheapest_by_month(df_curr, top_n=15)
-        ctry    = country_summary(df_curr)
-        watch   = promo_watchlist(df_curr)
-        movers  = big_movers(wd) if not wd.empty else pd.DataFrame()
+        bd     = best_dates(df_curr)
+        topm   = cheapest_by_month(df_curr, top_n=15)
+        ctry   = country_summary(df_curr)
+        watch  = promo_watchlist(df_curr)
+        movers = big_movers(wd) if not wd.empty else pd.DataFrame()
 
         # Couverture
         start_run = runs["run_date"].iloc[0]
-        end_run   = last
-        coverage  = f"_Historique : **{start_run}** → **{end_run}** ({len(runs)} runs)._"
+        coverage  = f"_Historique : **{start_run}** → **{last}** ({len(runs)} runs)._"
 
     finally:
         conn.close()
 
-    # --- Écriture des pages ---
-    # Accueil
-    home = f"""
-# RoadPrice — Accueil
+    # ---------- Construction de la page unique ----------
+    ts = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
 
-**Dernier run : `{end_run}` — {nb_offres} voyages disponibles**  
-{coverage}
+    content = f"""---
+title: RoadPrice — Évolutions tarifaires
+---
 
-- **Changements (même date)** : variations de prix pour un *même départ* (clé `best_tour_id`) entre les deux derniers runs.
-- **Gros mouvements** : variations fortes sur le panier “meilleur prix par destination”.
-- **Meilleures dates** : prix minimum par destination au run courant.
-- **Top par mois** : meilleures offres mensuelles.
-- **Watchlist** : départs ALMOST/CONFIRMED/GUARANTEED.
-- **KPIs** : historiques hebdo et mensuels.
-- **Pays** : synthèse par pays.
+{ASSETS}
+
+# RoadPrice — Évolutions tarifaires
+
+**Dernier run : `{last}` — {nb_offres} voyages disponibles**  
+{coverage}  
+_Build : {ts}_
+
+> Astuce : utilise la recherche au-dessus de chaque tableau et clique sur les en-têtes pour trier.
 
 ---
 
@@ -379,89 +346,56 @@ def main():
 
 ---
 
-## Lien rapides
-- [Changements (même date)](./same-date.md)
-- [Gros mouvements](./movers.md)
-- [Meilleures dates](./best-dates.md)
-- [Top par mois](./top-by-month.md)
-- [Watchlist](./watchlist.md)
-- [KPIs hebdo](./kpi-weekly.md)
-- [KPIs mensuels](./kpi-monthly.md)
-- [Pays](./countries.md)
-"""
-    (DOCS / "index.md").write_text(page_wrap("Accueil", "index.md", home), encoding="utf-8")
-
-    # Same-date
-    same_body = f"""
-# Changements de prix (même date)
-Seuil d’affichage : |Δ€| ≥ **{SAME_DATE_MIN_EUR:.0f}**
+## Changements de prix (même date)
+Départs identiques (même `best_tour_id`) dont le prix a changé entre les deux derniers runs.  
+Seuil d’affichage paramétré côté collecte : |Δ€| ≥ **{SAME_DATE_MIN_EUR:.0f}**.
 
 {html_table(same_date, max_rows=1500)}
-"""
-    (DOCS / "same-date.md").write_text(page_wrap("Changements (même date)", "same-date.md", same_body), encoding="utf-8")
 
-    # Movers
-    movers_body = f"""
-# Gros mouvements de prix
+---
+
+## Gros mouvements de prix
 Critères : Δ% ≥ **{ALERT_PCT*100:.0f}%** ou Δ€ ≥ **{ALERT_EUR:.0f}€**
 
 {html_table(movers, max_rows=800)}
-"""
-    (DOCS / "movers.md").write_text(page_wrap("Gros mouvements", "movers.md", movers_body), encoding="utf-8")
 
-    # Best dates
-    bd_body = f"""
-# Meilleures dates à réserver
-Prix minimum par destination (run courant).
+---
 
+## Meilleures dates à réserver (prix mini par destination)
 {html_table(bd, max_rows=2000)}
-"""
-    (DOCS / "best-dates.md").write_text(page_wrap("Meilleures dates", "best-dates.md", bd_body), encoding="utf-8")
 
-    # Top by month
-    topm_body = f"""
-# Top offres par mois
-Les offres les moins chères par mois.
+---
 
+## Top offres par mois (les moins chères)
 {html_table(topm, max_rows=2000)}
-"""
-    (DOCS / "top-by-month.md").write_text(page_wrap("Top par mois", "top-by-month.md", topm_body), encoding="utf-8")
 
-    # Watchlist
-    watch_body = f"""
-# Watchlist — départs proches / confirmés
-ALMOST / CONFIRMED / GUARANTEED.
+---
 
+## Watchlist — départs proches / confirmés
+ALMOST / CONFIRMED / GUARANTEED
 {html_table(watch, max_rows=2000)}
-"""
-    (DOCS / "watchlist.md").write_text(page_wrap("Watchlist", "watchlist.md", watch_body), encoding="utf-8")
 
-    # KPI weekly
-    kpiw_body = f"""
-# KPIs hebdo — Historique des runs
+---
+
+## KPIs hebdo — Historique des runs
 {html_table(kpi_hist, max_rows=5000)}
-"""
-    (DOCS / "kpi-weekly.md").write_text(page_wrap("KPIs hebdo", "kpi-weekly.md", kpiw_body), encoding="utf-8")
 
-    # KPI monthly
-    kpim_body = f"""
-# KPIs mensuels — Vue complète
+---
+
+## KPIs mensuels — Vue complète
 {html_table(mo_all, max_rows=5000)}
 
-## Aperçu {RECENT_MONTHS} derniers mois
+### KPIs mensuels — Aperçu {RECENT_MONTHS} derniers mois
 {html_table(mo_recent, max_rows=2000)}
-"""
-    (DOCS / "kpi-monthly.md").write_text(page_wrap("KPIs mensuels", "kpi-monthly.md", kpim_body), encoding="utf-8")
 
-    # Countries
-    countries_body = f"""
-# Pays — synthèse
+---
+
+## Pays — synthèse
 {html_table(ctry, max_rows=3000)}
 """
-    (DOCS / "countries.md").write_text(page_wrap("Pays", "countries.md", countries_body), encoding="utf-8")
+    out_file.write_text(content, encoding="utf-8")
+    print(f"Wrote {out_file}")
 
-    print("Wrote multi-pages in docs/")
-    
 
 if __name__ == "__main__":
     main()
