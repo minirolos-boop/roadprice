@@ -74,7 +74,7 @@ code.up{color:#d73a49;font-weight:600;} code.down{color:#2da44e;font-weight:600;
 
 **Dernier run : `2025-08-27` — 141 voyages disponibles**  
 _Historique : **2025-08-27** → **2025-08-27** (1 runs)._  
-_Build : 2025-08-27 17:32 UTC_
+_Build : 2025-08-27 18:45 UTC_
 
 > Astuce : utilise la recherche au-dessus de chaque tableau et clique sur les en-têtes pour trier.
 
@@ -602,10 +602,10 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td>NaN</td>
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
-      <td>2026-06-27</td>
-      <td>2026-07-01</td>
-      <td>https://www.weroad.fr/destinations/bretagne-quiberon-belle-ile/3905e92b-63ec-473c-87fb-28eb165ed1a7</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/bretagne-quiberon-belle-ile/3905e92b-63ec-473c-87fb-28eb165ed1a7'>🔗</a></td>
+      <td>2026-06-13</td>
+      <td>2026-06-17</td>
+      <td>https://www.weroad.fr/destinations/bretagne-quiberon-belle-ile/ce9e1721-2b6a-410c-9059-b0383f8beb0d</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/bretagne-quiberon-belle-ile/ce9e1721-2b6a-410c-9059-b0383f8beb0d'>🔗</a></td>
     </tr>
     <tr>
       <td>France</td>
@@ -2583,9 +2583,9 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td>679,00 €</td>
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
-      <td>2026-06-27</td>
-      <td>https://www.weroad.fr/destinations/bretagne-quiberon-belle-ile/3905e92b-63ec-473c-87fb-28eb165ed1a7</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/bretagne-quiberon-belle-ile/3905e92b-63ec-473c-87fb-28eb165ed1a7'>🔗</a></td>
+      <td>2026-06-13</td>
+      <td>https://www.weroad.fr/destinations/bretagne-quiberon-belle-ile/ce9e1721-2b6a-410c-9059-b0383f8beb0d</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/bretagne-quiberon-belle-ile/ce9e1721-2b6a-410c-9059-b0383f8beb0d'>🔗</a></td>
     </tr>
     <tr>
       <td>2026-06</td>
