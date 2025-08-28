@@ -72,9 +72,9 @@ code.up{color:#d73a49;font-weight:600;} code.down{color:#2da44e;font-weight:600;
 
 # RoadPrice — Évolutions tarifaires
 
-**Dernier run : `2025-08-27` — 141 voyages disponibles**  
-_Historique : **2025-08-27** → **2025-08-27** (1 runs)._  
-_Build : 2025-08-27 18:45 UTC_
+**Dernier run : `2025-08-28` — 141 voyages disponibles**  
+_Historique : **2025-08-28** → **2025-08-28** (1 runs)._  
+_Build : 2025-08-28 16:47 UTC_
 
 > Astuce : utilise la recherche au-dessus de chaque tableau et clique sur les en-têtes pour trier.
 
@@ -110,27 +110,27 @@ _Build : 2025-08-27 18:45 UTC_
   </thead>
   <tbody>
     <tr>
-      <td>2025-08-27</td>
+      <td>2025-08-28</td>
       <td>469,00 €</td>
       <td>3 499,00 €</td>
-      <td>1 285,44 €</td>
+      <td>1 286,01 €</td>
       <td>1 149,00 €</td>
       <td>499,00 €</td>
       <td>3 299,00 €</td>
-      <td>1 274,77 €</td>
+      <td>1 275,52 €</td>
       <td>1 099,00 €</td>
       <td>30.0</td>
       <td>590.0</td>
-      <td>159.692308</td>
-      <td>135.0</td>
+      <td>157.043478</td>
+      <td>130.0</td>
       <td>5.0</td>
       <td>20.0</td>
-      <td>12.513462</td>
-      <td>11.9</td>
+      <td>12.541304</td>
+      <td>12.0</td>
       <td>141</td>
-      <td>52</td>
-      <td>36.9%</td>
-      <td>{"2025-08": 2, "2025-09": 41, "2025-10": 22, "2025-11": 27, "2025-12": 11, "2026-01": 6, "2026-02": 8, "2026-03": 8, "2026-04": 2, "2026-05": 3, "2026-06": 4, "2026-07": 1, "2026-08": 2, "2026-09": 2, "2026-11": 1, "2026-12": 1}</td>
+      <td>46</td>
+      <td>32.6%</td>
+      <td>{"2025-08": 2, "2025-09": 35, "2025-10": 24, "2025-11": 27, "2025-12": 13, "2026-01": 5, "2026-02": 7, "2026-03": 7, "2026-04": 3, "2026-05": 5, "2026-06": 3, "2026-07": 1, "2026-08": 4, "2026-09": 1, "2026-10": 3, "2026-12": 1}</td>
     </tr>
   </tbody>
 </table>
@@ -196,20 +196,20 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td>NaN</td>
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
-      <td>2026-04-05</td>
-      <td>2026-04-10</td>
-      <td>https://www.weroad.fr/destinations/albanie-express-hiver/b480d1d1-d49c-4b3c-939d-b41c7c3aa1a9</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/albanie-express-hiver/b480d1d1-d49c-4b3c-939d-b41c7c3aa1a9'>🔗</a></td>
+      <td>2025-11-02</td>
+      <td>2025-11-07</td>
+      <td>https://www.weroad.fr/destinations/albanie-express-hiver/d1f93401-4d46-45aa-b657-214d5cc1ca4c</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/albanie-express-hiver/d1f93401-4d46-45aa-b657-214d5cc1ca4c'>🔗</a></td>
     </tr>
     <tr>
       <td>Allemagne</td>
       <td>Allemagne</td>
       <td>Berlin Express</td>
-      <td>649,00 €</td>
+      <td>599,00 €</td>
       <td>699,00 €</td>
-      <td>50.0</td>
-      <td>7.2%</td>
-      <td><span class='rp-badge almost'>ALMOST</span></td>
+      <td>100.0</td>
+      <td>14.3%</td>
+      <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2025-12-18</td>
       <td>2025-12-22</td>
       <td>https://www.weroad.fr/destinations/allemagne-berlin-express-tour-weroadx/e5d6c677-81fc-44be-abbf-d9589f0ebf6d</td>
@@ -237,11 +237,11 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td></td>
       <td>NaN</td>
       <td></td>
-      <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
-      <td>2025-10-28</td>
-      <td>2025-11-09</td>
-      <td>https://www.weroad.fr/destinations/patagonie-360/5857150e-6900-42bc-9490-3341afa4190e</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/patagonie-360/5857150e-6900-42bc-9490-3341afa4190e'>🔗</a></td>
+      <td><span class='rp-badge on-sale'>PLANNED</span></td>
+      <td>2026-01-17</td>
+      <td>2026-01-29</td>
+      <td>https://www.weroad.fr/destinations/patagonie-360/419673a8-9f13-4458-85ab-968b9de3a669</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/patagonie-360/419673a8-9f13-4458-85ab-968b9de3a669'>🔗</a></td>
     </tr>
     <tr>
       <td>Australie</td>
@@ -335,7 +335,7 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td></td>
       <td>NaN</td>
       <td></td>
-      <td><span class='rp-badge almost'>ALMOST</span></td>
+      <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2026-12-23</td>
       <td>2026-12-28</td>
       <td>https://www.weroad.fr/destinations/bulgarie-ski-express-bansko/8832ad88-d827-4684-8b3d-eb733e544d51</td>
@@ -406,10 +406,10 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td>NaN</td>
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
-      <td>2026-11-20</td>
-      <td>2026-12-01</td>
-      <td>https://www.weroad.fr/destinations/chine/a01b1a11-a4b5-4767-b6d8-6d28e6c532b9</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/chine/a01b1a11-a4b5-4767-b6d8-6d28e6c532b9'>🔗</a></td>
+      <td>2026-10-18</td>
+      <td>2026-10-29</td>
+      <td>https://www.weroad.fr/destinations/chine/9b8ed7dc-12d4-445f-a95b-0febbd6c727a</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/chine/9b8ed7dc-12d4-445f-a95b-0febbd6c727a'>🔗</a></td>
     </tr>
     <tr>
       <td>Colombie</td>
@@ -448,10 +448,10 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td>NaN</td>
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
-      <td>2025-11-28</td>
-      <td>2025-12-10</td>
-      <td>https://www.weroad.fr/destinations/costa-rica-360/564e6f58-c905-4a1b-a308-c372aa9433ff</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/costa-rica-360/564e6f58-c905-4a1b-a308-c372aa9433ff'>🔗</a></td>
+      <td>2026-10-17</td>
+      <td>2026-10-29</td>
+      <td>https://www.weroad.fr/destinations/costa-rica-360/2ba0714b-bd7e-4f16-9a35-9dd6d0e1c029</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/costa-rica-360/2ba0714b-bd7e-4f16-9a35-9dd6d0e1c029'>🔗</a></td>
     </tr>
     <tr>
       <td>Cuba</td>
@@ -490,10 +490,10 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td>100.0</td>
       <td>9.1%</td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
-      <td>2025-10-25</td>
-      <td>2025-11-01</td>
-      <td>https://www.weroad.fr/destinations/fuerteventura-surf-weroadx/64d74f09-6a4c-4eda-92b3-cb6d11b96111</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/fuerteventura-surf-weroadx/64d74f09-6a4c-4eda-92b3-cb6d11b96111'>🔗</a></td>
+      <td>2026-08-08</td>
+      <td>2026-08-15</td>
+      <td>https://www.weroad.fr/destinations/fuerteventura-surf-weroadx/2e20b69e-3510-44bc-a390-9668a46f4ea0</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/fuerteventura-surf-weroadx/2e20b69e-3510-44bc-a390-9668a46f4ea0'>🔗</a></td>
     </tr>
     <tr>
       <td>Gran Canaria</td>
@@ -504,10 +504,10 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td>NaN</td>
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
-      <td>2026-09-30</td>
-      <td>2026-10-04</td>
-      <td>https://www.weroad.fr/destinations/gran-canaria-express-ile-soleil/ac45904d-de30-45da-ae8b-3f3a48807a40</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/gran-canaria-express-ile-soleil/ac45904d-de30-45da-ae8b-3f3a48807a40'>🔗</a></td>
+      <td>2026-08-26</td>
+      <td>2026-08-30</td>
+      <td>https://www.weroad.fr/destinations/gran-canaria-express-ile-soleil/29e15ed6-9b1d-4203-9077-42e8d13dac30</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/gran-canaria-express-ile-soleil/29e15ed6-9b1d-4203-9077-42e8d13dac30'>🔗</a></td>
     </tr>
     <tr>
       <td>Îles Canaries</td>
@@ -517,11 +517,11 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td></td>
       <td>NaN</td>
       <td></td>
-      <td><span class='rp-badge on-sale'>PLANNED</span></td>
-      <td>2026-01-04</td>
-      <td>2026-01-11</td>
-      <td>https://www.weroad.fr/destinations/fuerteventura-lanzarote-plages-volcans/d6c620e4-255d-421e-b47d-587a63ecb1d0</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/fuerteventura-lanzarote-plages-volcans/d6c620e4-255d-421e-b47d-587a63ecb1d0'>🔗</a></td>
+      <td><span class='rp-badge almost'>ALMOST</span></td>
+      <td>2025-10-11</td>
+      <td>2025-10-18</td>
+      <td>https://www.weroad.fr/destinations/fuerteventura-lanzarote-plages-volcans/67e0eec3-90ff-4856-9dce-57691558b87d</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/fuerteventura-lanzarote-plages-volcans/67e0eec3-90ff-4856-9dce-57691558b87d'>🔗</a></td>
     </tr>
     <tr>
       <td>Pays Baltes</td>
@@ -560,10 +560,10 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td>NaN</td>
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
-      <td>2026-03-28</td>
-      <td>2026-04-01</td>
-      <td>https://www.weroad.fr/destinations/auvergne-express/4acf6fb8-2b08-4fa2-b19d-789885b70aa2</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/auvergne-express/4acf6fb8-2b08-4fa2-b19d-789885b70aa2'>🔗</a></td>
+      <td>2026-06-28</td>
+      <td>2026-07-02</td>
+      <td>https://www.weroad.fr/destinations/auvergne-express/0a76d502-b743-43b6-b498-bff932f124c0</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/auvergne-express/0a76d502-b743-43b6-b498-bff932f124c0'>🔗</a></td>
     </tr>
     <tr>
       <td>Bordeaux</td>
@@ -574,10 +574,10 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td>NaN</td>
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
-      <td>2026-05-16</td>
-      <td>2026-05-20</td>
-      <td>https://www.weroad.fr/destinations/bordeaux-dune-du-pilat/b591ef51-c824-4d7a-b28e-5bb2697d1bd1</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/bordeaux-dune-du-pilat/b591ef51-c824-4d7a-b28e-5bb2697d1bd1'>🔗</a></td>
+      <td>2026-10-17</td>
+      <td>2026-10-21</td>
+      <td>https://www.weroad.fr/destinations/bordeaux-dune-du-pilat/6c5a46e8-effd-4477-956d-771430b394e3</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/bordeaux-dune-du-pilat/6c5a46e8-effd-4477-956d-771430b394e3'>🔗</a></td>
     </tr>
     <tr>
       <td>Bourgogne</td>
@@ -588,10 +588,10 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td>50.0</td>
       <td>7.7%</td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
-      <td>2025-11-19</td>
-      <td>2025-11-23</td>
-      <td>https://www.weroad.fr/destinations/bourgogne-express-route-grand-crus/dc2f4b00-102c-4305-9f1b-f18851bd24ca</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/bourgogne-express-route-grand-crus/dc2f4b00-102c-4305-9f1b-f18851bd24ca'>🔗</a></td>
+      <td>2025-12-03</td>
+      <td>2025-12-07</td>
+      <td>https://www.weroad.fr/destinations/bourgogne-express-route-grand-crus/a7cdffcd-8b37-4239-b0c0-4fca95ebb9b4</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/bourgogne-express-route-grand-crus/a7cdffcd-8b37-4239-b0c0-4fca95ebb9b4'>🔗</a></td>
     </tr>
     <tr>
       <td>Bretagne</td>
@@ -602,10 +602,10 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td>NaN</td>
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
-      <td>2026-06-13</td>
-      <td>2026-06-17</td>
-      <td>https://www.weroad.fr/destinations/bretagne-quiberon-belle-ile/ce9e1721-2b6a-410c-9059-b0383f8beb0d</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/bretagne-quiberon-belle-ile/ce9e1721-2b6a-410c-9059-b0383f8beb0d'>🔗</a></td>
+      <td>2026-09-19</td>
+      <td>2026-09-23</td>
+      <td>https://www.weroad.fr/destinations/bretagne-quiberon-belle-ile/a99d7106-eab8-41f3-9472-8b6b3e9cf734</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/bretagne-quiberon-belle-ile/a99d7106-eab8-41f3-9472-8b6b3e9cf734'>🔗</a></td>
     </tr>
     <tr>
       <td>France</td>
@@ -616,10 +616,10 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td>NaN</td>
       <td></td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
-      <td>2025-10-30</td>
-      <td>2025-11-03</td>
-      <td>https://www.weroad.fr/destinations/mediterranee-express-montpellier-sete-camargue/dc5c957d-9752-4248-bdcd-e0df79513b15</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/mediterranee-express-montpellier-sete-camargue/dc5c957d-9752-4248-bdcd-e0df79513b15'>🔗</a></td>
+      <td>2026-08-13</td>
+      <td>2026-08-17</td>
+      <td>https://www.weroad.fr/destinations/mediterranee-express-montpellier-sete-camargue/620efe99-186e-4813-955c-6c04b089f39d</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/mediterranee-express-montpellier-sete-camargue/620efe99-186e-4813-955c-6c04b089f39d'>🔗</a></td>
     </tr>
     <tr>
       <td>Corfou</td>
@@ -658,10 +658,10 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td>NaN</td>
       <td></td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
-      <td>2025-10-11</td>
-      <td>2025-10-18</td>
-      <td>https://www.weroad.fr/destinations/grece-360-athenes-meteores-peloponnese/1904e602-71d9-44e0-bdb3-a15833b24807</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/grece-360-athenes-meteores-peloponnese/1904e602-71d9-44e0-bdb3-a15833b24807'>🔗</a></td>
+      <td>2025-11-01</td>
+      <td>2025-11-08</td>
+      <td>https://www.weroad.fr/destinations/grece-360-athenes-meteores-peloponnese/6c8c5634-ab2c-49b6-8eac-0635982d2b2f</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/grece-360-athenes-meteores-peloponnese/6c8c5634-ab2c-49b6-8eac-0635982d2b2f'>🔗</a></td>
     </tr>
     <tr>
       <td>Guatemala</td>
@@ -671,11 +671,11 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td></td>
       <td>NaN</td>
       <td></td>
-      <td><span class='rp-badge almost'>ALMOST</span></td>
-      <td>2026-04-09</td>
-      <td>2026-04-20</td>
-      <td>https://www.weroad.fr/destinations/guatemala-volcans-nature-cultures-anciennes/63bb2f26-bd1b-42c0-a675-00df9455154e</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/guatemala-volcans-nature-cultures-anciennes/63bb2f26-bd1b-42c0-a675-00df9455154e'>🔗</a></td>
+      <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
+      <td>2025-12-28</td>
+      <td>2026-01-08</td>
+      <td>https://www.weroad.fr/destinations/guatemala-volcans-nature-cultures-anciennes/88ba867e-7ecd-498d-aecd-1b15c774819e</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/guatemala-volcans-nature-cultures-anciennes/88ba867e-7ecd-498d-aecd-1b15c774819e'>🔗</a></td>
     </tr>
     <tr>
       <td>Géorgie</td>
@@ -699,7 +699,7 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td></td>
       <td>NaN</td>
       <td></td>
-      <td><span class='rp-badge almost'>ALMOST</span></td>
+      <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2025-11-07</td>
       <td>2025-11-11</td>
       <td>https://www.weroad.fr/destinations/budapest-express/997c4112-821d-42d3-8295-05400366e503</td>
@@ -714,24 +714,24 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td>50.0</td>
       <td>5.0%</td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
-      <td>2025-12-06</td>
-      <td>2025-12-12</td>
-      <td>https://www.weroad.fr/destinations/prague-budapest-marches-noel-weroadx/3cce12b1-62f4-49ef-9931-4dced2893755</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/prague-budapest-marches-noel-weroadx/3cce12b1-62f4-49ef-9931-4dced2893755'>🔗</a></td>
+      <td>2025-12-13</td>
+      <td>2025-12-19</td>
+      <td>https://www.weroad.fr/destinations/prague-budapest-marches-noel-weroadx/5f0863ec-25a3-42b2-9738-7bfb27a5e7ee</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/prague-budapest-marches-noel-weroadx/5f0863ec-25a3-42b2-9738-7bfb27a5e7ee'>🔗</a></td>
     </tr>
     <tr>
       <td>Inde</td>
       <td>Inde</td>
       <td>Inde : du Rajasthan au Taj Mahal</td>
-      <td>949,00 €</td>
       <td>999,00 €</td>
-      <td>50.0</td>
-      <td>5.0%</td>
-      <td><span class='rp-badge almost'>ALMOST</span></td>
-      <td>2025-09-26</td>
-      <td>2025-10-04</td>
-      <td>https://www.weroad.fr/destinations/inde-rajasthan-taj-mahal/08c99925-1059-4f3a-9d34-a737157c5e11</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/inde-rajasthan-taj-mahal/08c99925-1059-4f3a-9d34-a737157c5e11'>🔗</a></td>
+      <td></td>
+      <td>NaN</td>
+      <td></td>
+      <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
+      <td>2025-10-12</td>
+      <td>2025-10-20</td>
+      <td>https://www.weroad.fr/destinations/inde-rajasthan-taj-mahal/e39b83ce-32a1-4f98-8d35-e6437f87c7c1</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/inde-rajasthan-taj-mahal/e39b83ce-32a1-4f98-8d35-e6437f87c7c1'>🔗</a></td>
     </tr>
     <tr>
       <td>INDONÉSIE</td>
@@ -784,10 +784,10 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td>NaN</td>
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
-      <td>2025-11-11</td>
-      <td>2025-11-16</td>
-      <td>https://www.weroad.fr/destinations/irlande-express-tour-dublin-galway-connemara-weroadx/34a3e249-bb98-4302-ac7a-65ccaea93829</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/irlande-express-tour-dublin-galway-connemara-weroadx/34a3e249-bb98-4302-ac7a-65ccaea93829'>🔗</a></td>
+      <td>2026-02-03</td>
+      <td>2026-02-08</td>
+      <td>https://www.weroad.fr/destinations/irlande-express-tour-dublin-galway-connemara-weroadx/a5843663-f32e-4882-ab04-d8f741753d22</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/irlande-express-tour-dublin-galway-connemara-weroadx/a5843663-f32e-4882-ab04-d8f741753d22'>🔗</a></td>
     </tr>
     <tr>
       <td>Islande</td>
@@ -798,10 +798,10 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td>NaN</td>
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
-      <td>2026-03-04</td>
-      <td>2026-03-08</td>
-      <td>https://www.weroad.fr/destinations/islande-express/d3a67b3f-4e98-4e80-a54a-dca1f8c291e6</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/islande-express/d3a67b3f-4e98-4e80-a54a-dca1f8c291e6'>🔗</a></td>
+      <td>2026-04-08</td>
+      <td>2026-04-12</td>
+      <td>https://www.weroad.fr/destinations/islande-express/a94da2cf-d5ad-439d-9c9f-e1b2bd77c52c</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/islande-express/a94da2cf-d5ad-439d-9c9f-e1b2bd77c52c'>🔗</a></td>
     </tr>
     <tr>
       <td>Dolomites</td>
@@ -820,44 +820,30 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
     <tr>
       <td>Italie</td>
       <td>Italie</td>
-      <td>Italie : Carnaval de Venise : Masques, féérie & aperitivo</td>
-      <td>949,00 €</td>
+      <td>Italie Ski & Snowboard Express : les montagnes de Sestrières dans les Alpes</td>
+      <td>799,00 €</td>
       <td></td>
       <td>NaN</td>
       <td></td>
-      <td><span class='rp-badge almost'>ALMOST</span></td>
-      <td>2026-02-12</td>
-      <td>2026-02-16</td>
-      <td>https://www.weroad.fr/destinations/italie-carnaval-venise-masques-aperitivo/9d104808-b7d6-4ebe-b63a-6338d095d374</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/italie-carnaval-venise-masques-aperitivo/9d104808-b7d6-4ebe-b63a-6338d095d374'>🔗</a></td>
+      <td><span class='rp-badge on-sale'>PLANNED</span></td>
+      <td>2025-11-26</td>
+      <td>2025-11-30</td>
+      <td>https://www.weroad.fr/destinations/sestrieres-italie-ski-snowboard/d1280ff0-9371-4d62-bd54-f50a6526b313</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/sestrieres-italie-ski-snowboard/d1280ff0-9371-4d62-bd54-f50a6526b313'>🔗</a></td>
     </tr>
     <tr>
       <td>Naples & la côte Amalfitaine</td>
       <td>Italie</td>
       <td>Naples et la côte Amalfitaine Express</td>
-      <td>489,00 €</td>
       <td>519,00 €</td>
-      <td>30.0</td>
-      <td>5.8%</td>
-      <td><span class='rp-badge almost'>ALMOST</span></td>
-      <td>2025-09-27</td>
-      <td>2025-10-01</td>
-      <td>https://www.weroad.fr/destinations/naples-cote-amalfitaine/d89f2758-79ec-4f9d-89c6-5bf9c0d317bc</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/naples-cote-amalfitaine/d89f2758-79ec-4f9d-89c6-5bf9c0d317bc'>🔗</a></td>
-    </tr>
-    <tr>
-      <td>Pouilles</td>
-      <td>Italie</td>
-      <td>Pouilles 360°</td>
-      <td>1 079,00 €</td>
-      <td>1 349,00 €</td>
-      <td>270.0</td>
-      <td>20.0%</td>
-      <td><span class='rp-badge almost'>ALMOST</span></td>
-      <td>2025-09-27</td>
-      <td>2025-10-04</td>
-      <td>https://www.weroad.fr/destinations/pouilles-360/090b8ef2-dd13-4002-b1ef-9ec04e9a9907</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/pouilles-360/090b8ef2-dd13-4002-b1ef-9ec04e9a9907'>🔗</a></td>
+      <td></td>
+      <td>NaN</td>
+      <td></td>
+      <td><span class='rp-badge default'>ALMOST_FULL</span></td>
+      <td>2025-08-30</td>
+      <td>2025-09-03</td>
+      <td>https://www.weroad.fr/destinations/naples-cote-amalfitaine/9f0be399-fb89-4067-b622-e9d198a5718e</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/naples-cote-amalfitaine/9f0be399-fb89-4067-b622-e9d198a5718e'>🔗</a></td>
     </tr>
     <tr>
       <td>Sicile</td>
@@ -910,10 +896,10 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td>NaN</td>
       <td></td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
-      <td>2025-11-23</td>
-      <td>2025-12-02</td>
-      <td>https://www.weroad.fr/destinations/kenya-afrique-safari-plage-village/47543c07-3a00-4029-913d-da11f9d9d789</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/kenya-afrique-safari-plage-village/47543c07-3a00-4029-913d-da11f9d9d789'>🔗</a></td>
+      <td>2025-10-19</td>
+      <td>2025-10-28</td>
+      <td>https://www.weroad.fr/destinations/kenya-afrique-safari-plage-village/c38a5ff2-25f2-4033-b1f3-829713cef607</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/kenya-afrique-safari-plage-village/c38a5ff2-25f2-4033-b1f3-829713cef607'>🔗</a></td>
     </tr>
     <tr>
       <td>Kirghizistan</td>
@@ -923,11 +909,11 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td></td>
       <td>NaN</td>
       <td></td>
-      <td><span class='rp-badge almost'>ALMOST</span></td>
-      <td>2025-09-28</td>
-      <td>2025-10-06</td>
-      <td>https://www.weroad.fr/destinations/kirghizistan-winter/541ca4fc-cf41-4cb7-9a5a-c599eb83b6f8</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/kirghizistan-winter/541ca4fc-cf41-4cb7-9a5a-c599eb83b6f8'>🔗</a></td>
+      <td><span class='rp-badge on-sale'>PLANNED</span></td>
+      <td>2025-12-28</td>
+      <td>2026-01-05</td>
+      <td>https://www.weroad.fr/destinations/kirghizistan-winter/8fd3b586-dd7b-4f85-837d-64830c233a1c</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/kirghizistan-winter/8fd3b586-dd7b-4f85-837d-64830c233a1c'>🔗</a></td>
     </tr>
     <tr>
       <td>Malaisie</td>
@@ -951,11 +937,11 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td>1 249,00 €</td>
       <td>70.0</td>
       <td>5.6%</td>
-      <td><span class='rp-badge on-sale'>PLANNED</span></td>
-      <td>2026-08-09</td>
-      <td>2026-08-16</td>
-      <td>https://www.weroad.fr/destinations/maldives-beach-life-detente-snorkeling-maafushi/6f7e57ed-c650-4911-a20d-9f56ac5fa335</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/maldives-beach-life-detente-snorkeling-maafushi/6f7e57ed-c650-4911-a20d-9f56ac5fa335'>🔗</a></td>
+      <td><span class='rp-badge almost'>ALMOST</span></td>
+      <td>2026-04-05</td>
+      <td>2026-04-12</td>
+      <td>https://www.weroad.fr/destinations/maldives-beach-life-detente-snorkeling-maafushi/84abb2fa-2684-4cf6-a885-8bd7e882334a</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/maldives-beach-life-detente-snorkeling-maafushi/84abb2fa-2684-4cf6-a885-8bd7e882334a'>🔗</a></td>
     </tr>
     <tr>
       <td>Malte</td>
@@ -994,10 +980,10 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td>130.0</td>
       <td>9.8%</td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
-      <td>2026-02-22</td>
-      <td>2026-03-01</td>
-      <td>https://www.weroad.fr/destinations/ile-maurice-beach-life-road-trip-plages-aventure/16df8b33-89b1-43a4-ad3b-3cb1422e6475</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/ile-maurice-beach-life-road-trip-plages-aventure/16df8b33-89b1-43a4-ad3b-3cb1422e6475'>🔗</a></td>
+      <td>2026-04-19</td>
+      <td>2026-04-26</td>
+      <td>https://www.weroad.fr/destinations/ile-maurice-beach-life-road-trip-plages-aventure/9a7c3514-9d03-4070-928f-98e77181e68a</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/ile-maurice-beach-life-road-trip-plages-aventure/9a7c3514-9d03-4070-928f-98e77181e68a'>🔗</a></td>
     </tr>
     <tr>
       <td>Mexique</td>
@@ -1007,11 +993,11 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td></td>
       <td>NaN</td>
       <td></td>
-      <td><span class='rp-badge on-sale'>PLANNED</span></td>
-      <td>2026-01-03</td>
-      <td>2026-01-10</td>
-      <td>https://www.weroad.fr/destinations/mexique-yucatan-beach-life/0b25142d-a8c0-4876-b686-09a5a65c2bec</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/mexique-yucatan-beach-life/0b25142d-a8c0-4876-b686-09a5a65c2bec'>🔗</a></td>
+      <td><span class='rp-badge almost'>ALMOST</span></td>
+      <td>2026-03-03</td>
+      <td>2026-03-10</td>
+      <td>https://www.weroad.fr/destinations/mexique-yucatan-beach-life/cfcca156-1834-4bd3-83ae-e3c429ab3ee2</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/mexique-yucatan-beach-life/cfcca156-1834-4bd3-83ae-e3c429ab3ee2'>🔗</a></td>
     </tr>
     <tr>
       <td>Namibie</td>
@@ -1078,10 +1064,10 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td>NaN</td>
       <td></td>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
-      <td>2025-11-04</td>
-      <td>2025-11-12</td>
-      <td>https://www.weroad.fr/destinations/nepal/a40a2420-cf42-42f8-82d0-95a013b31b4f</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/nepal/a40a2420-cf42-42f8-82d0-95a013b31b4f'>🔗</a></td>
+      <td>2025-10-10</td>
+      <td>2025-10-18</td>
+      <td>https://www.weroad.fr/destinations/nepal/0e864cce-fbcb-4698-a26a-e2d8e7591f3d</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/nepal/0e864cce-fbcb-4698-a26a-e2d8e7591f3d'>🔗</a></td>
     </tr>
     <tr>
       <td>Oman</td>
@@ -1091,11 +1077,11 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td></td>
       <td>NaN</td>
       <td></td>
-      <td><span class='rp-badge almost'>ALMOST</span></td>
-      <td>2025-12-08</td>
-      <td>2025-12-16</td>
-      <td>https://www.weroad.fr/destinations/oman/f4c73a6c-05c1-4f9b-b856-230d531c2003</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/oman/f4c73a6c-05c1-4f9b-b856-230d531c2003'>🔗</a></td>
+      <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
+      <td>2025-11-02</td>
+      <td>2025-11-10</td>
+      <td>https://www.weroad.fr/destinations/oman/8dba8165-d999-4dae-b229-81e2dbb7e194</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/oman/8dba8165-d999-4dae-b229-81e2dbb7e194'>🔗</a></td>
     </tr>
     <tr>
       <td>Ouzbékistan</td>
@@ -1133,11 +1119,11 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td></td>
       <td>NaN</td>
       <td></td>
-      <td><span class='rp-badge almost'>ALMOST</span></td>
-      <td>2025-11-25</td>
-      <td>2025-12-07</td>
-      <td>https://www.weroad.fr/destinations/philippines-360/9bae06ec-7aee-4fdd-99aa-6b461ed692e7</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/philippines-360/9bae06ec-7aee-4fdd-99aa-6b461ed692e7'>🔗</a></td>
+      <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
+      <td>2026-01-18</td>
+      <td>2026-01-30</td>
+      <td>https://www.weroad.fr/destinations/philippines-360/ec77381d-1d62-4a80-ab3a-d7a26fe5e148</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/philippines-360/ec77381d-1d62-4a80-ab3a-d7a26fe5e148'>🔗</a></td>
     </tr>
     <tr>
       <td>Portugal</td>
@@ -1148,24 +1134,10 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td>NaN</td>
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
-      <td>2025-10-04</td>
-      <td>2025-10-08</td>
-      <td>https://www.weroad.fr/destinations/portugal-express/4fac448c-b7e1-4c52-9265-632cf8912065</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/portugal-express/4fac448c-b7e1-4c52-9265-632cf8912065'>🔗</a></td>
-    </tr>
-    <tr>
-      <td>le Portugal</td>
-      <td>Portugal</td>
-      <td>Portugal Beach Life : Lisbonne & Algarve</td>
-      <td>1 119,00 €</td>
-      <td>1 399,00 €</td>
-      <td>280.0</td>
-      <td>20.0%</td>
-      <td><span class='rp-badge almost'>ALMOST</span></td>
-      <td>2025-09-28</td>
-      <td>2025-10-05</td>
-      <td>https://www.weroad.fr/destinations/portugal-algarve-lisbonne/a8166e8a-3c9d-4ebe-9cb2-f8054daa5190</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/portugal-algarve-lisbonne/a8166e8a-3c9d-4ebe-9cb2-f8054daa5190'>🔗</a></td>
+      <td>2025-12-11</td>
+      <td>2025-12-15</td>
+      <td>https://www.weroad.fr/destinations/portugal-express/41ebed0a-8848-4667-81c2-aee3ced921e3</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/portugal-express/41ebed0a-8848-4667-81c2-aee3ced921e3'>🔗</a></td>
     </tr>
     <tr>
       <td>Pérou</td>
@@ -1203,11 +1175,11 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td>899,00 €</td>
       <td>50.0</td>
       <td>5.6%</td>
-      <td><span class='rp-badge almost'>ALMOST</span></td>
-      <td>2025-10-08</td>
-      <td>2025-10-12</td>
-      <td>https://www.weroad.fr/destinations/Ecosse-express-edimbourg-highlands/f9928125-64ec-4fbb-aa0f-d830fc9f913c</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/Ecosse-express-edimbourg-highlands/f9928125-64ec-4fbb-aa0f-d830fc9f913c'>🔗</a></td>
+      <td><span class='rp-badge on-sale'>PLANNED</span></td>
+      <td>2025-12-24</td>
+      <td>2025-12-28</td>
+      <td>https://www.weroad.fr/destinations/Ecosse-express-edimbourg-highlands/5f9ed4ab-37ca-4c18-ae89-ce3531680329</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/Ecosse-express-edimbourg-highlands/5f9ed4ab-37ca-4c18-ae89-ce3531680329'>🔗</a></td>
     </tr>
     <tr>
       <td>Réunion</td>
@@ -1259,11 +1231,11 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td></td>
       <td>NaN</td>
       <td></td>
-      <td><span class='rp-badge on-sale'>PLANNED</span></td>
-      <td>2025-09-24</td>
-      <td>2025-09-28</td>
-      <td>https://www.weroad.fr/destinations/suisse-express-alpes-lacs-montagnes/d3a59669-2431-4253-b649-52ea21ff57bb</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/suisse-express-alpes-lacs-montagnes/d3a59669-2431-4253-b649-52ea21ff57bb'>🔗</a></td>
+      <td><span class='rp-badge almost'>ALMOST</span></td>
+      <td>2025-10-22</td>
+      <td>2025-10-26</td>
+      <td>https://www.weroad.fr/destinations/suisse-express-alpes-lacs-montagnes/28df726d-d517-4b7c-8072-a9c1ff638411</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/suisse-express-alpes-lacs-montagnes/28df726d-d517-4b7c-8072-a9c1ff638411'>🔗</a></td>
     </tr>
     <tr>
       <td>Suède</td>
@@ -1288,10 +1260,10 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td>NaN</td>
       <td></td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
-      <td>2026-02-05</td>
-      <td>2026-02-14</td>
-      <td>https://www.weroad.fr/destinations/senegal-entre-terre-et-fleuve/fe693f15-05c5-4004-9bd3-0b21ed6ae6fa</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/senegal-entre-terre-et-fleuve/fe693f15-05c5-4004-9bd3-0b21ed6ae6fa'>🔗</a></td>
+      <td>2026-03-19</td>
+      <td>2026-03-28</td>
+      <td>https://www.weroad.fr/destinations/senegal-entre-terre-et-fleuve/7aa97544-55dd-4840-895d-972f0be9f05d</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/senegal-entre-terre-et-fleuve/7aa97544-55dd-4840-895d-972f0be9f05d'>🔗</a></td>
     </tr>
     <tr>
       <td>Tanzanie</td>
@@ -1344,10 +1316,10 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td>NaN</td>
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
-      <td>2026-01-15</td>
-      <td>2026-01-24</td>
-      <td>https://www.weroad.fr/destinations/thailande-plage-hiver/0aa75913-2a0b-4e4c-a3d9-fea3deb052a4</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/thailande-plage-hiver/0aa75913-2a0b-4e4c-a3d9-fea3deb052a4'>🔗</a></td>
+      <td>2026-05-09</td>
+      <td>2026-05-18</td>
+      <td>https://www.weroad.fr/destinations/thailande-plage-hiver/b7a3a3b5-39f3-4323-b82f-b40fdde0358c</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/thailande-plage-hiver/b7a3a3b5-39f3-4323-b82f-b40fdde0358c'>🔗</a></td>
     </tr>
     <tr>
       <td>Tunisie</td>
@@ -1372,10 +1344,10 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td>NaN</td>
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
-      <td>2025-12-10</td>
-      <td>2025-12-14</td>
-      <td>https://www.weroad.fr/destinations/istanbul-express/c21e6694-997e-4a79-81ed-91541377a708</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/istanbul-express/c21e6694-997e-4a79-81ed-91541377a708'>🔗</a></td>
+      <td>2025-11-12</td>
+      <td>2025-11-16</td>
+      <td>https://www.weroad.fr/destinations/istanbul-express/81e0c541-8380-4ad5-aed2-65713d6cbb3e</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/istanbul-express/81e0c541-8380-4ad5-aed2-65713d6cbb3e'>🔗</a></td>
     </tr>
     <tr>
       <td>Istanbul & Cappadoce</td>
@@ -1399,11 +1371,11 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td></td>
       <td>NaN</td>
       <td></td>
-      <td><span class='rp-badge on-sale'>PLANNED</span></td>
-      <td>2026-03-21</td>
-      <td>2026-03-29</td>
-      <td>https://www.weroad.fr/destinations/turquie-istanbul-cappadoce-ephese/a587c038-116a-4db7-9945-9a45e50c9ead</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/turquie-istanbul-cappadoce-ephese/a587c038-116a-4db7-9945-9a45e50c9ead'>🔗</a></td>
+      <td><span class='rp-badge almost'>ALMOST</span></td>
+      <td>2026-05-01</td>
+      <td>2026-05-09</td>
+      <td>https://www.weroad.fr/destinations/turquie-istanbul-cappadoce-ephese/597a75fe-83b7-428f-8942-c5c5e6959ce1</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/turquie-istanbul-cappadoce-ephese/597a75fe-83b7-428f-8942-c5c5e6959ce1'>🔗</a></td>
     </tr>
     <tr>
       <td>Vietnam</td>
@@ -1414,10 +1386,10 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td>NaN</td>
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
-      <td>2026-09-18</td>
-      <td>2026-09-27</td>
-      <td>https://www.weroad.fr/destinations/vietnam-backpack/6ebada4f-7268-4bef-a237-60bd74f9cde1</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/vietnam-backpack/6ebada4f-7268-4bef-a237-60bd74f9cde1'>🔗</a></td>
+      <td>2026-02-27</td>
+      <td>2026-03-08</td>
+      <td>https://www.weroad.fr/destinations/vietnam-backpack/7b83a658-97ee-4633-978d-9011289ae650</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/vietnam-backpack/7b83a658-97ee-4633-978d-9011289ae650'>🔗</a></td>
     </tr>
     <tr>
       <td>Égypte</td>
@@ -1428,10 +1400,10 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td>NaN</td>
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
-      <td>2025-12-18</td>
-      <td>2025-12-22</td>
-      <td>https://www.weroad.fr/destinations/le-caire-express-egypt/4709ec22-7976-4372-a6c5-e84074610751</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/le-caire-express-egypt/4709ec22-7976-4372-a6c5-e84074610751'>🔗</a></td>
+      <td>2025-12-05</td>
+      <td>2025-12-09</td>
+      <td>https://www.weroad.fr/destinations/le-caire-express-egypt/bfe5c5e8-2c20-4761-9093-e5941d18325c</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/le-caire-express-egypt/bfe5c5e8-2c20-4761-9093-e5941d18325c'>🔗</a></td>
     </tr>
     <tr>
       <td>Émirats Arabes Unis</td>
@@ -1469,11 +1441,11 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td></td>
       <td>NaN</td>
       <td></td>
-      <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
-      <td>2025-11-01</td>
-      <td>2025-11-11</td>
-      <td>https://www.weroad.fr/destinations/equateur-et-amazonie/77e9704e-9156-479d-a8d4-37cc34c836cc</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/equateur-et-amazonie/77e9704e-9156-479d-a8d4-37cc34c836cc'>🔗</a></td>
+      <td><span class='rp-badge almost'>ALMOST</span></td>
+      <td>2025-10-25</td>
+      <td>2025-11-04</td>
+      <td>https://www.weroad.fr/destinations/equateur-et-amazonie/89e92461-4baa-44bf-b886-18280e75526d</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/equateur-et-amazonie/89e92461-4baa-44bf-b886-18280e75526d'>🔗</a></td>
     </tr>
     <tr>
       <td>Floride</td>
@@ -1493,15 +1465,15 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td>New York</td>
       <td>États-Unis d'Amérique</td>
       <td>New York 360° : à la découverte de Manhattan, Brooklyn et Harlem</td>
-      <td>799,00 €</td>
+      <td>819,00 €</td>
       <td>999,00 €</td>
-      <td>200.0</td>
-      <td>20.0%</td>
-      <td><span class='rp-badge almost'>ALMOST</span></td>
-      <td>2025-09-28</td>
-      <td>2025-10-03</td>
-      <td>https://www.weroad.fr/destinations/new-york/be94222b-4570-4efc-abc5-e9fffca1ace0</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/new-york/be94222b-4570-4efc-abc5-e9fffca1ace0'>🔗</a></td>
+      <td>180.0</td>
+      <td>18.0%</td>
+      <td><span class='rp-badge default'>ALMOST_FULL</span></td>
+      <td>2025-09-14</td>
+      <td>2025-09-19</td>
+      <td>https://www.weroad.fr/destinations/new-york/b570f3fe-55dc-4dad-a15b-48718a0ef8e8</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/new-york/b570f3fe-55dc-4dad-a15b-48718a0ef8e8'>🔗</a></td>
     </tr>
     <tr>
       <td>Route 66</td>
@@ -1511,11 +1483,11 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td></td>
       <td>NaN</td>
       <td></td>
-      <td><span class='rp-badge default'>SOLD&nbsp;OUT</span></td>
-      <td>2025-09-12</td>
-      <td>2025-09-26</td>
-      <td>https://www.weroad.fr/destinations/road-trip-route-66-chicago-los-angeles/e6b8bddc-1bc1-4087-a6ba-dc460de73139</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/road-trip-route-66-chicago-los-angeles/e6b8bddc-1bc1-4087-a6ba-dc460de73139'>🔗</a></td>
+      <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
+      <td>2025-10-18</td>
+      <td>2025-11-01</td>
+      <td>https://www.weroad.fr/destinations/road-trip-route-66-chicago-los-angeles/9f58586f-b92a-455d-a8e1-d404f1abdb85</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/road-trip-route-66-chicago-los-angeles/9f58586f-b92a-455d-a8e1-d404f1abdb85'>🔗</a></td>
     </tr>
     <tr>
       <td>États-Unis</td>
@@ -1557,6 +1529,18 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
   <tbody>
     <tr>
       <td>2025-08</td>
+      <td>Naples & la côte Amalfitaine</td>
+      <td>Naples et la côte Amalfitaine Express</td>
+      <td>Italie</td>
+      <td>519,00 €</td>
+      <td></td>
+      <td><span class='rp-badge default'>ALMOST_FULL</span></td>
+      <td>2025-08-30</td>
+      <td>https://www.weroad.fr/destinations/naples-cote-amalfitaine/9f0be399-fb89-4067-b622-e9d198a5718e</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/naples-cote-amalfitaine/9f0be399-fb89-4067-b622-e9d198a5718e'>🔗</a></td>
+    </tr>
+    <tr>
+      <td>2025-08</td>
       <td>Islande</td>
       <td>Islande Expédition : sur l'île de glace et de feu sous une tente</td>
       <td>Islande</td>
@@ -1566,18 +1550,6 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td>2025-08-31</td>
       <td>https://www.weroad.fr/destinations/islande-expedition/5f3339d6-7b58-4a8f-a3cc-6b6194015a03</td>
       <td><a target='_blank' href='https://www.weroad.fr/destinations/islande-expedition/5f3339d6-7b58-4a8f-a3cc-6b6194015a03'>🔗</a></td>
-    </tr>
-    <tr>
-      <td>2025-08</td>
-      <td>Islande</td>
-      <td>Islande 360° :  à la découverte de l'île de glace et de feu</td>
-      <td>Islande</td>
-      <td>1 479,00 €</td>
-      <td>17.8%</td>
-      <td><span class='rp-badge default'>SOLD&nbsp;OUT</span></td>
-      <td>2025-08-29</td>
-      <td>https://www.weroad.fr/destinations/islande-360-ete/383a8efe-d171-43f0-8c13-40ab3475ec83</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/islande-360-ete/383a8efe-d171-43f0-8c13-40ab3475ec83'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-09</td>
@@ -1602,18 +1574,6 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td>2025-09-27</td>
       <td>https://www.weroad.fr/destinations/maroc-trekking-mount-toubkal/4310fa36-bb29-48fb-856e-359806887f88</td>
       <td><a target='_blank' href='https://www.weroad.fr/destinations/maroc-trekking-mount-toubkal/4310fa36-bb29-48fb-856e-359806887f88'>🔗</a></td>
-    </tr>
-    <tr>
-      <td>2025-09</td>
-      <td>Naples & la côte Amalfitaine</td>
-      <td>Naples et la côte Amalfitaine Express</td>
-      <td>Italie</td>
-      <td>489,00 €</td>
-      <td>5.8%</td>
-      <td><span class='rp-badge almost'>ALMOST</span></td>
-      <td>2025-09-27</td>
-      <td>https://www.weroad.fr/destinations/naples-cote-amalfitaine/d89f2758-79ec-4f9d-89c6-5bf9c0d317bc</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/naples-cote-amalfitaine/d89f2758-79ec-4f9d-89c6-5bf9c0d317bc'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-09</td>
@@ -1713,18 +1673,6 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
     </tr>
     <tr>
       <td>2025-09</td>
-      <td>New York</td>
-      <td>New York 360° : à la découverte de Manhattan, Brooklyn et Harlem</td>
-      <td>États-Unis d'Amérique</td>
-      <td>799,00 €</td>
-      <td>20.0%</td>
-      <td><span class='rp-badge almost'>ALMOST</span></td>
-      <td>2025-09-28</td>
-      <td>https://www.weroad.fr/destinations/new-york/be94222b-4570-4efc-abc5-e9fffca1ace0</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/new-york/be94222b-4570-4efc-abc5-e9fffca1ace0'>🔗</a></td>
-    </tr>
-    <tr>
-      <td>2025-09</td>
       <td>Crète</td>
       <td>Crète Beach Life</td>
       <td>Grèce</td>
@@ -1734,6 +1682,18 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td>2025-09-13</td>
       <td>https://www.weroad.fr/destinations/crete-beach-life/151b04d2-e13f-421a-a398-abc9861657da</td>
       <td><a target='_blank' href='https://www.weroad.fr/destinations/crete-beach-life/151b04d2-e13f-421a-a398-abc9861657da'>🔗</a></td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>New York</td>
+      <td>New York 360° : à la découverte de Manhattan, Brooklyn et Harlem</td>
+      <td>États-Unis d'Amérique</td>
+      <td>819,00 €</td>
+      <td>18.0%</td>
+      <td><span class='rp-badge default'>ALMOST_FULL</span></td>
+      <td>2025-09-14</td>
+      <td>https://www.weroad.fr/destinations/new-york/b570f3fe-55dc-4dad-a15b-48718a0ef8e8</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/new-york/b570f3fe-55dc-4dad-a15b-48718a0ef8e8'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-09</td>
@@ -1760,28 +1720,16 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td><a target='_blank' href='https://www.weroad.fr/destinations/sri-lanka-360-ete/cd29383d-b82d-4c3b-a062-052b18c87d3f'>🔗</a></td>
     </tr>
     <tr>
-      <td>2025-10</td>
-      <td>France</td>
-      <td>Méditerranée Beach Life Express : Montpellier, Sète et Camargue</td>
-      <td>France</td>
-      <td>599,00 €</td>
-      <td></td>
-      <td><span class='rp-badge almost'>ALMOST</span></td>
-      <td>2025-10-30</td>
-      <td>https://www.weroad.fr/destinations/mediterranee-express-montpellier-sete-camargue/dc5c957d-9752-4248-bdcd-e0df79513b15</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/mediterranee-express-montpellier-sete-camargue/dc5c957d-9752-4248-bdcd-e0df79513b15'>🔗</a></td>
-    </tr>
-    <tr>
-      <td>2025-10</td>
-      <td>Portugal</td>
-      <td>Portugal Express</td>
-      <td>Portugal</td>
-      <td>699,00 €</td>
-      <td></td>
-      <td><span class='rp-badge on-sale'>PLANNED</span></td>
-      <td>2025-10-04</td>
-      <td>https://www.weroad.fr/destinations/portugal-express/4fac448c-b7e1-4c52-9265-632cf8912065</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/portugal-express/4fac448c-b7e1-4c52-9265-632cf8912065'>🔗</a></td>
+      <td>2025-09</td>
+      <td>Indonesie</td>
+      <td>Indonésie d'île en île : Bali, Lembongan et Gili</td>
+      <td>Indonésie</td>
+      <td>899,00 €</td>
+      <td>18.2%</td>
+      <td><span class='rp-badge default'>SOLD&nbsp;OUT</span></td>
+      <td>2025-09-05</td>
+      <td>https://www.weroad.fr/destinations/indonesie-bali-lombok-java-nusa-penida/d0b065fd-904f-4676-97d6-44355c8075bb</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/indonesie-bali-lombok-java-nusa-penida/d0b065fd-904f-4676-97d6-44355c8075bb'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-10</td>
@@ -1794,18 +1742,6 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td>2025-10-15</td>
       <td>https://www.weroad.fr/destinations/tunisie-express-djerba-detente-culture/a36141f8-fe71-4213-9468-4434f3e031b6</td>
       <td><a target='_blank' href='https://www.weroad.fr/destinations/tunisie-express-djerba-detente-culture/a36141f8-fe71-4213-9468-4434f3e031b6'>🔗</a></td>
-    </tr>
-    <tr>
-      <td>2025-10</td>
-      <td>Écosse</td>
-      <td>Écosse Express : Édimbourg et les Highlands comme un local</td>
-      <td>Royaume-Uni</td>
-      <td>849,00 €</td>
-      <td>5.6%</td>
-      <td><span class='rp-badge almost'>ALMOST</span></td>
-      <td>2025-10-08</td>
-      <td>https://www.weroad.fr/destinations/Ecosse-express-edimbourg-highlands/f9928125-64ec-4fbb-aa0f-d830fc9f913c</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/Ecosse-express-edimbourg-highlands/f9928125-64ec-4fbb-aa0f-d830fc9f913c'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-10</td>
@@ -1845,39 +1781,63 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
     </tr>
     <tr>
       <td>2025-10</td>
-      <td>Grecia</td>
-      <td>Grèce 360: Athènes, les Météores et le Péloponnèse</td>
-      <td>Grèce</td>
+      <td>Suisse</td>
+      <td>Suisse Express : aventure en train au coeur des Alpes entre lacs et montagnes</td>
+      <td>Suisse</td>
+      <td>949,00 €</td>
+      <td></td>
+      <td><span class='rp-badge almost'>ALMOST</span></td>
+      <td>2025-10-22</td>
+      <td>https://www.weroad.fr/destinations/suisse-express-alpes-lacs-montagnes/28df726d-d517-4b7c-8072-a9c1ff638411</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/suisse-express-alpes-lacs-montagnes/28df726d-d517-4b7c-8072-a9c1ff638411'>🔗</a></td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>Italie</td>
+      <td>Italie: Rome, le Chianti, Florence, Luques et Pise</td>
+      <td>Italie</td>
+      <td>999,00 €</td>
+      <td></td>
+      <td><span class='rp-badge on-sale'>PLANNED</span></td>
+      <td>2025-10-04</td>
+      <td>https://www.weroad.fr/destinations/rome-chianti-florence-luques-pise/55fcd078-9b03-46ac-a0cb-0386c37963bb</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/rome-chianti-florence-luques-pise/55fcd078-9b03-46ac-a0cb-0386c37963bb'>🔗</a></td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>Népal</td>
+      <td>Népal 360° : entre les temples de Katmandou et les sommets de l'Annapurna</td>
+      <td>Népal</td>
+      <td>999,00 €</td>
+      <td></td>
+      <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
+      <td>2025-10-10</td>
+      <td>https://www.weroad.fr/destinations/nepal/0e864cce-fbcb-4698-a26a-e2d8e7591f3d</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/nepal/0e864cce-fbcb-4698-a26a-e2d8e7591f3d'>🔗</a></td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>Îles Canaries</td>
+      <td>Fuerteventura et Lanzarote  360° : entre plages et volcans</td>
+      <td>Espagne</td>
       <td>999,00 €</td>
       <td></td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-10-11</td>
-      <td>https://www.weroad.fr/destinations/grece-360-athenes-meteores-peloponnese/1904e602-71d9-44e0-bdb3-a15833b24807</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/grece-360-athenes-meteores-peloponnese/1904e602-71d9-44e0-bdb3-a15833b24807'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/fuerteventura-lanzarote-plages-volcans/67e0eec3-90ff-4856-9dce-57691558b87d</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/fuerteventura-lanzarote-plages-volcans/67e0eec3-90ff-4856-9dce-57691558b87d'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-10</td>
-      <td>Espagne</td>
-      <td>Fuerteventura Surf : aventure à la découverte de l'île</td>
-      <td>Espagne</td>
+      <td>Inde</td>
+      <td>Inde : du Rajasthan au Taj Mahal</td>
+      <td>Inde</td>
       <td>999,00 €</td>
-      <td>9.1%</td>
-      <td><span class='rp-badge on-sale'>PLANNED</span></td>
-      <td>2025-10-25</td>
-      <td>https://www.weroad.fr/destinations/fuerteventura-surf-weroadx/64d74f09-6a4c-4eda-92b3-cb6d11b96111</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/fuerteventura-surf-weroadx/64d74f09-6a4c-4eda-92b3-cb6d11b96111'>🔗</a></td>
-    </tr>
-    <tr>
-      <td>2025-10</td>
-      <td>Espagne</td>
-      <td>Ibiza et Formentera Beach Life : aventure aux Baléares</td>
-      <td>Espagne</td>
-      <td>1 099,00 €</td>
       <td></td>
-      <td><span class='rp-badge on-sale'>PLANNED</span></td>
-      <td>2025-10-26</td>
-      <td>https://www.weroad.fr/destinations/ibiza-formentera-baleares/aad9bc1e-d226-4d9c-a410-411aeed2da89</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/ibiza-formentera-baleares/aad9bc1e-d226-4d9c-a410-411aeed2da89'>🔗</a></td>
+      <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
+      <td>2025-10-12</td>
+      <td>https://www.weroad.fr/destinations/inde-rajasthan-taj-mahal/e39b83ce-32a1-4f98-8d35-e6437f87c7c1</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/inde-rajasthan-taj-mahal/e39b83ce-32a1-4f98-8d35-e6437f87c7c1'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-10</td>
@@ -1893,6 +1853,18 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
     </tr>
     <tr>
       <td>2025-10</td>
+      <td>Espagne</td>
+      <td>Ibiza et Formentera Beach Life : aventure aux Baléares</td>
+      <td>Espagne</td>
+      <td>1 099,00 €</td>
+      <td></td>
+      <td><span class='rp-badge almost'>ALMOST</span></td>
+      <td>2025-10-12</td>
+      <td>https://www.weroad.fr/destinations/ibiza-formentera-baleares/3527020b-7f01-4028-a0c4-63035ed07ea9</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/ibiza-formentera-baleares/3527020b-7f01-4028-a0c4-63035ed07ea9'>🔗</a></td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
       <td>Émirats Arabes Unis</td>
       <td>Émirats Arabes Unis 360° : Dubaï, Abou Dabi et le désert</td>
       <td>Émirats arabes unis</td>
@@ -1902,6 +1874,18 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td>2025-10-17</td>
       <td>https://www.weroad.fr/destinations/dubai-abou-dhabi-desert/ea5c696d-41ec-4831-8b2e-65f6d10205f1</td>
       <td><a target='_blank' href='https://www.weroad.fr/destinations/dubai-abou-dhabi-desert/ea5c696d-41ec-4831-8b2e-65f6d10205f1'>🔗</a></td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>Équateur & Amazonie</td>
+      <td>Équateur & Amazonie Expedition</td>
+      <td>Équateur</td>
+      <td>1 299,00 €</td>
+      <td></td>
+      <td><span class='rp-badge almost'>ALMOST</span></td>
+      <td>2025-10-25</td>
+      <td>https://www.weroad.fr/destinations/equateur-et-amazonie/89e92461-4baa-44bf-b886-18280e75526d</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/equateur-et-amazonie/89e92461-4baa-44bf-b886-18280e75526d'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-10</td>
@@ -1928,28 +1912,28 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td><a target='_blank' href='https://www.weroad.fr/destinations/coree-du-sud-360/d1db200e-8ac8-40ad-88d3-04c78aff3fc2'>🔗</a></td>
     </tr>
     <tr>
-      <td>2025-10</td>
-      <td>Belize</td>
-      <td>Belize 360° : jungles luxuriantes, plages paradisiaques et Blue Hole</td>
-      <td>Belize</td>
-      <td>1 499,00 €</td>
-      <td>6.3%</td>
-      <td><span class='rp-badge almost'>ALMOST</span></td>
-      <td>2025-10-17</td>
-      <td>https://www.weroad.fr/destinations/belize-jungles-plages-blue-hole/b1d4305d-a377-46ed-b533-dad5169b092e</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/belize-jungles-plages-blue-hole/b1d4305d-a377-46ed-b533-dad5169b092e'>🔗</a></td>
+      <td>2025-11</td>
+      <td>Albanie</td>
+      <td>Albanie Express Winter : histoire, nature et aventure</td>
+      <td>Albanie</td>
+      <td>549,00 €</td>
+      <td></td>
+      <td><span class='rp-badge on-sale'>PLANNED</span></td>
+      <td>2025-11-02</td>
+      <td>https://www.weroad.fr/destinations/albanie-express-hiver/d1f93401-4d46-45aa-b657-214d5cc1ca4c</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/albanie-express-hiver/d1f93401-4d46-45aa-b657-214d5cc1ca4c'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-11</td>
-      <td>Bourgogne</td>
-      <td>Bourgogne Express : sur la route des Grands Crus</td>
-      <td>France</td>
+      <td>Istanbul</td>
+      <td>Istanbul Express</td>
+      <td>Turquie</td>
       <td>599,00 €</td>
-      <td>7.7%</td>
+      <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
-      <td>2025-11-19</td>
-      <td>https://www.weroad.fr/destinations/bourgogne-express-route-grand-crus/dc2f4b00-102c-4305-9f1b-f18851bd24ca</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/bourgogne-express-route-grand-crus/dc2f4b00-102c-4305-9f1b-f18851bd24ca'>🔗</a></td>
+      <td>2025-11-12</td>
+      <td>https://www.weroad.fr/destinations/istanbul-express/81e0c541-8380-4ad5-aed2-65713d6cbb3e</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/istanbul-express/81e0c541-8380-4ad5-aed2-65713d6cbb3e'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-11</td>
@@ -1958,7 +1942,7 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td>Hongrie</td>
       <td>599,00 €</td>
       <td></td>
-      <td><span class='rp-badge almost'>ALMOST</span></td>
+      <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2025-11-07</td>
       <td>https://www.weroad.fr/destinations/budapest-express/997c4112-821d-42d3-8295-05400366e503</td>
       <td><a target='_blank' href='https://www.weroad.fr/destinations/budapest-express/997c4112-821d-42d3-8295-05400366e503'>🔗</a></td>
@@ -2013,6 +1997,18 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
     </tr>
     <tr>
       <td>2025-11</td>
+      <td>Italie</td>
+      <td>Italie Ski & Snowboard Express : les montagnes de Sestrières dans les Alpes</td>
+      <td>Italie</td>
+      <td>799,00 €</td>
+      <td></td>
+      <td><span class='rp-badge on-sale'>PLANNED</span></td>
+      <td>2025-11-26</td>
+      <td>https://www.weroad.fr/destinations/sestrieres-italie-ski-snowboard/d1280ff0-9371-4d62-bd54-f50a6526b313</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/sestrieres-italie-ski-snowboard/d1280ff0-9371-4d62-bd54-f50a6526b313'>🔗</a></td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
       <td>Indonésie</td>
       <td>Bali et Gili : ambiance tropicale et eau turquoise</td>
       <td>Indonésie</td>
@@ -2025,27 +2021,27 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
     </tr>
     <tr>
       <td>2025-11</td>
-      <td>Irlande</td>
-      <td>Irlande Express : Dublin, Galway et au Connemara</td>
-      <td>Irlande</td>
-      <td>999,00 €</td>
+      <td>Autriche</td>
+      <td>Autriche Ski & Snowboard Express : sport et détente à Sölden</td>
+      <td>Autriche</td>
+      <td>899,00 €</td>
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
-      <td>2025-11-11</td>
-      <td>https://www.weroad.fr/destinations/irlande-express-tour-dublin-galway-connemara-weroadx/34a3e249-bb98-4302-ac7a-65ccaea93829</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/irlande-express-tour-dublin-galway-connemara-weroadx/34a3e249-bb98-4302-ac7a-65ccaea93829'>🔗</a></td>
+      <td>2025-11-26</td>
+      <td>https://www.weroad.fr/destinations/autriche-solden-ski-snowboard/38faed8a-ee1c-477d-b49d-678b7d88bee5</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/autriche-solden-ski-snowboard/38faed8a-ee1c-477d-b49d-678b7d88bee5'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-11</td>
-      <td>Népal</td>
-      <td>Népal 360° : entre les temples de Katmandou et les sommets de l'Annapurna</td>
-      <td>Népal</td>
+      <td>Grecia</td>
+      <td>Grèce 360: Athènes, les Météores et le Péloponnèse</td>
+      <td>Grèce</td>
       <td>999,00 €</td>
       <td></td>
-      <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
-      <td>2025-11-04</td>
-      <td>https://www.weroad.fr/destinations/nepal/a40a2420-cf42-42f8-82d0-95a013b31b4f</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/nepal/a40a2420-cf42-42f8-82d0-95a013b31b4f'>🔗</a></td>
+      <td><span class='rp-badge almost'>ALMOST</span></td>
+      <td>2025-11-01</td>
+      <td>https://www.weroad.fr/destinations/grece-360-athenes-meteores-peloponnese/6c8c5634-ab2c-49b6-8eac-0635982d2b2f</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/grece-360-athenes-meteores-peloponnese/6c8c5634-ab2c-49b6-8eac-0635982d2b2f'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-11</td>
@@ -2054,10 +2050,34 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td>Sri Lanka</td>
       <td>1 099,00 €</td>
       <td></td>
+      <td><span class='rp-badge on-sale'>PLANNED</span></td>
+      <td>2025-11-19</td>
+      <td>https://www.weroad.fr/destinations/sri-lanka-360-hiver/74dd4b80-bf3e-4930-bc3e-f0eefd2e1316</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/sri-lanka-360-hiver/74dd4b80-bf3e-4930-bc3e-f0eefd2e1316'>🔗</a></td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Oman</td>
+      <td>Oman 360°</td>
+      <td>Oman</td>
+      <td>1 149,00 €</td>
+      <td></td>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
-      <td>2025-11-28</td>
-      <td>https://www.weroad.fr/destinations/sri-lanka-360-hiver/70ff426d-905e-4e91-99e1-f5bfffe14768</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/sri-lanka-360-hiver/70ff426d-905e-4e91-99e1-f5bfffe14768'>🔗</a></td>
+      <td>2025-11-02</td>
+      <td>https://www.weroad.fr/destinations/oman/8dba8165-d999-4dae-b229-81e2dbb7e194</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/oman/8dba8165-d999-4dae-b229-81e2dbb7e194'>🔗</a></td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Ouzbékistan</td>
+      <td>Ouzbékistan 360° Winter</td>
+      <td>Ouzbékistan</td>
+      <td>1 149,00 €</td>
+      <td></td>
+      <td><span class='rp-badge almost'>ALMOST</span></td>
+      <td>2025-11-14</td>
+      <td>https://www.weroad.fr/destinations/ouzbekistan-hiver/0c00e967-5bcf-45f2-9162-090ed0a1c519</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/ouzbekistan-hiver/0c00e967-5bcf-45f2-9162-090ed0a1c519'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-11</td>
@@ -2072,54 +2092,6 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td><a target='_blank' href='https://www.weroad.fr/destinations/jordanie-trekking/08ab2340-2115-4c98-8b7a-c18643dfad8d'>🔗</a></td>
     </tr>
     <tr>
-      <td>2025-11</td>
-      <td>Équateur & Amazonie</td>
-      <td>Équateur & Amazonie Expedition</td>
-      <td>Équateur</td>
-      <td>1 299,00 €</td>
-      <td></td>
-      <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
-      <td>2025-11-01</td>
-      <td>https://www.weroad.fr/destinations/equateur-et-amazonie/77e9704e-9156-479d-a8d4-37cc34c836cc</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/equateur-et-amazonie/77e9704e-9156-479d-a8d4-37cc34c836cc'>🔗</a></td>
-    </tr>
-    <tr>
-      <td>2025-11</td>
-      <td>Indonésie</td>
-      <td>Indonésie 360° : Java, Bali et Gili</td>
-      <td>Indonésie</td>
-      <td>1 349,00 €</td>
-      <td></td>
-      <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
-      <td>2025-11-15</td>
-      <td>https://www.weroad.fr/destinations/indonesie-360/0c2b49fa-d541-43a4-9c97-8a4ad1f8af3b</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/indonesie-360/0c2b49fa-d541-43a4-9c97-8a4ad1f8af3b'>🔗</a></td>
-    </tr>
-    <tr>
-      <td>2025-11</td>
-      <td>Islande</td>
-      <td>Islande : à la poursuite des aurores boréales</td>
-      <td>Islande</td>
-      <td>1 449,00 €</td>
-      <td></td>
-      <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
-      <td>2025-11-09</td>
-      <td>https://www.weroad.fr/destinations/islande-aurores-boreales/4866ae55-2663-4cac-a2a2-0e07178a99f2</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/islande-aurores-boreales/4866ae55-2663-4cac-a2a2-0e07178a99f2'>🔗</a></td>
-    </tr>
-    <tr>
-      <td>2025-11</td>
-      <td>Mexique</td>
-      <td>Mexique 360° : à la découverte du Yucatán des Mayas</td>
-      <td>Mexique</td>
-      <td>1 549,00 €</td>
-      <td></td>
-      <td><span class='rp-badge almost'>ALMOST</span></td>
-      <td>2025-11-03</td>
-      <td>https://www.weroad.fr/destinations/mexique-yucatan-maya/42832fc4-b316-4127-a357-aa4e125dfd94</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/mexique-yucatan-maya/42832fc4-b316-4127-a357-aa4e125dfd94'>🔗</a></td>
-    </tr>
-    <tr>
       <td>2025-12</td>
       <td>Égypte</td>
       <td>Egypte Express: Le Caire et les Pyramides</td>
@@ -2127,33 +2099,57 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td>499,00 €</td>
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
-      <td>2025-12-18</td>
-      <td>https://www.weroad.fr/destinations/le-caire-express-egypt/4709ec22-7976-4372-a6c5-e84074610751</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/le-caire-express-egypt/4709ec22-7976-4372-a6c5-e84074610751'>🔗</a></td>
+      <td>2025-12-05</td>
+      <td>https://www.weroad.fr/destinations/le-caire-express-egypt/bfe5c5e8-2c20-4761-9093-e5941d18325c</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/le-caire-express-egypt/bfe5c5e8-2c20-4761-9093-e5941d18325c'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-12</td>
-      <td>Istanbul</td>
-      <td>Istanbul Express</td>
-      <td>Turquie</td>
+      <td>Bourgogne</td>
+      <td>Bourgogne Express : sur la route des Grands Crus</td>
+      <td>France</td>
       <td>599,00 €</td>
-      <td></td>
+      <td>7.7%</td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
-      <td>2025-12-10</td>
-      <td>https://www.weroad.fr/destinations/istanbul-express/c21e6694-997e-4a79-81ed-91541377a708</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/istanbul-express/c21e6694-997e-4a79-81ed-91541377a708'>🔗</a></td>
+      <td>2025-12-03</td>
+      <td>https://www.weroad.fr/destinations/bourgogne-express-route-grand-crus/a7cdffcd-8b37-4239-b0c0-4fca95ebb9b4</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/bourgogne-express-route-grand-crus/a7cdffcd-8b37-4239-b0c0-4fca95ebb9b4'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-12</td>
       <td>Allemagne</td>
       <td>Berlin Express</td>
       <td>Allemagne</td>
-      <td>649,00 €</td>
-      <td>7.2%</td>
-      <td><span class='rp-badge almost'>ALMOST</span></td>
+      <td>599,00 €</td>
+      <td>14.3%</td>
+      <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2025-12-18</td>
       <td>https://www.weroad.fr/destinations/allemagne-berlin-express-tour-weroadx/e5d6c677-81fc-44be-abbf-d9589f0ebf6d</td>
       <td><a target='_blank' href='https://www.weroad.fr/destinations/allemagne-berlin-express-tour-weroadx/e5d6c677-81fc-44be-abbf-d9589f0ebf6d'>🔗</a></td>
+    </tr>
+    <tr>
+      <td>2025-12</td>
+      <td>Portugal</td>
+      <td>Portugal Express</td>
+      <td>Portugal</td>
+      <td>699,00 €</td>
+      <td></td>
+      <td><span class='rp-badge on-sale'>PLANNED</span></td>
+      <td>2025-12-11</td>
+      <td>https://www.weroad.fr/destinations/portugal-express/41ebed0a-8848-4667-81c2-aee3ced921e3</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/portugal-express/41ebed0a-8848-4667-81c2-aee3ced921e3'>🔗</a></td>
+    </tr>
+    <tr>
+      <td>2025-12</td>
+      <td>Écosse</td>
+      <td>Écosse Express : Édimbourg et les Highlands comme un local</td>
+      <td>Royaume-Uni</td>
+      <td>849,00 €</td>
+      <td>5.6%</td>
+      <td><span class='rp-badge on-sale'>PLANNED</span></td>
+      <td>2025-12-24</td>
+      <td>https://www.weroad.fr/destinations/Ecosse-express-edimbourg-highlands/5f9ed4ab-37ca-4c18-ae89-ce3531680329</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/Ecosse-express-edimbourg-highlands/5f9ed4ab-37ca-4c18-ae89-ce3531680329'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-12</td>
@@ -2175,33 +2171,21 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td>949,00 €</td>
       <td>5.0%</td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
-      <td>2025-12-06</td>
-      <td>https://www.weroad.fr/destinations/prague-budapest-marches-noel-weroadx/3cce12b1-62f4-49ef-9931-4dced2893755</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/prague-budapest-marches-noel-weroadx/3cce12b1-62f4-49ef-9931-4dced2893755'>🔗</a></td>
+      <td>2025-12-13</td>
+      <td>https://www.weroad.fr/destinations/prague-budapest-marches-noel-weroadx/5f0863ec-25a3-42b2-9738-7bfb27a5e7ee</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/prague-budapest-marches-noel-weroadx/5f0863ec-25a3-42b2-9738-7bfb27a5e7ee'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-12</td>
-      <td>Italie</td>
-      <td>Italie: Rome, le Chianti, Florence, Luques et Pise</td>
-      <td>Italie</td>
-      <td>999,00 €</td>
+      <td>Kirghizistan</td>
+      <td>Kirghizistan Winter : entre lacs gelés et culture nomade</td>
+      <td>Kirghizistan</td>
+      <td>1 049,00 €</td>
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
-      <td>2025-12-06</td>
-      <td>https://www.weroad.fr/destinations/rome-chianti-florence-luques-pise/bc7c2fc4-bcd5-4f71-ab84-416db711ea86</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/rome-chianti-florence-luques-pise/bc7c2fc4-bcd5-4f71-ab84-416db711ea86'>🔗</a></td>
-    </tr>
-    <tr>
-      <td>2025-12</td>
-      <td>Oman</td>
-      <td>Oman 360°</td>
-      <td>Oman</td>
-      <td>1 149,00 €</td>
-      <td></td>
-      <td><span class='rp-badge almost'>ALMOST</span></td>
-      <td>2025-12-08</td>
-      <td>https://www.weroad.fr/destinations/oman/f4c73a6c-05c1-4f9b-b856-230d531c2003</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/oman/f4c73a6c-05c1-4f9b-b856-230d531c2003'>🔗</a></td>
+      <td>2025-12-28</td>
+      <td>https://www.weroad.fr/destinations/kirghizistan-winter/8fd3b586-dd7b-4f85-837d-64830c233a1c</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/kirghizistan-winter/8fd3b586-dd7b-4f85-837d-64830c233a1c'>🔗</a></td>
     </tr>
     <tr>
       <td>2025-12</td>
@@ -2241,6 +2225,18 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
     </tr>
     <tr>
       <td>2025-12</td>
+      <td>Guatemala</td>
+      <td>Guatemala 360° : Voyage au pays des volcans, nature sauvage et cultures anciennes</td>
+      <td>Guatemala</td>
+      <td>1 699,00 €</td>
+      <td></td>
+      <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
+      <td>2025-12-28</td>
+      <td>https://www.weroad.fr/destinations/guatemala-volcans-nature-cultures-anciennes/88ba867e-7ecd-498d-aecd-1b15c774819e</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/guatemala-volcans-nature-cultures-anciennes/88ba867e-7ecd-498d-aecd-1b15c774819e'>🔗</a></td>
+    </tr>
+    <tr>
+      <td>2025-12</td>
       <td>Tanzanie</td>
       <td>Kilimandjaro Expedition: Lemosho route and Safari</td>
       <td>Tanzanie</td>
@@ -2253,30 +2249,6 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
     </tr>
     <tr>
       <td>2026-01</td>
-      <td>Îles Canaries</td>
-      <td>Fuerteventura et Lanzarote  360° : entre plages et volcans</td>
-      <td>Espagne</td>
-      <td>999,00 €</td>
-      <td></td>
-      <td><span class='rp-badge on-sale'>PLANNED</span></td>
-      <td>2026-01-04</td>
-      <td>https://www.weroad.fr/destinations/fuerteventura-lanzarote-plages-volcans/d6c620e4-255d-421e-b47d-587a63ecb1d0</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/fuerteventura-lanzarote-plages-volcans/d6c620e4-255d-421e-b47d-587a63ecb1d0'>🔗</a></td>
-    </tr>
-    <tr>
-      <td>2026-01</td>
-      <td>Thaïlande</td>
-      <td>Thaïlande Beach Life Winter : Phuket, Krabi et Koh Lanta</td>
-      <td>Thaïlande</td>
-      <td>999,00 €</td>
-      <td></td>
-      <td><span class='rp-badge on-sale'>PLANNED</span></td>
-      <td>2026-01-15</td>
-      <td>https://www.weroad.fr/destinations/thailande-plage-hiver/0aa75913-2a0b-4e4c-a3d9-fea3deb052a4</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/thailande-plage-hiver/0aa75913-2a0b-4e4c-a3d9-fea3deb052a4'>🔗</a></td>
-    </tr>
-    <tr>
-      <td>2026-01</td>
       <td>Thaïlande</td>
       <td>Thaïlande Backpack Winter : Bangkok, Krabi et les îles Phi Phi</td>
       <td>Thaïlande</td>
@@ -2286,18 +2258,6 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td>2026-01-16</td>
       <td>https://www.weroad.fr/destinations/thailande-hiver-expedition/c49ac5ac-3b7b-4fe5-827c-d4faf88dcd50</td>
       <td><a target='_blank' href='https://www.weroad.fr/destinations/thailande-hiver-expedition/c49ac5ac-3b7b-4fe5-827c-d4faf88dcd50'>🔗</a></td>
-    </tr>
-    <tr>
-      <td>2026-01</td>
-      <td>Mexique</td>
-      <td>Mexique Beach Life : de Cancun à Isla Mujeres, plage et détente</td>
-      <td>Mexique</td>
-      <td>1 399,00 €</td>
-      <td></td>
-      <td><span class='rp-badge on-sale'>PLANNED</span></td>
-      <td>2026-01-03</td>
-      <td>https://www.weroad.fr/destinations/mexique-yucatan-beach-life/0b25142d-a8c0-4876-b686-09a5a65c2bec</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/mexique-yucatan-beach-life/0b25142d-a8c0-4876-b686-09a5a65c2bec'>🔗</a></td>
     </tr>
     <tr>
       <td>2026-01</td>
@@ -2324,6 +2284,30 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td><a target='_blank' href='https://www.weroad.fr/destinations/laponie-finlandaise/3197a02f-7b14-4dea-8e82-acdb48bae7da'>🔗</a></td>
     </tr>
     <tr>
+      <td>2026-01</td>
+      <td>Philippines</td>
+      <td>Philippines 360° : Bohol, Coron & Palawan</td>
+      <td>Philippines</td>
+      <td>2 099,00 €</td>
+      <td></td>
+      <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
+      <td>2026-01-18</td>
+      <td>https://www.weroad.fr/destinations/philippines-360/ec77381d-1d62-4a80-ab3a-d7a26fe5e148</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/philippines-360/ec77381d-1d62-4a80-ab3a-d7a26fe5e148'>🔗</a></td>
+    </tr>
+    <tr>
+      <td>2026-01</td>
+      <td>Patagonie</td>
+      <td>Patagonie Trekking : aventure à travers l’Argentine et le Chili</td>
+      <td>Argentine</td>
+      <td>2 999,00 €</td>
+      <td></td>
+      <td><span class='rp-badge on-sale'>PLANNED</span></td>
+      <td>2026-01-17</td>
+      <td>https://www.weroad.fr/destinations/patagonie-360/419673a8-9f13-4458-85ab-968b9de3a669</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/patagonie-360/419673a8-9f13-4458-85ab-968b9de3a669'>🔗</a></td>
+    </tr>
+    <tr>
       <td>2026-02</td>
       <td>Italie</td>
       <td>Italie : Carnaval de Venise : Masques, féérie & aperitivo</td>
@@ -2337,27 +2321,27 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
     </tr>
     <tr>
       <td>2026-02</td>
-      <td>Ouzbékistan</td>
-      <td>Ouzbékistan 360° Winter</td>
-      <td>Ouzbékistan</td>
-      <td>1 149,00 €</td>
+      <td>Irlande</td>
+      <td>Irlande Express : Dublin, Galway et au Connemara</td>
+      <td>Irlande</td>
+      <td>999,00 €</td>
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
-      <td>2026-02-23</td>
-      <td>https://www.weroad.fr/destinations/ouzbekistan-hiver/ec6387ab-c26c-4658-b57f-53d8c609906e</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/ouzbekistan-hiver/ec6387ab-c26c-4658-b57f-53d8c609906e'>🔗</a></td>
+      <td>2026-02-03</td>
+      <td>https://www.weroad.fr/destinations/irlande-express-tour-dublin-galway-connemara-weroadx/a5843663-f32e-4882-ab04-d8f741753d22</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/irlande-express-tour-dublin-galway-connemara-weroadx/a5843663-f32e-4882-ab04-d8f741753d22'>🔗</a></td>
     </tr>
     <tr>
       <td>2026-02</td>
-      <td>Maurice</td>
-      <td>Île Maurice Beach Life : Road trip entre plages paradisiaques et aventure locale</td>
-      <td>Maurice</td>
-      <td>1 199,00 €</td>
-      <td>9.8%</td>
+      <td>Vietnam</td>
+      <td>Vietnam 360° Backpack : de Hanoï à Hô Chi Minh</td>
+      <td>Viêt Nam</td>
+      <td>1 049,00 €</td>
+      <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
-      <td>2026-02-22</td>
-      <td>https://www.weroad.fr/destinations/ile-maurice-beach-life-road-trip-plages-aventure/16df8b33-89b1-43a4-ad3b-3cb1422e6475</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/ile-maurice-beach-life-road-trip-plages-aventure/16df8b33-89b1-43a4-ad3b-3cb1422e6475'>🔗</a></td>
+      <td>2026-02-27</td>
+      <td>https://www.weroad.fr/destinations/vietnam-backpack/7b83a658-97ee-4633-978d-9011289ae650</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/vietnam-backpack/7b83a658-97ee-4633-978d-9011289ae650'>🔗</a></td>
     </tr>
     <tr>
       <td>2026-02</td>
@@ -2373,6 +2357,18 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
     </tr>
     <tr>
       <td>2026-02</td>
+      <td>Thaïlande</td>
+      <td>Thaïlande 360° Winter : Bangkok, Chiang Mai et les îles Phi Phi</td>
+      <td>Thaïlande</td>
+      <td>1 699,00 €</td>
+      <td></td>
+      <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
+      <td>2026-02-01</td>
+      <td>https://www.weroad.fr/destinations/thailande-360-hiver/d2641a32-876c-4704-a2ba-63c1ac861539</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/thailande-360-hiver/d2641a32-876c-4704-a2ba-63c1ac861539'>🔗</a></td>
+    </tr>
+    <tr>
+      <td>2026-02</td>
       <td>Argentine</td>
       <td>Argentine et Brésil : une aventure sud-américaine authentique</td>
       <td>Argentine</td>
@@ -2385,30 +2381,6 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
     </tr>
     <tr>
       <td>2026-02</td>
-      <td>Sénégal</td>
-      <td>Sénégal :  Roadtrip entre terre et fleuve</td>
-      <td>Sénégal</td>
-      <td>2 050,00 €</td>
-      <td></td>
-      <td><span class='rp-badge almost'>ALMOST</span></td>
-      <td>2026-02-05</td>
-      <td>https://www.weroad.fr/destinations/senegal-entre-terre-et-fleuve/fe693f15-05c5-4004-9bd3-0b21ed6ae6fa</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/senegal-entre-terre-et-fleuve/fe693f15-05c5-4004-9bd3-0b21ed6ae6fa'>🔗</a></td>
-    </tr>
-    <tr>
-      <td>2026-02</td>
-      <td>Japon</td>
-      <td>Japon ski & snowboard : de Tokyo aux montagnes de Nagano</td>
-      <td>Japon</td>
-      <td>2 099,00 €</td>
-      <td></td>
-      <td><span class='rp-badge on-sale'>PLANNED</span></td>
-      <td>2026-02-22</td>
-      <td>https://www.weroad.fr/destinations/japon-ski-snowboard/5f816e11-0b35-400b-95f1-0925692dc2f0</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/japon-ski-snowboard/5f816e11-0b35-400b-95f1-0925692dc2f0'>🔗</a></td>
-    </tr>
-    <tr>
-      <td>2026-02</td>
       <td>Brésil</td>
       <td>Brésil : Double Carnaval à Rio & Salvador, Fiesta & plages</td>
       <td>Brésil</td>
@@ -2418,30 +2390,6 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td>2026-02-11</td>
       <td>https://www.weroad.fr/destinations/bresil-carnaval-rio-salvador-fiesta-plages/9fa3f4b0-0b21-45fb-9fbb-de6e846e1247</td>
       <td><a target='_blank' href='https://www.weroad.fr/destinations/bresil-carnaval-rio-salvador-fiesta-plages/9fa3f4b0-0b21-45fb-9fbb-de6e846e1247'>🔗</a></td>
-    </tr>
-    <tr>
-      <td>2026-03</td>
-      <td>Auvergne</td>
-      <td>Auvergne Express : à la découverte du Sancy</td>
-      <td>France</td>
-      <td>549,00 €</td>
-      <td></td>
-      <td><span class='rp-badge on-sale'>PLANNED</span></td>
-      <td>2026-03-28</td>
-      <td>https://www.weroad.fr/destinations/auvergne-express/4acf6fb8-2b08-4fa2-b19d-789885b70aa2</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/auvergne-express/4acf6fb8-2b08-4fa2-b19d-789885b70aa2'>🔗</a></td>
-    </tr>
-    <tr>
-      <td>2026-03</td>
-      <td>Islande</td>
-      <td>Islande Express : un aperçu de l'île de glace et de feu</td>
-      <td>Islande</td>
-      <td>899,00 €</td>
-      <td></td>
-      <td><span class='rp-badge on-sale'>PLANNED</span></td>
-      <td>2026-03-04</td>
-      <td>https://www.weroad.fr/destinations/islande-express/d3a67b3f-4e98-4e80-a54a-dca1f8c291e6</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/islande-express/d3a67b3f-4e98-4e80-a54a-dca1f8c291e6'>🔗</a></td>
     </tr>
     <tr>
       <td>2026-03</td>
@@ -2481,27 +2429,15 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
     </tr>
     <tr>
       <td>2026-03</td>
-      <td>Turquie</td>
-      <td>Turquie 360° : Istanbul, Cappadoce et Éphèse</td>
-      <td>Turquie</td>
-      <td>1 349,00 €</td>
+      <td>Mexique</td>
+      <td>Mexique Beach Life : de Cancun à Isla Mujeres, plage et détente</td>
+      <td>Mexique</td>
+      <td>1 399,00 €</td>
       <td></td>
-      <td><span class='rp-badge on-sale'>PLANNED</span></td>
-      <td>2026-03-21</td>
-      <td>https://www.weroad.fr/destinations/turquie-istanbul-cappadoce-ephese/a587c038-116a-4db7-9945-9a45e50c9ead</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/turquie-istanbul-cappadoce-ephese/a587c038-116a-4db7-9945-9a45e50c9ead'>🔗</a></td>
-    </tr>
-    <tr>
-      <td>2026-03</td>
-      <td>Thaïlande</td>
-      <td>Thaïlande 360° Winter : Bangkok, Chiang Mai et les îles Phi Phi</td>
-      <td>Thaïlande</td>
-      <td>1 699,00 €</td>
-      <td></td>
-      <td><span class='rp-badge on-sale'>PLANNED</span></td>
-      <td>2026-03-16</td>
-      <td>https://www.weroad.fr/destinations/thailande-360-hiver/cc1e2dee-2c9e-4b4a-9705-a8e4cf55d0cc</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/thailande-360-hiver/cc1e2dee-2c9e-4b4a-9705-a8e4cf55d0cc'>🔗</a></td>
+      <td><span class='rp-badge almost'>ALMOST</span></td>
+      <td>2026-03-03</td>
+      <td>https://www.weroad.fr/destinations/mexique-yucatan-beach-life/cfcca156-1834-4bd3-83ae-e3c429ab3ee2</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/mexique-yucatan-beach-life/cfcca156-1834-4bd3-83ae-e3c429ab3ee2'>🔗</a></td>
     </tr>
     <tr>
       <td>2026-03</td>
@@ -2516,40 +2452,76 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td><a target='_blank' href='https://www.weroad.fr/destinations/laos-cambodge-routes-temples-indochine/3a3d0763-6567-4060-b7cc-eb9ab1b3c06d'>🔗</a></td>
     </tr>
     <tr>
-      <td>2026-04</td>
-      <td>Albanie</td>
-      <td>Albanie Express Winter : histoire, nature et aventure</td>
-      <td>Albanie</td>
-      <td>549,00 €</td>
-      <td></td>
-      <td><span class='rp-badge on-sale'>PLANNED</span></td>
-      <td>2026-04-05</td>
-      <td>https://www.weroad.fr/destinations/albanie-express-hiver/b480d1d1-d49c-4b3c-939d-b41c7c3aa1a9</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/albanie-express-hiver/b480d1d1-d49c-4b3c-939d-b41c7c3aa1a9'>🔗</a></td>
-    </tr>
-    <tr>
-      <td>2026-04</td>
-      <td>Guatemala</td>
-      <td>Guatemala 360° : Voyage au pays des volcans, nature sauvage et cultures anciennes</td>
-      <td>Guatemala</td>
-      <td>1 699,00 €</td>
+      <td>2026-03</td>
+      <td>Sénégal</td>
+      <td>Sénégal :  Roadtrip entre terre et fleuve</td>
+      <td>Sénégal</td>
+      <td>2 050,00 €</td>
       <td></td>
       <td><span class='rp-badge almost'>ALMOST</span></td>
-      <td>2026-04-09</td>
-      <td>https://www.weroad.fr/destinations/guatemala-volcans-nature-cultures-anciennes/63bb2f26-bd1b-42c0-a675-00df9455154e</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/guatemala-volcans-nature-cultures-anciennes/63bb2f26-bd1b-42c0-a675-00df9455154e'>🔗</a></td>
+      <td>2026-03-19</td>
+      <td>https://www.weroad.fr/destinations/senegal-entre-terre-et-fleuve/7aa97544-55dd-4840-895d-972f0be9f05d</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/senegal-entre-terre-et-fleuve/7aa97544-55dd-4840-895d-972f0be9f05d'>🔗</a></td>
     </tr>
     <tr>
-      <td>2026-05</td>
-      <td>Bordeaux</td>
-      <td>Bordeaux Express : de la Dune du Pilat à la pointe du Cap-Ferret</td>
-      <td>France</td>
+      <td>2026-03</td>
+      <td>Japon</td>
+      <td>Japon ski & snowboard : de Tokyo aux montagnes de Nagano</td>
+      <td>Japon</td>
+      <td>2 099,00 €</td>
+      <td></td>
+      <td><span class='rp-badge on-sale'>PLANNED</span></td>
+      <td>2026-03-08</td>
+      <td>https://www.weroad.fr/destinations/japon-ski-snowboard/c8774c4c-e734-4f50-a2b3-56fa2464b4b1</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/japon-ski-snowboard/c8774c4c-e734-4f50-a2b3-56fa2464b4b1'>🔗</a></td>
+    </tr>
+    <tr>
+      <td>2026-04</td>
+      <td>Islande</td>
+      <td>Islande Express : un aperçu de l'île de glace et de feu</td>
+      <td>Islande</td>
       <td>899,00 €</td>
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
-      <td>2026-05-16</td>
-      <td>https://www.weroad.fr/destinations/bordeaux-dune-du-pilat/b591ef51-c824-4d7a-b28e-5bb2697d1bd1</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/bordeaux-dune-du-pilat/b591ef51-c824-4d7a-b28e-5bb2697d1bd1'>🔗</a></td>
+      <td>2026-04-08</td>
+      <td>https://www.weroad.fr/destinations/islande-express/a94da2cf-d5ad-439d-9c9f-e1b2bd77c52c</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/islande-express/a94da2cf-d5ad-439d-9c9f-e1b2bd77c52c'>🔗</a></td>
+    </tr>
+    <tr>
+      <td>2026-04</td>
+      <td>Maldives</td>
+      <td>Maldives Beach Life BackPack : snorkeling et détente à Maafushi</td>
+      <td>Maldives</td>
+      <td>1 179,00 €</td>
+      <td>5.6%</td>
+      <td><span class='rp-badge almost'>ALMOST</span></td>
+      <td>2026-04-05</td>
+      <td>https://www.weroad.fr/destinations/maldives-beach-life-detente-snorkeling-maafushi/84abb2fa-2684-4cf6-a885-8bd7e882334a</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/maldives-beach-life-detente-snorkeling-maafushi/84abb2fa-2684-4cf6-a885-8bd7e882334a'>🔗</a></td>
+    </tr>
+    <tr>
+      <td>2026-04</td>
+      <td>Maurice</td>
+      <td>Île Maurice Beach Life : Road trip entre plages paradisiaques et aventure locale</td>
+      <td>Maurice</td>
+      <td>1 199,00 €</td>
+      <td>9.8%</td>
+      <td><span class='rp-badge on-sale'>PLANNED</span></td>
+      <td>2026-04-19</td>
+      <td>https://www.weroad.fr/destinations/ile-maurice-beach-life-road-trip-plages-aventure/9a7c3514-9d03-4070-928f-98e77181e68a</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/ile-maurice-beach-life-road-trip-plages-aventure/9a7c3514-9d03-4070-928f-98e77181e68a'>🔗</a></td>
+    </tr>
+    <tr>
+      <td>2026-05</td>
+      <td>Thaïlande</td>
+      <td>Thaïlande Beach Life Winter : Phuket, Krabi et Koh Lanta</td>
+      <td>Thaïlande</td>
+      <td>999,00 €</td>
+      <td></td>
+      <td><span class='rp-badge on-sale'>PLANNED</span></td>
+      <td>2026-05-09</td>
+      <td>https://www.weroad.fr/destinations/thailande-plage-hiver/b7a3a3b5-39f3-4323-b82f-b40fdde0358c</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/thailande-plage-hiver/b7a3a3b5-39f3-4323-b82f-b40fdde0358c'>🔗</a></td>
     </tr>
     <tr>
       <td>2026-05</td>
@@ -2565,6 +2537,30 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
     </tr>
     <tr>
       <td>2026-05</td>
+      <td>Turquie</td>
+      <td>Turquie 360° : Istanbul, Cappadoce et Éphèse</td>
+      <td>Turquie</td>
+      <td>1 349,00 €</td>
+      <td></td>
+      <td><span class='rp-badge almost'>ALMOST</span></td>
+      <td>2026-05-01</td>
+      <td>https://www.weroad.fr/destinations/turquie-istanbul-cappadoce-ephese/597a75fe-83b7-428f-8942-c5c5e6959ce1</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/turquie-istanbul-cappadoce-ephese/597a75fe-83b7-428f-8942-c5c5e6959ce1'>🔗</a></td>
+    </tr>
+    <tr>
+      <td>2026-05</td>
+      <td>États-Unis</td>
+      <td>Usa Rock'n Drive : d'Atlanta à la Nouvelle-Orléans en passant par Nashville et Memphis</td>
+      <td>États-Unis d'Amérique</td>
+      <td>1 699,00 €</td>
+      <td></td>
+      <td><span class='rp-badge on-sale'>PLANNED</span></td>
+      <td>2026-05-15</td>
+      <td>https://www.weroad.fr/destinations/usa-rock-n-drive/1df59f3c-1d62-4acd-9673-a564641c24e0</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/usa-rock-n-drive/1df59f3c-1d62-4acd-9673-a564641c24e0'>🔗</a></td>
+    </tr>
+    <tr>
+      <td>2026-05</td>
       <td>Portugal</td>
       <td>Açores 360° : au coeur de l'archipel, de São Miguel à Faial et Terceira</td>
       <td>Portugal</td>
@@ -2577,15 +2573,15 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
     </tr>
     <tr>
       <td>2026-06</td>
-      <td>Bretagne</td>
-      <td>Bretagne Sud Beach Life : Quiberon et Belle-île-en-Mer</td>
+      <td>Auvergne</td>
+      <td>Auvergne Express : à la découverte du Sancy</td>
       <td>France</td>
-      <td>679,00 €</td>
+      <td>549,00 €</td>
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
-      <td>2026-06-13</td>
-      <td>https://www.weroad.fr/destinations/bretagne-quiberon-belle-ile/ce9e1721-2b6a-410c-9059-b0383f8beb0d</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/bretagne-quiberon-belle-ile/ce9e1721-2b6a-410c-9059-b0383f8beb0d'>🔗</a></td>
+      <td>2026-06-28</td>
+      <td>https://www.weroad.fr/destinations/auvergne-express/0a76d502-b743-43b6-b498-bff932f124c0</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/auvergne-express/0a76d502-b743-43b6-b498-bff932f124c0'>🔗</a></td>
     </tr>
     <tr>
       <td>2026-06</td>
@@ -2607,21 +2603,9 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td>1 199,00 €</td>
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
-      <td>2026-06-21</td>
-      <td>https://www.weroad.fr/destinations/thailande-ete-expedition/3fc78f4a-d22d-4465-9f15-e20c98932305</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/thailande-ete-expedition/3fc78f4a-d22d-4465-9f15-e20c98932305'>🔗</a></td>
-    </tr>
-    <tr>
-      <td>2026-06</td>
-      <td>États-Unis</td>
-      <td>Usa Rock'n Drive : d'Atlanta à la Nouvelle-Orléans en passant par Nashville et Memphis</td>
-      <td>États-Unis d'Amérique</td>
-      <td>1 699,00 €</td>
-      <td></td>
-      <td><span class='rp-badge on-sale'>PLANNED</span></td>
-      <td>2026-06-05</td>
-      <td>https://www.weroad.fr/destinations/usa-rock-n-drive/4fe5eb0a-1f45-43fb-ae36-4752de369ad4</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/usa-rock-n-drive/4fe5eb0a-1f45-43fb-ae36-4752de369ad4'>🔗</a></td>
+      <td>2026-06-07</td>
+      <td>https://www.weroad.fr/destinations/thailande-ete-expedition/ad595669-6e78-45de-9d81-275c8504e563</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/thailande-ete-expedition/ad595669-6e78-45de-9d81-275c8504e563'>🔗</a></td>
     </tr>
     <tr>
       <td>2026-07</td>
@@ -2637,15 +2621,39 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
     </tr>
     <tr>
       <td>2026-08</td>
-      <td>Maldives</td>
-      <td>Maldives Beach Life BackPack : snorkeling et détente à Maafushi</td>
-      <td>Maldives</td>
-      <td>1 179,00 €</td>
-      <td>5.6%</td>
+      <td>Gran Canaria</td>
+      <td>Gran Canaria Beach Life Express : l’île du soleil</td>
+      <td>Espagne</td>
+      <td>599,00 €</td>
+      <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
-      <td>2026-08-09</td>
-      <td>https://www.weroad.fr/destinations/maldives-beach-life-detente-snorkeling-maafushi/6f7e57ed-c650-4911-a20d-9f56ac5fa335</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/maldives-beach-life-detente-snorkeling-maafushi/6f7e57ed-c650-4911-a20d-9f56ac5fa335'>🔗</a></td>
+      <td>2026-08-26</td>
+      <td>https://www.weroad.fr/destinations/gran-canaria-express-ile-soleil/29e15ed6-9b1d-4203-9077-42e8d13dac30</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/gran-canaria-express-ile-soleil/29e15ed6-9b1d-4203-9077-42e8d13dac30'>🔗</a></td>
+    </tr>
+    <tr>
+      <td>2026-08</td>
+      <td>France</td>
+      <td>Méditerranée Beach Life Express : Montpellier, Sète et Camargue</td>
+      <td>France</td>
+      <td>599,00 €</td>
+      <td></td>
+      <td><span class='rp-badge almost'>ALMOST</span></td>
+      <td>2026-08-13</td>
+      <td>https://www.weroad.fr/destinations/mediterranee-express-montpellier-sete-camargue/620efe99-186e-4813-955c-6c04b089f39d</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/mediterranee-express-montpellier-sete-camargue/620efe99-186e-4813-955c-6c04b089f39d'>🔗</a></td>
+    </tr>
+    <tr>
+      <td>2026-08</td>
+      <td>Espagne</td>
+      <td>Fuerteventura Surf : aventure à la découverte de l'île</td>
+      <td>Espagne</td>
+      <td>999,00 €</td>
+      <td>9.1%</td>
+      <td><span class='rp-badge on-sale'>PLANNED</span></td>
+      <td>2026-08-08</td>
+      <td>https://www.weroad.fr/destinations/fuerteventura-surf-weroadx/2e20b69e-3510-44bc-a390-9668a46f4ea0</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/fuerteventura-surf-weroadx/2e20b69e-3510-44bc-a390-9668a46f4ea0'>🔗</a></td>
     </tr>
     <tr>
       <td>2026-08</td>
@@ -2661,39 +2669,51 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
     </tr>
     <tr>
       <td>2026-09</td>
-      <td>Gran Canaria</td>
-      <td>Gran Canaria Beach Life Express : l’île du soleil</td>
-      <td>Espagne</td>
-      <td>599,00 €</td>
+      <td>Bretagne</td>
+      <td>Bretagne Sud Beach Life : Quiberon et Belle-île-en-Mer</td>
+      <td>France</td>
+      <td>679,00 €</td>
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
-      <td>2026-09-30</td>
-      <td>https://www.weroad.fr/destinations/gran-canaria-express-ile-soleil/ac45904d-de30-45da-ae8b-3f3a48807a40</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/gran-canaria-express-ile-soleil/ac45904d-de30-45da-ae8b-3f3a48807a40'>🔗</a></td>
+      <td>2026-09-19</td>
+      <td>https://www.weroad.fr/destinations/bretagne-quiberon-belle-ile/a99d7106-eab8-41f3-9472-8b6b3e9cf734</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/bretagne-quiberon-belle-ile/a99d7106-eab8-41f3-9472-8b6b3e9cf734'>🔗</a></td>
     </tr>
     <tr>
-      <td>2026-09</td>
-      <td>Vietnam</td>
-      <td>Vietnam 360° Backpack : de Hanoï à Hô Chi Minh</td>
-      <td>Viêt Nam</td>
-      <td>1 049,00 €</td>
+      <td>2026-10</td>
+      <td>Bordeaux</td>
+      <td>Bordeaux Express : de la Dune du Pilat à la pointe du Cap-Ferret</td>
+      <td>France</td>
+      <td>899,00 €</td>
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
-      <td>2026-09-18</td>
-      <td>https://www.weroad.fr/destinations/vietnam-backpack/6ebada4f-7268-4bef-a237-60bd74f9cde1</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/vietnam-backpack/6ebada4f-7268-4bef-a237-60bd74f9cde1'>🔗</a></td>
+      <td>2026-10-17</td>
+      <td>https://www.weroad.fr/destinations/bordeaux-dune-du-pilat/6c5a46e8-effd-4477-956d-771430b394e3</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/bordeaux-dune-du-pilat/6c5a46e8-effd-4477-956d-771430b394e3'>🔗</a></td>
     </tr>
     <tr>
-      <td>2026-11</td>
+      <td>2026-10</td>
+      <td>Costa Rica</td>
+      <td>Costa Rica 360° : pura vida parmi les forêts tropicales</td>
+      <td>Costa Rica</td>
+      <td>1 799,00 €</td>
+      <td></td>
+      <td><span class='rp-badge on-sale'>PLANNED</span></td>
+      <td>2026-10-17</td>
+      <td>https://www.weroad.fr/destinations/costa-rica-360/2ba0714b-bd7e-4f16-9a35-9dd6d0e1c029</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/costa-rica-360/2ba0714b-bd7e-4f16-9a35-9dd6d0e1c029'>🔗</a></td>
+    </tr>
+    <tr>
+      <td>2026-10</td>
       <td>Chine</td>
       <td>Chine 360° : Pékin, Shanghai et la Grande Muraille</td>
       <td>Chine</td>
       <td>1 899,00 €</td>
       <td></td>
       <td><span class='rp-badge on-sale'>PLANNED</span></td>
-      <td>2026-11-20</td>
-      <td>https://www.weroad.fr/destinations/chine/a01b1a11-a4b5-4767-b6d8-6d28e6c532b9</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/chine/a01b1a11-a4b5-4767-b6d8-6d28e6c532b9'>🔗</a></td>
+      <td>2026-10-18</td>
+      <td>https://www.weroad.fr/destinations/chine/9b8ed7dc-12d4-445f-a95b-0febbd6c727a</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/chine/9b8ed7dc-12d4-445f-a95b-0febbd6c727a'>🔗</a></td>
     </tr>
     <tr>
       <td>2026-12</td>
@@ -2702,7 +2722,7 @@ Critères : Δ% ≥ **10%** ou Δ€ ≥ **150€**
       <td>Bulgarie</td>
       <td>699,00 €</td>
       <td></td>
-      <td><span class='rp-badge almost'>ALMOST</span></td>
+      <td><span class='rp-badge on-sale'>PLANNED</span></td>
       <td>2026-12-23</td>
       <td>https://www.weroad.fr/destinations/bulgarie-ski-express-bansko/8832ad88-d827-4684-8b3d-eb733e544d51</td>
       <td><a target='_blank' href='https://www.weroad.fr/destinations/bulgarie-ski-express-bansko/8832ad88-d827-4684-8b3d-eb733e544d51'>🔗</a></td>
@@ -2767,21 +2787,6 @@ ALMOST / CONFIRMED / GUARANTEED
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
-      <td>2025-09-26</td>
-      <td>2025-10-04</td>
-      <td>Inde : du Rajasthan au Taj Mahal</td>
-      <td>Inde</td>
-      <td>Inde</td>
-      <td>949,00 €</td>
-      <td>5.0%</td>
-      <td>NaN</td>
-      <td>15.0</td>
-      <td>None</td>
-      <td>https://www.weroad.fr/destinations/inde-rajasthan-taj-mahal/08c99925-1059-4f3a-9d34-a737157c5e11</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/inde-rajasthan-taj-mahal/08c99925-1059-4f3a-9d34-a737157c5e11'>🔗</a></td>
-    </tr>
-    <tr>
-      <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-09-27</td>
       <td>2025-10-01</td>
       <td>Maroc : Trekking au Mont Toubkal</td>
@@ -2794,96 +2799,6 @@ ALMOST / CONFIRMED / GUARANTEED
       <td>None</td>
       <td>https://www.weroad.fr/destinations/maroc-trekking-mount-toubkal/4310fa36-bb29-48fb-856e-359806887f88</td>
       <td><a target='_blank' href='https://www.weroad.fr/destinations/maroc-trekking-mount-toubkal/4310fa36-bb29-48fb-856e-359806887f88'>🔗</a></td>
-    </tr>
-    <tr>
-      <td><span class='rp-badge almost'>ALMOST</span></td>
-      <td>2025-09-27</td>
-      <td>2025-10-01</td>
-      <td>Naples et la côte Amalfitaine Express</td>
-      <td>Naples & la côte Amalfitaine</td>
-      <td>Italie</td>
-      <td>489,00 €</td>
-      <td>5.8%</td>
-      <td>NaN</td>
-      <td>15.0</td>
-      <td>None</td>
-      <td>https://www.weroad.fr/destinations/naples-cote-amalfitaine/d89f2758-79ec-4f9d-89c6-5bf9c0d317bc</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/naples-cote-amalfitaine/d89f2758-79ec-4f9d-89c6-5bf9c0d317bc'>🔗</a></td>
-    </tr>
-    <tr>
-      <td><span class='rp-badge almost'>ALMOST</span></td>
-      <td>2025-09-27</td>
-      <td>2025-10-04</td>
-      <td>Pouilles 360°</td>
-      <td>Pouilles</td>
-      <td>Italie</td>
-      <td>1 079,00 €</td>
-      <td>20.0%</td>
-      <td>NaN</td>
-      <td>19.0</td>
-      <td>None</td>
-      <td>https://www.weroad.fr/destinations/pouilles-360/090b8ef2-dd13-4002-b1ef-9ec04e9a9907</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/pouilles-360/090b8ef2-dd13-4002-b1ef-9ec04e9a9907'>🔗</a></td>
-    </tr>
-    <tr>
-      <td><span class='rp-badge almost'>ALMOST</span></td>
-      <td>2025-09-28</td>
-      <td>2025-10-03</td>
-      <td>New York 360° : à la découverte de Manhattan, Brooklyn et Harlem</td>
-      <td>New York</td>
-      <td>États-Unis d'Amérique</td>
-      <td>799,00 €</td>
-      <td>20.0%</td>
-      <td>NaN</td>
-      <td>11.0</td>
-      <td>None</td>
-      <td>https://www.weroad.fr/destinations/new-york/be94222b-4570-4efc-abc5-e9fffca1ace0</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/new-york/be94222b-4570-4efc-abc5-e9fffca1ace0'>🔗</a></td>
-    </tr>
-    <tr>
-      <td><span class='rp-badge almost'>ALMOST</span></td>
-      <td>2025-09-28</td>
-      <td>2025-10-06</td>
-      <td>Kirghizistan Winter : entre lacs gelés et culture nomade</td>
-      <td>Kirghizistan</td>
-      <td>Kirghizistan</td>
-      <td>1 049,00 €</td>
-      <td></td>
-      <td>NaN</td>
-      <td>15.0</td>
-      <td>None</td>
-      <td>https://www.weroad.fr/destinations/kirghizistan-winter/541ca4fc-cf41-4cb7-9a5a-c599eb83b6f8</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/kirghizistan-winter/541ca4fc-cf41-4cb7-9a5a-c599eb83b6f8'>🔗</a></td>
-    </tr>
-    <tr>
-      <td><span class='rp-badge almost'>ALMOST</span></td>
-      <td>2025-09-28</td>
-      <td>2025-10-05</td>
-      <td>Portugal Beach Life : Lisbonne & Algarve</td>
-      <td>le Portugal</td>
-      <td>Portugal</td>
-      <td>1 119,00 €</td>
-      <td>20.0%</td>
-      <td>NaN</td>
-      <td>15.0</td>
-      <td>None</td>
-      <td>https://www.weroad.fr/destinations/portugal-algarve-lisbonne/a8166e8a-3c9d-4ebe-9cb2-f8054daa5190</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/portugal-algarve-lisbonne/a8166e8a-3c9d-4ebe-9cb2-f8054daa5190'>🔗</a></td>
-    </tr>
-    <tr>
-      <td><span class='rp-badge almost'>ALMOST</span></td>
-      <td>2025-10-08</td>
-      <td>2025-10-12</td>
-      <td>Écosse Express : Édimbourg et les Highlands comme un local</td>
-      <td>Écosse</td>
-      <td>Royaume-Uni</td>
-      <td>849,00 €</td>
-      <td>5.6%</td>
-      <td>NaN</td>
-      <td>15.0</td>
-      <td>None</td>
-      <td>https://www.weroad.fr/destinations/Ecosse-express-edimbourg-highlands/f9928125-64ec-4fbb-aa0f-d830fc9f913c</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/Ecosse-express-edimbourg-highlands/f9928125-64ec-4fbb-aa0f-d830fc9f913c'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
@@ -2904,16 +2819,31 @@ ALMOST / CONFIRMED / GUARANTEED
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-10-11</td>
       <td>2025-10-18</td>
-      <td>Grèce 360: Athènes, les Météores et le Péloponnèse</td>
-      <td>Grecia</td>
-      <td>Grèce</td>
+      <td>Fuerteventura et Lanzarote  360° : entre plages et volcans</td>
+      <td>Îles Canaries</td>
+      <td>Espagne</td>
       <td>999,00 €</td>
       <td></td>
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td>https://www.weroad.fr/destinations/grece-360-athenes-meteores-peloponnese/1904e602-71d9-44e0-bdb3-a15833b24807</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/grece-360-athenes-meteores-peloponnese/1904e602-71d9-44e0-bdb3-a15833b24807'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/fuerteventura-lanzarote-plages-volcans/67e0eec3-90ff-4856-9dce-57691558b87d</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/fuerteventura-lanzarote-plages-volcans/67e0eec3-90ff-4856-9dce-57691558b87d'>🔗</a></td>
+    </tr>
+    <tr>
+      <td><span class='rp-badge almost'>ALMOST</span></td>
+      <td>2025-10-12</td>
+      <td>2025-10-19</td>
+      <td>Ibiza et Formentera Beach Life : aventure aux Baléares</td>
+      <td>Espagne</td>
+      <td>Espagne</td>
+      <td>1 099,00 €</td>
+      <td></td>
+      <td>NaN</td>
+      <td>15.0</td>
+      <td>None</td>
+      <td>https://www.weroad.fr/destinations/ibiza-formentera-baleares/3527020b-7f01-4028-a0c4-63035ed07ea9</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/ibiza-formentera-baleares/3527020b-7f01-4028-a0c4-63035ed07ea9'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
@@ -2977,6 +2907,36 @@ ALMOST / CONFIRMED / GUARANTEED
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
+      <td>2025-10-19</td>
+      <td>2025-10-28</td>
+      <td>Kenya : au cœur de l'Afrique entre safaris, plages et villages locaux</td>
+      <td>Kenya</td>
+      <td>Kenya</td>
+      <td>1 789,00 €</td>
+      <td></td>
+      <td>NaN</td>
+      <td>15.0</td>
+      <td>None</td>
+      <td>https://www.weroad.fr/destinations/kenya-afrique-safari-plage-village/c38a5ff2-25f2-4033-b1f3-829713cef607</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/kenya-afrique-safari-plage-village/c38a5ff2-25f2-4033-b1f3-829713cef607'>🔗</a></td>
+    </tr>
+    <tr>
+      <td><span class='rp-badge almost'>ALMOST</span></td>
+      <td>2025-10-22</td>
+      <td>2025-10-26</td>
+      <td>Suisse Express : aventure en train au coeur des Alpes entre lacs et montagnes</td>
+      <td>Suisse</td>
+      <td>Suisse</td>
+      <td>949,00 €</td>
+      <td></td>
+      <td>NaN</td>
+      <td>15.0</td>
+      <td>None</td>
+      <td>https://www.weroad.fr/destinations/suisse-express-alpes-lacs-montagnes/28df726d-d517-4b7c-8072-a9c1ff638411</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/suisse-express-alpes-lacs-montagnes/28df726d-d517-4b7c-8072-a9c1ff638411'>🔗</a></td>
+    </tr>
+    <tr>
+      <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-10-25</td>
       <td>2025-11-01</td>
       <td>Pays Baltes : Tallinn, Riga et Vilnius</td>
@@ -2992,18 +2952,33 @@ ALMOST / CONFIRMED / GUARANTEED
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
-      <td>2025-10-30</td>
-      <td>2025-11-03</td>
-      <td>Méditerranée Beach Life Express : Montpellier, Sète et Camargue</td>
-      <td>France</td>
-      <td>France</td>
-      <td>599,00 €</td>
+      <td>2025-10-25</td>
+      <td>2025-11-04</td>
+      <td>Équateur & Amazonie Expedition</td>
+      <td>Équateur & Amazonie</td>
+      <td>Équateur</td>
+      <td>1 299,00 €</td>
       <td></td>
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td>https://www.weroad.fr/destinations/mediterranee-express-montpellier-sete-camargue/dc5c957d-9752-4248-bdcd-e0df79513b15</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/mediterranee-express-montpellier-sete-camargue/dc5c957d-9752-4248-bdcd-e0df79513b15'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/equateur-et-amazonie/89e92461-4baa-44bf-b886-18280e75526d</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/equateur-et-amazonie/89e92461-4baa-44bf-b886-18280e75526d'>🔗</a></td>
+    </tr>
+    <tr>
+      <td><span class='rp-badge almost'>ALMOST</span></td>
+      <td>2025-11-01</td>
+      <td>2025-11-08</td>
+      <td>Grèce 360: Athènes, les Météores et le Péloponnèse</td>
+      <td>Grecia</td>
+      <td>Grèce</td>
+      <td>999,00 €</td>
+      <td></td>
+      <td>NaN</td>
+      <td>15.0</td>
+      <td>None</td>
+      <td>https://www.weroad.fr/destinations/grece-360-athenes-meteores-peloponnese/6c8c5634-ab2c-49b6-8eac-0635982d2b2f</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/grece-360-athenes-meteores-peloponnese/6c8c5634-ab2c-49b6-8eac-0635982d2b2f'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
@@ -3019,21 +2994,6 @@ ALMOST / CONFIRMED / GUARANTEED
       <td>None</td>
       <td>https://www.weroad.fr/destinations/mexique-yucatan-maya/42832fc4-b316-4127-a357-aa4e125dfd94</td>
       <td><a target='_blank' href='https://www.weroad.fr/destinations/mexique-yucatan-maya/42832fc4-b316-4127-a357-aa4e125dfd94'>🔗</a></td>
-    </tr>
-    <tr>
-      <td><span class='rp-badge almost'>ALMOST</span></td>
-      <td>2025-11-07</td>
-      <td>2025-11-11</td>
-      <td>Budapest Express</td>
-      <td>Hongrie</td>
-      <td>Hongrie</td>
-      <td>599,00 €</td>
-      <td></td>
-      <td>NaN</td>
-      <td>15.0</td>
-      <td>None</td>
-      <td>https://www.weroad.fr/destinations/budapest-express/997c4112-821d-42d3-8295-05400366e503</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/budapest-express/997c4112-821d-42d3-8295-05400366e503'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
@@ -3082,6 +3042,21 @@ ALMOST / CONFIRMED / GUARANTEED
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
+      <td>2025-11-14</td>
+      <td>2025-11-22</td>
+      <td>Ouzbékistan 360° Winter</td>
+      <td>Ouzbékistan</td>
+      <td>Ouzbékistan</td>
+      <td>1 149,00 €</td>
+      <td></td>
+      <td>NaN</td>
+      <td>15.0</td>
+      <td>None</td>
+      <td>https://www.weroad.fr/destinations/ouzbekistan-hiver/0c00e967-5bcf-45f2-9162-090ed0a1c519</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/ouzbekistan-hiver/0c00e967-5bcf-45f2-9162-090ed0a1c519'>🔗</a></td>
+    </tr>
+    <tr>
+      <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-11-15</td>
       <td>2025-11-22</td>
       <td>Jordanie Trekking</td>
@@ -3113,21 +3088,6 @@ ALMOST / CONFIRMED / GUARANTEED
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2025-11-23</td>
-      <td>2025-12-02</td>
-      <td>Kenya : au cœur de l'Afrique entre safaris, plages et villages locaux</td>
-      <td>Kenya</td>
-      <td>Kenya</td>
-      <td>1 789,00 €</td>
-      <td></td>
-      <td>NaN</td>
-      <td>15.0</td>
-      <td>None</td>
-      <td>https://www.weroad.fr/destinations/kenya-afrique-safari-plage-village/47543c07-3a00-4029-913d-da11f9d9d789</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/kenya-afrique-safari-plage-village/47543c07-3a00-4029-913d-da11f9d9d789'>🔗</a></td>
-    </tr>
-    <tr>
-      <td><span class='rp-badge almost'>ALMOST</span></td>
-      <td>2025-11-23</td>
       <td>2025-12-04</td>
       <td>Colombie 360° : Bogota, Medellin, Carthagène et parc Tayrona</td>
       <td>Colombie</td>
@@ -3142,23 +3102,8 @@ ALMOST / CONFIRMED / GUARANTEED
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
-      <td>2025-11-25</td>
-      <td>2025-12-07</td>
-      <td>Philippines 360° : Bohol, Coron & Palawan</td>
-      <td>Philippines</td>
-      <td>Philippines</td>
-      <td>2 099,00 €</td>
-      <td></td>
-      <td>NaN</td>
-      <td>15.0</td>
-      <td>None</td>
-      <td>https://www.weroad.fr/destinations/philippines-360/9bae06ec-7aee-4fdd-99aa-6b461ed692e7</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/philippines-360/9bae06ec-7aee-4fdd-99aa-6b461ed692e7'>🔗</a></td>
-    </tr>
-    <tr>
-      <td><span class='rp-badge almost'>ALMOST</span></td>
-      <td>2025-12-06</td>
-      <td>2025-12-12</td>
+      <td>2025-12-13</td>
+      <td>2025-12-19</td>
       <td>Prague, Vienne et Budapest : édition Marchés de Noël</td>
       <td>Hungary</td>
       <td>Hongrie</td>
@@ -3167,23 +3112,8 @@ ALMOST / CONFIRMED / GUARANTEED
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td>https://www.weroad.fr/destinations/prague-budapest-marches-noel-weroadx/3cce12b1-62f4-49ef-9931-4dced2893755</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/prague-budapest-marches-noel-weroadx/3cce12b1-62f4-49ef-9931-4dced2893755'>🔗</a></td>
-    </tr>
-    <tr>
-      <td><span class='rp-badge almost'>ALMOST</span></td>
-      <td>2025-12-08</td>
-      <td>2025-12-16</td>
-      <td>Oman 360°</td>
-      <td>Oman</td>
-      <td>Oman</td>
-      <td>1 149,00 €</td>
-      <td></td>
-      <td>NaN</td>
-      <td>15.0</td>
-      <td>None</td>
-      <td>https://www.weroad.fr/destinations/oman/f4c73a6c-05c1-4f9b-b856-230d531c2003</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/oman/f4c73a6c-05c1-4f9b-b856-230d531c2003'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/prague-budapest-marches-noel-weroadx/5f0863ec-25a3-42b2-9738-7bfb27a5e7ee</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/prague-budapest-marches-noel-weroadx/5f0863ec-25a3-42b2-9738-7bfb27a5e7ee'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
@@ -3199,21 +3129,6 @@ ALMOST / CONFIRMED / GUARANTEED
       <td>None</td>
       <td>https://www.weroad.fr/destinations/ile-reunion-cirques-volcan-plages/1d152290-dbfc-413e-baee-48ddcd2a4ffb</td>
       <td><a target='_blank' href='https://www.weroad.fr/destinations/ile-reunion-cirques-volcan-plages/1d152290-dbfc-413e-baee-48ddcd2a4ffb'>🔗</a></td>
-    </tr>
-    <tr>
-      <td><span class='rp-badge almost'>ALMOST</span></td>
-      <td>2025-12-18</td>
-      <td>2025-12-22</td>
-      <td>Berlin Express</td>
-      <td>Allemagne</td>
-      <td>Allemagne</td>
-      <td>649,00 €</td>
-      <td>7.2%</td>
-      <td>NaN</td>
-      <td>11.0</td>
-      <td>None</td>
-      <td>https://www.weroad.fr/destinations/allemagne-berlin-express-tour-weroadx/e5d6c677-81fc-44be-abbf-d9589f0ebf6d</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/allemagne-berlin-express-tour-weroadx/e5d6c677-81fc-44be-abbf-d9589f0ebf6d'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
@@ -3262,21 +3177,6 @@ ALMOST / CONFIRMED / GUARANTEED
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
-      <td>2026-02-05</td>
-      <td>2026-02-14</td>
-      <td>Sénégal :  Roadtrip entre terre et fleuve</td>
-      <td>Sénégal</td>
-      <td>Sénégal</td>
-      <td>2 050,00 €</td>
-      <td></td>
-      <td>NaN</td>
-      <td>15.0</td>
-      <td>None</td>
-      <td>https://www.weroad.fr/destinations/senegal-entre-terre-et-fleuve/fe693f15-05c5-4004-9bd3-0b21ed6ae6fa</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/senegal-entre-terre-et-fleuve/fe693f15-05c5-4004-9bd3-0b21ed6ae6fa'>🔗</a></td>
-    </tr>
-    <tr>
-      <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2026-02-11</td>
       <td>2026-02-19</td>
       <td>Brésil : Double Carnaval à Rio & Salvador, Fiesta & plages</td>
@@ -3322,6 +3222,36 @@ ALMOST / CONFIRMED / GUARANTEED
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
+      <td>2026-03-03</td>
+      <td>2026-03-10</td>
+      <td>Mexique Beach Life : de Cancun à Isla Mujeres, plage et détente</td>
+      <td>Mexique</td>
+      <td>Mexique</td>
+      <td>1 399,00 €</td>
+      <td></td>
+      <td>NaN</td>
+      <td>15.0</td>
+      <td>None</td>
+      <td>https://www.weroad.fr/destinations/mexique-yucatan-beach-life/cfcca156-1834-4bd3-83ae-e3c429ab3ee2</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/mexique-yucatan-beach-life/cfcca156-1834-4bd3-83ae-e3c429ab3ee2'>🔗</a></td>
+    </tr>
+    <tr>
+      <td><span class='rp-badge almost'>ALMOST</span></td>
+      <td>2026-03-19</td>
+      <td>2026-03-28</td>
+      <td>Sénégal :  Roadtrip entre terre et fleuve</td>
+      <td>Sénégal</td>
+      <td>Sénégal</td>
+      <td>2 050,00 €</td>
+      <td></td>
+      <td>NaN</td>
+      <td>15.0</td>
+      <td>None</td>
+      <td>https://www.weroad.fr/destinations/senegal-entre-terre-et-fleuve/7aa97544-55dd-4840-895d-972f0be9f05d</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/senegal-entre-terre-et-fleuve/7aa97544-55dd-4840-895d-972f0be9f05d'>🔗</a></td>
+    </tr>
+    <tr>
+      <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2026-03-20</td>
       <td>2026-03-31</td>
       <td>Laos et Cambodge : Sur les routes des temples d’Indochine</td>
@@ -3352,18 +3282,33 @@ ALMOST / CONFIRMED / GUARANTEED
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
-      <td>2026-04-09</td>
-      <td>2026-04-20</td>
-      <td>Guatemala 360° : Voyage au pays des volcans, nature sauvage et cultures anciennes</td>
-      <td>Guatemala</td>
-      <td>Guatemala</td>
-      <td>1 699,00 €</td>
-      <td></td>
-      <td>2.0</td>
+      <td>2026-04-05</td>
+      <td>2026-04-12</td>
+      <td>Maldives Beach Life BackPack : snorkeling et détente à Maafushi</td>
+      <td>Maldives</td>
+      <td>Maldives</td>
+      <td>1 179,00 €</td>
+      <td>5.6%</td>
+      <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td>https://www.weroad.fr/destinations/guatemala-volcans-nature-cultures-anciennes/63bb2f26-bd1b-42c0-a675-00df9455154e</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/guatemala-volcans-nature-cultures-anciennes/63bb2f26-bd1b-42c0-a675-00df9455154e'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/maldives-beach-life-detente-snorkeling-maafushi/84abb2fa-2684-4cf6-a885-8bd7e882334a</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/maldives-beach-life-detente-snorkeling-maafushi/84abb2fa-2684-4cf6-a885-8bd7e882334a'>🔗</a></td>
+    </tr>
+    <tr>
+      <td><span class='rp-badge almost'>ALMOST</span></td>
+      <td>2026-05-01</td>
+      <td>2026-05-09</td>
+      <td>Turquie 360° : Istanbul, Cappadoce et Éphèse</td>
+      <td>Turquie</td>
+      <td>Turquie</td>
+      <td>1 349,00 €</td>
+      <td></td>
+      <td>NaN</td>
+      <td>17.0</td>
+      <td>None</td>
+      <td>https://www.weroad.fr/destinations/turquie-istanbul-cappadoce-ephese/597a75fe-83b7-428f-8942-c5c5e6959ce1</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/turquie-istanbul-cappadoce-ephese/597a75fe-83b7-428f-8942-c5c5e6959ce1'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
@@ -3397,6 +3342,21 @@ ALMOST / CONFIRMED / GUARANTEED
     </tr>
     <tr>
       <td><span class='rp-badge almost'>ALMOST</span></td>
+      <td>2026-08-13</td>
+      <td>2026-08-17</td>
+      <td>Méditerranée Beach Life Express : Montpellier, Sète et Camargue</td>
+      <td>France</td>
+      <td>France</td>
+      <td>599,00 €</td>
+      <td></td>
+      <td>NaN</td>
+      <td>15.0</td>
+      <td>None</td>
+      <td>https://www.weroad.fr/destinations/mediterranee-express-montpellier-sete-camargue/620efe99-186e-4813-955c-6c04b089f39d</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/mediterranee-express-montpellier-sete-camargue/620efe99-186e-4813-955c-6c04b089f39d'>🔗</a></td>
+    </tr>
+    <tr>
+      <td><span class='rp-badge almost'>ALMOST</span></td>
       <td>2026-08-28</td>
       <td>2026-09-07</td>
       <td>Kirghizistan Actif : chevaux, yourtes et rando</td>
@@ -3409,21 +3369,6 @@ ALMOST / CONFIRMED / GUARANTEED
       <td>None</td>
       <td>https://www.weroad.fr/destinations/kirghizistan-actif-trekking-chevaux-weroadx/d436331b-8e23-4bde-92cc-d3aeefe79952</td>
       <td><a target='_blank' href='https://www.weroad.fr/destinations/kirghizistan-actif-trekking-chevaux-weroadx/d436331b-8e23-4bde-92cc-d3aeefe79952'>🔗</a></td>
-    </tr>
-    <tr>
-      <td><span class='rp-badge almost'>ALMOST</span></td>
-      <td>2026-12-23</td>
-      <td>2026-12-28</td>
-      <td>Bulgarie Ski Express : Bansko entre pistes, spa et fête !</td>
-      <td>Bulgarie</td>
-      <td>Bulgarie</td>
-      <td>699,00 €</td>
-      <td></td>
-      <td>NaN</td>
-      <td>15.0</td>
-      <td>None</td>
-      <td>https://www.weroad.fr/destinations/bulgarie-ski-express-bansko/8832ad88-d827-4684-8b3d-eb733e544d51</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/bulgarie-ski-express-bansko/8832ad88-d827-4684-8b3d-eb733e544d51'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
@@ -3454,6 +3399,21 @@ ALMOST / CONFIRMED / GUARANTEED
       <td>None</td>
       <td>https://www.weroad.fr/destinations/maroc-marrakech-fes-rabat-desert/2e17500f-c6fb-4880-949e-390fd175f648</td>
       <td><a target='_blank' href='https://www.weroad.fr/destinations/maroc-marrakech-fes-rabat-desert/2e17500f-c6fb-4880-949e-390fd175f648'>🔗</a></td>
+    </tr>
+    <tr>
+      <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
+      <td>2025-09-13</td>
+      <td>2025-09-21</td>
+      <td>Égypte 360° : des pyramides à la mer d'Hurgada</td>
+      <td>Égypte</td>
+      <td>Égypte</td>
+      <td>1 079,00 €</td>
+      <td>10.0%</td>
+      <td>NaN</td>
+      <td>15.0</td>
+      <td>None</td>
+      <td>https://www.weroad.fr/destinations/egypte-360/2d57b987-0463-465e-b916-636dd0cc50cf</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/egypte-360/2d57b987-0463-465e-b916-636dd0cc50cf'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
@@ -3555,7 +3515,7 @@ ALMOST / CONFIRMED / GUARANTEED
       <td>919,00 €</td>
       <td>12.4%</td>
       <td>NaN</td>
-      <td>19.0</td>
+      <td>7.0</td>
       <td>None</td>
       <td>https://www.weroad.fr/destinations/dolomites/cd862058-7484-4ee5-b21b-7152baf7951f</td>
       <td><a target='_blank' href='https://www.weroad.fr/destinations/dolomites/cd862058-7484-4ee5-b21b-7152baf7951f'>🔗</a></td>
@@ -3563,17 +3523,17 @@ ALMOST / CONFIRMED / GUARANTEED
     <tr>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
       <td>2025-09-27</td>
-      <td>2025-10-05</td>
-      <td>Égypte 360° : des pyramides à la mer d'Hurgada</td>
-      <td>Égypte</td>
-      <td>Égypte</td>
-      <td>1 079,00 €</td>
-      <td>10.0%</td>
+      <td>2025-10-07</td>
+      <td>Malaisie : de Kuala Lumpur à Bornéo</td>
+      <td>Malaisie</td>
+      <td>Malaisie</td>
+      <td>1 599,00 €</td>
+      <td></td>
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td>https://www.weroad.fr/destinations/egypte-360/e960081b-2c39-4711-946d-17c93f179947</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/egypte-360/e960081b-2c39-4711-946d-17c93f179947'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/malaisie-kuala-lumpur-borneo/c9aa87e8-3250-409f-b1dc-a334ddd342ee</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/malaisie-kuala-lumpur-borneo/c9aa87e8-3250-409f-b1dc-a334ddd342ee'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
@@ -3607,6 +3567,21 @@ ALMOST / CONFIRMED / GUARANTEED
     </tr>
     <tr>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
+      <td>2025-10-10</td>
+      <td>2025-10-18</td>
+      <td>Népal 360° : entre les temples de Katmandou et les sommets de l'Annapurna</td>
+      <td>Népal</td>
+      <td>Népal</td>
+      <td>999,00 €</td>
+      <td></td>
+      <td>NaN</td>
+      <td>15.0</td>
+      <td>None</td>
+      <td>https://www.weroad.fr/destinations/nepal/0e864cce-fbcb-4698-a26a-e2d8e7591f3d</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/nepal/0e864cce-fbcb-4698-a26a-e2d8e7591f3d'>🔗</a></td>
+    </tr>
+    <tr>
+      <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
       <td>2025-10-11</td>
       <td>2025-10-22</td>
       <td>Bolivie & Chili : de Santiago à La Paz</td>
@@ -3619,6 +3594,21 @@ ALMOST / CONFIRMED / GUARANTEED
       <td>None</td>
       <td>https://www.weroad.fr/destinations/bolivie-et-chili-360/b39ff2f8-7e30-4f6e-bdff-a59433b5da85</td>
       <td><a target='_blank' href='https://www.weroad.fr/destinations/bolivie-et-chili-360/b39ff2f8-7e30-4f6e-bdff-a59433b5da85'>🔗</a></td>
+    </tr>
+    <tr>
+      <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
+      <td>2025-10-12</td>
+      <td>2025-10-20</td>
+      <td>Inde : du Rajasthan au Taj Mahal</td>
+      <td>Inde</td>
+      <td>Inde</td>
+      <td>999,00 €</td>
+      <td></td>
+      <td>NaN</td>
+      <td>15.0</td>
+      <td>None</td>
+      <td>https://www.weroad.fr/destinations/inde-rajasthan-taj-mahal/e39b83ce-32a1-4f98-8d35-e6437f87c7c1</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/inde-rajasthan-taj-mahal/e39b83ce-32a1-4f98-8d35-e6437f87c7c1'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
@@ -3637,6 +3627,21 @@ ALMOST / CONFIRMED / GUARANTEED
     </tr>
     <tr>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
+      <td>2025-10-18</td>
+      <td>2025-11-01</td>
+      <td>États-Unis : Road Trip sur la route 66 de Chicago à Los Angeles</td>
+      <td>Route 66</td>
+      <td>États-Unis d'Amérique</td>
+      <td>1 899,00 €</td>
+      <td></td>
+      <td>NaN</td>
+      <td>15.0</td>
+      <td>None</td>
+      <td>https://www.weroad.fr/destinations/road-trip-route-66-chicago-los-angeles/9f58586f-b92a-455d-a8e1-d404f1abdb85</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/road-trip-route-66-chicago-los-angeles/9f58586f-b92a-455d-a8e1-d404f1abdb85'>🔗</a></td>
+    </tr>
+    <tr>
+      <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
       <td>2025-10-26</td>
       <td>2025-11-06</td>
       <td>Far West 360° : Los Angeles, Las Vegas et les grands parcs américains</td>
@@ -3652,63 +3657,18 @@ ALMOST / CONFIRMED / GUARANTEED
     </tr>
     <tr>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
-      <td>2025-10-28</td>
-      <td>2025-11-09</td>
-      <td>Patagonie Trekking : aventure à travers l’Argentine et le Chili</td>
-      <td>Patagonie</td>
-      <td>Argentine</td>
-      <td>2 999,00 €</td>
+      <td>2025-11-02</td>
+      <td>2025-11-10</td>
+      <td>Oman 360°</td>
+      <td>Oman</td>
+      <td>Oman</td>
+      <td>1 149,00 €</td>
       <td></td>
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td>https://www.weroad.fr/destinations/patagonie-360/5857150e-6900-42bc-9490-3341afa4190e</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/patagonie-360/5857150e-6900-42bc-9490-3341afa4190e'>🔗</a></td>
-    </tr>
-    <tr>
-      <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
-      <td>2025-11-01</td>
-      <td>2025-11-11</td>
-      <td>Équateur & Amazonie Expedition</td>
-      <td>Équateur & Amazonie</td>
-      <td>Équateur</td>
-      <td>1 299,00 €</td>
-      <td></td>
-      <td>NaN</td>
-      <td>15.0</td>
-      <td>None</td>
-      <td>https://www.weroad.fr/destinations/equateur-et-amazonie/77e9704e-9156-479d-a8d4-37cc34c836cc</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/equateur-et-amazonie/77e9704e-9156-479d-a8d4-37cc34c836cc'>🔗</a></td>
-    </tr>
-    <tr>
-      <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
-      <td>2025-11-04</td>
-      <td>2025-11-12</td>
-      <td>Népal 360° : entre les temples de Katmandou et les sommets de l'Annapurna</td>
-      <td>Népal</td>
-      <td>Népal</td>
-      <td>999,00 €</td>
-      <td></td>
-      <td>NaN</td>
-      <td>15.0</td>
-      <td>None</td>
-      <td>https://www.weroad.fr/destinations/nepal/a40a2420-cf42-42f8-82d0-95a013b31b4f</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/nepal/a40a2420-cf42-42f8-82d0-95a013b31b4f'>🔗</a></td>
-    </tr>
-    <tr>
-      <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
-      <td>2025-11-09</td>
-      <td>2025-11-16</td>
-      <td>Islande : à la poursuite des aurores boréales</td>
-      <td>Islande</td>
-      <td>Islande</td>
-      <td>1 449,00 €</td>
-      <td></td>
-      <td>NaN</td>
-      <td>15.0</td>
-      <td>None</td>
-      <td>https://www.weroad.fr/destinations/islande-aurores-boreales/4866ae55-2663-4cac-a2a2-0e07178a99f2</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/islande-aurores-boreales/4866ae55-2663-4cac-a2a2-0e07178a99f2'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/oman/8dba8165-d999-4dae-b229-81e2dbb7e194</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/oman/8dba8165-d999-4dae-b229-81e2dbb7e194'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
@@ -3724,6 +3684,21 @@ ALMOST / CONFIRMED / GUARANTEED
       <td>None</td>
       <td>https://www.weroad.fr/destinations/floride/c763c529-259d-4aa7-a56d-eedb7277cd0d</td>
       <td><a target='_blank' href='https://www.weroad.fr/destinations/floride/c763c529-259d-4aa7-a56d-eedb7277cd0d'>🔗</a></td>
+    </tr>
+    <tr>
+      <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
+      <td>2025-11-14</td>
+      <td>2025-11-21</td>
+      <td>Islande : à la poursuite des aurores boréales</td>
+      <td>Islande</td>
+      <td>Islande</td>
+      <td>1 449,00 €</td>
+      <td></td>
+      <td>NaN</td>
+      <td>15.0</td>
+      <td>None</td>
+      <td>https://www.weroad.fr/destinations/islande-aurores-boreales/4c76cd50-42c1-42e0-81c7-9eba938eee99</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/islande-aurores-boreales/4c76cd50-42c1-42e0-81c7-9eba938eee99'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
@@ -3772,18 +3747,33 @@ ALMOST / CONFIRMED / GUARANTEED
     </tr>
     <tr>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
-      <td>2025-11-28</td>
-      <td>2025-12-09</td>
-      <td>Sri Lanka 360° Winter</td>
-      <td>Sri Lanka</td>
-      <td>Sri Lanka</td>
-      <td>1 099,00 €</td>
+      <td>2025-11-29</td>
+      <td>2025-12-05</td>
+      <td>Laponie suédoise: à la poursuite des aurores boréales</td>
+      <td>Suède</td>
+      <td>Suède</td>
+      <td>1 599,00 €</td>
+      <td></td>
+      <td>NaN</td>
+      <td>11.0</td>
+      <td>None</td>
+      <td>https://www.weroad.fr/destinations/laponie-suedoise/463a135f-d1f2-4223-9aa2-9fca7706c165</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/laponie-suedoise/463a135f-d1f2-4223-9aa2-9fca7706c165'>🔗</a></td>
+    </tr>
+    <tr>
+      <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
+      <td>2025-12-28</td>
+      <td>2026-01-08</td>
+      <td>Guatemala 360° : Voyage au pays des volcans, nature sauvage et cultures anciennes</td>
+      <td>Guatemala</td>
+      <td>Guatemala</td>
+      <td>1 699,00 €</td>
       <td></td>
       <td>NaN</td>
       <td>15.0</td>
       <td>None</td>
-      <td>https://www.weroad.fr/destinations/sri-lanka-360-hiver/70ff426d-905e-4e91-99e1-f5bfffe14768</td>
-      <td><a target='_blank' href='https://www.weroad.fr/destinations/sri-lanka-360-hiver/70ff426d-905e-4e91-99e1-f5bfffe14768'>🔗</a></td>
+      <td>https://www.weroad.fr/destinations/guatemala-volcans-nature-cultures-anciennes/88ba867e-7ecd-498d-aecd-1b15c774819e</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/guatemala-volcans-nature-cultures-anciennes/88ba867e-7ecd-498d-aecd-1b15c774819e'>🔗</a></td>
     </tr>
     <tr>
       <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
@@ -3799,6 +3789,36 @@ ALMOST / CONFIRMED / GUARANTEED
       <td>None</td>
       <td>https://www.weroad.fr/destinations/thailande-hiver-expedition/c49ac5ac-3b7b-4fe5-827c-d4faf88dcd50</td>
       <td><a target='_blank' href='https://www.weroad.fr/destinations/thailande-hiver-expedition/c49ac5ac-3b7b-4fe5-827c-d4faf88dcd50'>🔗</a></td>
+    </tr>
+    <tr>
+      <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
+      <td>2026-01-18</td>
+      <td>2026-01-30</td>
+      <td>Philippines 360° : Bohol, Coron & Palawan</td>
+      <td>Philippines</td>
+      <td>Philippines</td>
+      <td>2 099,00 €</td>
+      <td></td>
+      <td>NaN</td>
+      <td>15.0</td>
+      <td>None</td>
+      <td>https://www.weroad.fr/destinations/philippines-360/ec77381d-1d62-4a80-ab3a-d7a26fe5e148</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/philippines-360/ec77381d-1d62-4a80-ab3a-d7a26fe5e148'>🔗</a></td>
+    </tr>
+    <tr>
+      <td><span class='rp-badge confirmed'>CONFIRMED</span></td>
+      <td>2026-02-01</td>
+      <td>2026-02-13</td>
+      <td>Thaïlande 360° Winter : Bangkok, Chiang Mai et les îles Phi Phi</td>
+      <td>Thaïlande</td>
+      <td>Thaïlande</td>
+      <td>1 699,00 €</td>
+      <td></td>
+      <td>NaN</td>
+      <td>15.0</td>
+      <td>None</td>
+      <td>https://www.weroad.fr/destinations/thailande-360-hiver/d2641a32-876c-4704-a2ba-63c1ac861539</td>
+      <td><a target='_blank' href='https://www.weroad.fr/destinations/thailande-360-hiver/d2641a32-876c-4704-a2ba-63c1ac861539'>🔗</a></td>
     </tr>
   </tbody>
 </table>
@@ -3822,13 +3842,13 @@ ALMOST / CONFIRMED / GUARANTEED
   </thead>
   <tbody>
     <tr>
-      <td>2025-08-27</td>
+      <td>2025-08-28</td>
       <td>469,00 €</td>
       <td>1 149,00 €</td>
-      <td>1 285,44 €</td>
+      <td>1 286,01 €</td>
       <td>141</td>
-      <td>52</td>
-      <td>36.9%</td>
+      <td>46</td>
+      <td>32.6%</td>
     </tr>
   </tbody>
 </table>
@@ -3853,8 +3873,15 @@ ALMOST / CONFIRMED / GUARANTEED
       <td>2025-08</td>
       <td>Islande</td>
       <td>999,00 €</td>
-      <td>1 239,00 €</td>
-      <td>2</td>
+      <td>999,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-08</td>
+      <td>Naples & la côte Amalfitaine</td>
+      <td>519,00 €</td>
+      <td>519,00 €</td>
+      <td>1</td>
     </tr>
     <tr>
       <td>2025-09</td>
@@ -3928,13 +3955,6 @@ ALMOST / CONFIRMED / GUARANTEED
     </tr>
     <tr>
       <td>2025-09</td>
-      <td>Inde</td>
-      <td>949,00 €</td>
-      <td>949,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>2025-09</td>
       <td>Indonesie</td>
       <td>899,00 €</td>
       <td>899,00 €</td>
@@ -3945,6 +3965,13 @@ ALMOST / CONFIRMED / GUARANTEED
       <td>Indonésie</td>
       <td>1 699,00 €</td>
       <td>1 699,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Islande</td>
+      <td>1 799,00 €</td>
+      <td>1 799,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -3977,16 +4004,9 @@ ALMOST / CONFIRMED / GUARANTEED
     </tr>
     <tr>
       <td>2025-09</td>
-      <td>Kirghizistan</td>
-      <td>1 049,00 €</td>
-      <td>1 049,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>2025-09</td>
       <td>Malaisie</td>
-      <td>1 389,00 €</td>
-      <td>1 389,00 €</td>
+      <td>1 599,00 €</td>
+      <td>1 599,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -4005,16 +4025,9 @@ ALMOST / CONFIRMED / GUARANTEED
     </tr>
     <tr>
       <td>2025-09</td>
-      <td>Naples & la côte Amalfitaine</td>
-      <td>489,00 €</td>
-      <td>489,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>2025-09</td>
       <td>New York</td>
-      <td>799,00 €</td>
-      <td>799,00 €</td>
+      <td>819,00 €</td>
+      <td>819,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -4022,13 +4035,6 @@ ALMOST / CONFIRMED / GUARANTEED
       <td>Ouzbékistan</td>
       <td>899,00 €</td>
       <td>899,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>2025-09</td>
-      <td>Pouilles</td>
-      <td>1 079,00 €</td>
-      <td>1 079,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -4043,13 +4049,6 @@ ALMOST / CONFIRMED / GUARANTEED
       <td>Romania</td>
       <td>469,00 €</td>
       <td>469,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>2025-09</td>
-      <td>Route 66</td>
-      <td>1 899,00 €</td>
-      <td>1 899,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -4075,13 +4074,6 @@ ALMOST / CONFIRMED / GUARANTEED
     </tr>
     <tr>
       <td>2025-09</td>
-      <td>Suisse</td>
-      <td>949,00 €</td>
-      <td>949,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>2025-09</td>
       <td>Thailande</td>
       <td>1 119,00 €</td>
       <td>1 119,00 €</td>
@@ -4092,13 +4084,6 @@ ALMOST / CONFIRMED / GUARANTEED
       <td>Vietnam</td>
       <td>1 059,00 €</td>
       <td>1 059,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>2025-09</td>
-      <td>le Portugal</td>
-      <td>1 119,00 €</td>
-      <td>1 119,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -4167,22 +4152,36 @@ ALMOST / CONFIRMED / GUARANTEED
     <tr>
       <td>2025-10</td>
       <td>Espagne</td>
-      <td>999,00 €</td>
-      <td>1 049,00 €</td>
-      <td>2</td>
+      <td>1 099,00 €</td>
+      <td>1 099,00 €</td>
+      <td>1</td>
     </tr>
     <tr>
       <td>2025-10</td>
       <td>France</td>
-      <td>599,00 €</td>
-      <td>749,00 €</td>
-      <td>2</td>
+      <td>899,00 €</td>
+      <td>899,00 €</td>
+      <td>1</td>
     </tr>
     <tr>
       <td>2025-10</td>
-      <td>Grecia</td>
+      <td>Inde</td>
       <td>999,00 €</td>
       <td>999,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>Italie</td>
+      <td>999,00 €</td>
+      <td>999,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>Kenya</td>
+      <td>1 789,00 €</td>
+      <td>1 789,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -4194,9 +4193,9 @@ ALMOST / CONFIRMED / GUARANTEED
     </tr>
     <tr>
       <td>2025-10</td>
-      <td>Patagonie</td>
-      <td>2 999,00 €</td>
-      <td>2 999,00 €</td>
+      <td>Népal</td>
+      <td>999,00 €</td>
+      <td>999,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -4208,9 +4207,16 @@ ALMOST / CONFIRMED / GUARANTEED
     </tr>
     <tr>
       <td>2025-10</td>
-      <td>Portugal</td>
-      <td>699,00 €</td>
-      <td>699,00 €</td>
+      <td>Route 66</td>
+      <td>1 899,00 €</td>
+      <td>1 899,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>Suisse</td>
+      <td>949,00 €</td>
+      <td>949,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -4236,16 +4242,16 @@ ALMOST / CONFIRMED / GUARANTEED
     </tr>
     <tr>
       <td>2025-10</td>
-      <td>Écosse</td>
-      <td>849,00 €</td>
-      <td>849,00 €</td>
+      <td>Émirats Arabes Unis</td>
+      <td>1 199,00 €</td>
+      <td>1 199,00 €</td>
       <td>1</td>
     </tr>
     <tr>
       <td>2025-10</td>
-      <td>Émirats Arabes Unis</td>
-      <td>1 199,00 €</td>
-      <td>1 199,00 €</td>
+      <td>Équateur & Amazonie</td>
+      <td>1 299,00 €</td>
+      <td>1 299,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -4256,24 +4262,31 @@ ALMOST / CONFIRMED / GUARANTEED
       <td>1</td>
     </tr>
     <tr>
+      <td>2025-10</td>
+      <td>Îles Canaries</td>
+      <td>999,00 €</td>
+      <td>999,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Albanie</td>
+      <td>549,00 €</td>
+      <td>549,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
       <td>2025-11</td>
       <td>Autriche</td>
       <td>799,00 €</td>
-      <td>799,00 €</td>
-      <td>1</td>
+      <td>849,00 €</td>
+      <td>2</td>
     </tr>
     <tr>
       <td>2025-11</td>
       <td>Belgique</td>
       <td>789,00 €</td>
       <td>789,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>2025-11</td>
-      <td>Bourgogne</td>
-      <td>599,00 €</td>
-      <td>599,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -4299,13 +4312,6 @@ ALMOST / CONFIRMED / GUARANTEED
     </tr>
     <tr>
       <td>2025-11</td>
-      <td>Costa Rica</td>
-      <td>1 799,00 €</td>
-      <td>1 799,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>2025-11</td>
       <td>Floride</td>
       <td>1 599,00 €</td>
       <td>1 599,00 €</td>
@@ -4317,6 +4323,13 @@ ALMOST / CONFIRMED / GUARANTEED
       <td>699,00 €</td>
       <td>749,00 €</td>
       <td>2</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Grecia</td>
+      <td>999,00 €</td>
+      <td>999,00 €</td>
+      <td>1</td>
     </tr>
     <tr>
       <td>2025-11</td>
@@ -4334,13 +4347,6 @@ ALMOST / CONFIRMED / GUARANTEED
     </tr>
     <tr>
       <td>2025-11</td>
-      <td>Irlande</td>
-      <td>999,00 €</td>
-      <td>999,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>2025-11</td>
       <td>Islande</td>
       <td>1 449,00 €</td>
       <td>1 449,00 €</td>
@@ -4348,16 +4354,23 @@ ALMOST / CONFIRMED / GUARANTEED
     </tr>
     <tr>
       <td>2025-11</td>
-      <td>Jordanie</td>
-      <td>1 249,00 €</td>
-      <td>1 249,00 €</td>
+      <td>Istanbul</td>
+      <td>599,00 €</td>
+      <td>599,00 €</td>
       <td>1</td>
     </tr>
     <tr>
       <td>2025-11</td>
-      <td>Kenya</td>
-      <td>1 789,00 €</td>
-      <td>1 789,00 €</td>
+      <td>Italie</td>
+      <td>799,00 €</td>
+      <td>799,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Jordanie</td>
+      <td>1 249,00 €</td>
+      <td>1 249,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -4376,9 +4389,16 @@ ALMOST / CONFIRMED / GUARANTEED
     </tr>
     <tr>
       <td>2025-11</td>
-      <td>Népal</td>
-      <td>999,00 €</td>
-      <td>999,00 €</td>
+      <td>Oman</td>
+      <td>1 149,00 €</td>
+      <td>1 149,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Ouzbékistan</td>
+      <td>1 149,00 €</td>
+      <td>1 149,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -4386,13 +4406,6 @@ ALMOST / CONFIRMED / GUARANTEED
       <td>Panamá</td>
       <td>1 566,00 €</td>
       <td>1 566,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>2025-11</td>
-      <td>Philippines</td>
-      <td>2 099,00 €</td>
-      <td>2 099,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -4417,17 +4430,24 @@ ALMOST / CONFIRMED / GUARANTEED
       <td>1</td>
     </tr>
     <tr>
-      <td>2025-11</td>
-      <td>Équateur & Amazonie</td>
-      <td>1 299,00 €</td>
-      <td>1 299,00 €</td>
+      <td>2025-12</td>
+      <td>Allemagne</td>
+      <td>599,00 €</td>
+      <td>599,00 €</td>
       <td>1</td>
     </tr>
     <tr>
       <td>2025-12</td>
-      <td>Allemagne</td>
-      <td>649,00 €</td>
-      <td>649,00 €</td>
+      <td>Bourgogne</td>
+      <td>599,00 €</td>
+      <td>599,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-12</td>
+      <td>Guatemala</td>
+      <td>1 699,00 €</td>
+      <td>1 699,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -4446,16 +4466,9 @@ ALMOST / CONFIRMED / GUARANTEED
     </tr>
     <tr>
       <td>2025-12</td>
-      <td>Istanbul</td>
-      <td>599,00 €</td>
-      <td>599,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>2025-12</td>
-      <td>Italie</td>
-      <td>999,00 €</td>
-      <td>999,00 €</td>
+      <td>Kirghizistan</td>
+      <td>1 049,00 €</td>
+      <td>1 049,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -4467,9 +4480,9 @@ ALMOST / CONFIRMED / GUARANTEED
     </tr>
     <tr>
       <td>2025-12</td>
-      <td>Oman</td>
-      <td>1 149,00 €</td>
-      <td>1 149,00 €</td>
+      <td>Portugal</td>
+      <td>699,00 €</td>
+      <td>699,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -4495,6 +4508,13 @@ ALMOST / CONFIRMED / GUARANTEED
     </tr>
     <tr>
       <td>2025-12</td>
+      <td>Écosse</td>
+      <td>849,00 €</td>
+      <td>849,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-12</td>
       <td>Égypte</td>
       <td>499,00 €</td>
       <td>499,00 €</td>
@@ -4509,13 +4529,6 @@ ALMOST / CONFIRMED / GUARANTEED
     </tr>
     <tr>
       <td>2026-01</td>
-      <td>Mexique</td>
-      <td>1 399,00 €</td>
-      <td>1 399,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>2026-01</td>
       <td>Nicaragua</td>
       <td>1 429,00 €</td>
       <td>1 429,00 €</td>
@@ -4523,16 +4536,23 @@ ALMOST / CONFIRMED / GUARANTEED
     </tr>
     <tr>
       <td>2026-01</td>
-      <td>Thaïlande</td>
-      <td>999,00 €</td>
-      <td>1 124,00 €</td>
-      <td>2</td>
+      <td>Patagonie</td>
+      <td>2 999,00 €</td>
+      <td>2 999,00 €</td>
+      <td>1</td>
     </tr>
     <tr>
       <td>2026-01</td>
-      <td>Îles Canaries</td>
-      <td>999,00 €</td>
-      <td>999,00 €</td>
+      <td>Philippines</td>
+      <td>2 099,00 €</td>
+      <td>2 099,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-01</td>
+      <td>Thaïlande</td>
+      <td>1 249,00 €</td>
+      <td>1 249,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -4551,16 +4571,16 @@ ALMOST / CONFIRMED / GUARANTEED
     </tr>
     <tr>
       <td>2026-02</td>
-      <td>Italie</td>
-      <td>949,00 €</td>
-      <td>949,00 €</td>
+      <td>Irlande</td>
+      <td>999,00 €</td>
+      <td>999,00 €</td>
       <td>1</td>
     </tr>
     <tr>
       <td>2026-02</td>
-      <td>Japon</td>
-      <td>2 099,00 €</td>
-      <td>2 099,00 €</td>
+      <td>Italie</td>
+      <td>949,00 €</td>
+      <td>949,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -4572,30 +4592,16 @@ ALMOST / CONFIRMED / GUARANTEED
     </tr>
     <tr>
       <td>2026-02</td>
-      <td>Maurice</td>
-      <td>1 199,00 €</td>
-      <td>1 199,00 €</td>
+      <td>Thaïlande</td>
+      <td>1 699,00 €</td>
+      <td>1 699,00 €</td>
       <td>1</td>
     </tr>
     <tr>
       <td>2026-02</td>
-      <td>Ouzbékistan</td>
-      <td>1 149,00 €</td>
-      <td>1 149,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>2026-02</td>
-      <td>Sénégal</td>
-      <td>2 050,00 €</td>
-      <td>2 050,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>2026-03</td>
-      <td>Auvergne</td>
-      <td>549,00 €</td>
-      <td>549,00 €</td>
+      <td>Vietnam</td>
+      <td>1 049,00 €</td>
+      <td>1 049,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -4621,9 +4627,9 @@ ALMOST / CONFIRMED / GUARANTEED
     </tr>
     <tr>
       <td>2026-03</td>
-      <td>Islande</td>
-      <td>899,00 €</td>
-      <td>899,00 €</td>
+      <td>Japon</td>
+      <td>2 099,00 €</td>
+      <td>2 099,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -4635,37 +4641,37 @@ ALMOST / CONFIRMED / GUARANTEED
     </tr>
     <tr>
       <td>2026-03</td>
-      <td>Thaïlande</td>
-      <td>1 699,00 €</td>
-      <td>1 699,00 €</td>
+      <td>Mexique</td>
+      <td>1 399,00 €</td>
+      <td>1 399,00 €</td>
       <td>1</td>
     </tr>
     <tr>
       <td>2026-03</td>
-      <td>Turquie</td>
-      <td>1 349,00 €</td>
-      <td>1 349,00 €</td>
+      <td>Sénégal</td>
+      <td>2 050,00 €</td>
+      <td>2 050,00 €</td>
       <td>1</td>
     </tr>
     <tr>
       <td>2026-04</td>
-      <td>Albanie</td>
-      <td>549,00 €</td>
-      <td>549,00 €</td>
+      <td>Islande</td>
+      <td>899,00 €</td>
+      <td>899,00 €</td>
       <td>1</td>
     </tr>
     <tr>
       <td>2026-04</td>
-      <td>Guatemala</td>
-      <td>1 699,00 €</td>
-      <td>1 699,00 €</td>
+      <td>Maldives</td>
+      <td>1 179,00 €</td>
+      <td>1 179,00 €</td>
       <td>1</td>
     </tr>
     <tr>
-      <td>2026-05</td>
-      <td>Bordeaux</td>
-      <td>899,00 €</td>
-      <td>899,00 €</td>
+      <td>2026-04</td>
+      <td>Maurice</td>
+      <td>1 199,00 €</td>
+      <td>1 199,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -4683,10 +4689,31 @@ ALMOST / CONFIRMED / GUARANTEED
       <td>1</td>
     </tr>
     <tr>
+      <td>2026-05</td>
+      <td>Thaïlande</td>
+      <td>999,00 €</td>
+      <td>999,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-05</td>
+      <td>Turquie</td>
+      <td>1 349,00 €</td>
+      <td>1 349,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-05</td>
+      <td>États-Unis</td>
+      <td>1 699,00 €</td>
+      <td>1 699,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
       <td>2026-06</td>
-      <td>Bretagne</td>
-      <td>679,00 €</td>
-      <td>679,00 €</td>
+      <td>Auvergne</td>
+      <td>549,00 €</td>
+      <td>549,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -4704,17 +4731,31 @@ ALMOST / CONFIRMED / GUARANTEED
       <td>1</td>
     </tr>
     <tr>
-      <td>2026-06</td>
-      <td>États-Unis</td>
-      <td>1 699,00 €</td>
-      <td>1 699,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
       <td>2026-07</td>
       <td>Namibie</td>
       <td>2 299,00 €</td>
       <td>2 299,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-08</td>
+      <td>Espagne</td>
+      <td>999,00 €</td>
+      <td>999,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-08</td>
+      <td>France</td>
+      <td>599,00 €</td>
+      <td>599,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-08</td>
+      <td>Gran Canaria</td>
+      <td>599,00 €</td>
+      <td>599,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -4725,31 +4766,31 @@ ALMOST / CONFIRMED / GUARANTEED
       <td>1</td>
     </tr>
     <tr>
-      <td>2026-08</td>
-      <td>Maldives</td>
-      <td>1 179,00 €</td>
-      <td>1 179,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
       <td>2026-09</td>
-      <td>Gran Canaria</td>
-      <td>599,00 €</td>
-      <td>599,00 €</td>
+      <td>Bretagne</td>
+      <td>679,00 €</td>
+      <td>679,00 €</td>
       <td>1</td>
     </tr>
     <tr>
-      <td>2026-09</td>
-      <td>Vietnam</td>
-      <td>1 049,00 €</td>
-      <td>1 049,00 €</td>
+      <td>2026-10</td>
+      <td>Bordeaux</td>
+      <td>899,00 €</td>
+      <td>899,00 €</td>
       <td>1</td>
     </tr>
     <tr>
-      <td>2026-11</td>
+      <td>2026-10</td>
       <td>Chine</td>
       <td>1 899,00 €</td>
       <td>1 899,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-10</td>
+      <td>Costa Rica</td>
+      <td>1 799,00 €</td>
+      <td>1 799,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -4780,8 +4821,15 @@ ALMOST / CONFIRMED / GUARANTEED
       <td>2025-08</td>
       <td>Islande</td>
       <td>999,00 €</td>
-      <td>1 239,00 €</td>
-      <td>2</td>
+      <td>999,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-08</td>
+      <td>Naples & la côte Amalfitaine</td>
+      <td>519,00 €</td>
+      <td>519,00 €</td>
+      <td>1</td>
     </tr>
     <tr>
       <td>2025-09</td>
@@ -4855,13 +4903,6 @@ ALMOST / CONFIRMED / GUARANTEED
     </tr>
     <tr>
       <td>2025-09</td>
-      <td>Inde</td>
-      <td>949,00 €</td>
-      <td>949,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>2025-09</td>
       <td>Indonesie</td>
       <td>899,00 €</td>
       <td>899,00 €</td>
@@ -4872,6 +4913,13 @@ ALMOST / CONFIRMED / GUARANTEED
       <td>Indonésie</td>
       <td>1 699,00 €</td>
       <td>1 699,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-09</td>
+      <td>Islande</td>
+      <td>1 799,00 €</td>
+      <td>1 799,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -4904,16 +4952,9 @@ ALMOST / CONFIRMED / GUARANTEED
     </tr>
     <tr>
       <td>2025-09</td>
-      <td>Kirghizistan</td>
-      <td>1 049,00 €</td>
-      <td>1 049,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>2025-09</td>
       <td>Malaisie</td>
-      <td>1 389,00 €</td>
-      <td>1 389,00 €</td>
+      <td>1 599,00 €</td>
+      <td>1 599,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -4932,16 +4973,9 @@ ALMOST / CONFIRMED / GUARANTEED
     </tr>
     <tr>
       <td>2025-09</td>
-      <td>Naples & la côte Amalfitaine</td>
-      <td>489,00 €</td>
-      <td>489,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>2025-09</td>
       <td>New York</td>
-      <td>799,00 €</td>
-      <td>799,00 €</td>
+      <td>819,00 €</td>
+      <td>819,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -4949,13 +4983,6 @@ ALMOST / CONFIRMED / GUARANTEED
       <td>Ouzbékistan</td>
       <td>899,00 €</td>
       <td>899,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>2025-09</td>
-      <td>Pouilles</td>
-      <td>1 079,00 €</td>
-      <td>1 079,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -4970,13 +4997,6 @@ ALMOST / CONFIRMED / GUARANTEED
       <td>Romania</td>
       <td>469,00 €</td>
       <td>469,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>2025-09</td>
-      <td>Route 66</td>
-      <td>1 899,00 €</td>
-      <td>1 899,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -5002,13 +5022,6 @@ ALMOST / CONFIRMED / GUARANTEED
     </tr>
     <tr>
       <td>2025-09</td>
-      <td>Suisse</td>
-      <td>949,00 €</td>
-      <td>949,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>2025-09</td>
       <td>Thailande</td>
       <td>1 119,00 €</td>
       <td>1 119,00 €</td>
@@ -5019,13 +5032,6 @@ ALMOST / CONFIRMED / GUARANTEED
       <td>Vietnam</td>
       <td>1 059,00 €</td>
       <td>1 059,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>2025-09</td>
-      <td>le Portugal</td>
-      <td>1 119,00 €</td>
-      <td>1 119,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -5094,22 +5100,36 @@ ALMOST / CONFIRMED / GUARANTEED
     <tr>
       <td>2025-10</td>
       <td>Espagne</td>
-      <td>999,00 €</td>
-      <td>1 049,00 €</td>
-      <td>2</td>
+      <td>1 099,00 €</td>
+      <td>1 099,00 €</td>
+      <td>1</td>
     </tr>
     <tr>
       <td>2025-10</td>
       <td>France</td>
-      <td>599,00 €</td>
-      <td>749,00 €</td>
-      <td>2</td>
+      <td>899,00 €</td>
+      <td>899,00 €</td>
+      <td>1</td>
     </tr>
     <tr>
       <td>2025-10</td>
-      <td>Grecia</td>
+      <td>Inde</td>
       <td>999,00 €</td>
       <td>999,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>Italie</td>
+      <td>999,00 €</td>
+      <td>999,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>Kenya</td>
+      <td>1 789,00 €</td>
+      <td>1 789,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -5121,9 +5141,9 @@ ALMOST / CONFIRMED / GUARANTEED
     </tr>
     <tr>
       <td>2025-10</td>
-      <td>Patagonie</td>
-      <td>2 999,00 €</td>
-      <td>2 999,00 €</td>
+      <td>Népal</td>
+      <td>999,00 €</td>
+      <td>999,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -5135,9 +5155,16 @@ ALMOST / CONFIRMED / GUARANTEED
     </tr>
     <tr>
       <td>2025-10</td>
-      <td>Portugal</td>
-      <td>699,00 €</td>
-      <td>699,00 €</td>
+      <td>Route 66</td>
+      <td>1 899,00 €</td>
+      <td>1 899,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-10</td>
+      <td>Suisse</td>
+      <td>949,00 €</td>
+      <td>949,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -5163,16 +5190,16 @@ ALMOST / CONFIRMED / GUARANTEED
     </tr>
     <tr>
       <td>2025-10</td>
-      <td>Écosse</td>
-      <td>849,00 €</td>
-      <td>849,00 €</td>
+      <td>Émirats Arabes Unis</td>
+      <td>1 199,00 €</td>
+      <td>1 199,00 €</td>
       <td>1</td>
     </tr>
     <tr>
       <td>2025-10</td>
-      <td>Émirats Arabes Unis</td>
-      <td>1 199,00 €</td>
-      <td>1 199,00 €</td>
+      <td>Équateur & Amazonie</td>
+      <td>1 299,00 €</td>
+      <td>1 299,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -5183,24 +5210,31 @@ ALMOST / CONFIRMED / GUARANTEED
       <td>1</td>
     </tr>
     <tr>
+      <td>2025-10</td>
+      <td>Îles Canaries</td>
+      <td>999,00 €</td>
+      <td>999,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Albanie</td>
+      <td>549,00 €</td>
+      <td>549,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
       <td>2025-11</td>
       <td>Autriche</td>
       <td>799,00 €</td>
-      <td>799,00 €</td>
-      <td>1</td>
+      <td>849,00 €</td>
+      <td>2</td>
     </tr>
     <tr>
       <td>2025-11</td>
       <td>Belgique</td>
       <td>789,00 €</td>
       <td>789,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>2025-11</td>
-      <td>Bourgogne</td>
-      <td>599,00 €</td>
-      <td>599,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -5226,13 +5260,6 @@ ALMOST / CONFIRMED / GUARANTEED
     </tr>
     <tr>
       <td>2025-11</td>
-      <td>Costa Rica</td>
-      <td>1 799,00 €</td>
-      <td>1 799,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>2025-11</td>
       <td>Floride</td>
       <td>1 599,00 €</td>
       <td>1 599,00 €</td>
@@ -5244,6 +5271,13 @@ ALMOST / CONFIRMED / GUARANTEED
       <td>699,00 €</td>
       <td>749,00 €</td>
       <td>2</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Grecia</td>
+      <td>999,00 €</td>
+      <td>999,00 €</td>
+      <td>1</td>
     </tr>
     <tr>
       <td>2025-11</td>
@@ -5261,13 +5295,6 @@ ALMOST / CONFIRMED / GUARANTEED
     </tr>
     <tr>
       <td>2025-11</td>
-      <td>Irlande</td>
-      <td>999,00 €</td>
-      <td>999,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>2025-11</td>
       <td>Islande</td>
       <td>1 449,00 €</td>
       <td>1 449,00 €</td>
@@ -5275,16 +5302,23 @@ ALMOST / CONFIRMED / GUARANTEED
     </tr>
     <tr>
       <td>2025-11</td>
-      <td>Jordanie</td>
-      <td>1 249,00 €</td>
-      <td>1 249,00 €</td>
+      <td>Istanbul</td>
+      <td>599,00 €</td>
+      <td>599,00 €</td>
       <td>1</td>
     </tr>
     <tr>
       <td>2025-11</td>
-      <td>Kenya</td>
-      <td>1 789,00 €</td>
-      <td>1 789,00 €</td>
+      <td>Italie</td>
+      <td>799,00 €</td>
+      <td>799,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Jordanie</td>
+      <td>1 249,00 €</td>
+      <td>1 249,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -5303,9 +5337,16 @@ ALMOST / CONFIRMED / GUARANTEED
     </tr>
     <tr>
       <td>2025-11</td>
-      <td>Népal</td>
-      <td>999,00 €</td>
-      <td>999,00 €</td>
+      <td>Oman</td>
+      <td>1 149,00 €</td>
+      <td>1 149,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-11</td>
+      <td>Ouzbékistan</td>
+      <td>1 149,00 €</td>
+      <td>1 149,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -5313,13 +5354,6 @@ ALMOST / CONFIRMED / GUARANTEED
       <td>Panamá</td>
       <td>1 566,00 €</td>
       <td>1 566,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>2025-11</td>
-      <td>Philippines</td>
-      <td>2 099,00 €</td>
-      <td>2 099,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -5344,17 +5378,24 @@ ALMOST / CONFIRMED / GUARANTEED
       <td>1</td>
     </tr>
     <tr>
-      <td>2025-11</td>
-      <td>Équateur & Amazonie</td>
-      <td>1 299,00 €</td>
-      <td>1 299,00 €</td>
+      <td>2025-12</td>
+      <td>Allemagne</td>
+      <td>599,00 €</td>
+      <td>599,00 €</td>
       <td>1</td>
     </tr>
     <tr>
       <td>2025-12</td>
-      <td>Allemagne</td>
-      <td>649,00 €</td>
-      <td>649,00 €</td>
+      <td>Bourgogne</td>
+      <td>599,00 €</td>
+      <td>599,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-12</td>
+      <td>Guatemala</td>
+      <td>1 699,00 €</td>
+      <td>1 699,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -5373,16 +5414,9 @@ ALMOST / CONFIRMED / GUARANTEED
     </tr>
     <tr>
       <td>2025-12</td>
-      <td>Istanbul</td>
-      <td>599,00 €</td>
-      <td>599,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>2025-12</td>
-      <td>Italie</td>
-      <td>999,00 €</td>
-      <td>999,00 €</td>
+      <td>Kirghizistan</td>
+      <td>1 049,00 €</td>
+      <td>1 049,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -5394,9 +5428,9 @@ ALMOST / CONFIRMED / GUARANTEED
     </tr>
     <tr>
       <td>2025-12</td>
-      <td>Oman</td>
-      <td>1 149,00 €</td>
-      <td>1 149,00 €</td>
+      <td>Portugal</td>
+      <td>699,00 €</td>
+      <td>699,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -5422,6 +5456,13 @@ ALMOST / CONFIRMED / GUARANTEED
     </tr>
     <tr>
       <td>2025-12</td>
+      <td>Écosse</td>
+      <td>849,00 €</td>
+      <td>849,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2025-12</td>
       <td>Égypte</td>
       <td>499,00 €</td>
       <td>499,00 €</td>
@@ -5436,13 +5477,6 @@ ALMOST / CONFIRMED / GUARANTEED
     </tr>
     <tr>
       <td>2026-01</td>
-      <td>Mexique</td>
-      <td>1 399,00 €</td>
-      <td>1 399,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>2026-01</td>
       <td>Nicaragua</td>
       <td>1 429,00 €</td>
       <td>1 429,00 €</td>
@@ -5450,16 +5484,23 @@ ALMOST / CONFIRMED / GUARANTEED
     </tr>
     <tr>
       <td>2026-01</td>
-      <td>Thaïlande</td>
-      <td>999,00 €</td>
-      <td>1 124,00 €</td>
-      <td>2</td>
+      <td>Patagonie</td>
+      <td>2 999,00 €</td>
+      <td>2 999,00 €</td>
+      <td>1</td>
     </tr>
     <tr>
       <td>2026-01</td>
-      <td>Îles Canaries</td>
-      <td>999,00 €</td>
-      <td>999,00 €</td>
+      <td>Philippines</td>
+      <td>2 099,00 €</td>
+      <td>2 099,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-01</td>
+      <td>Thaïlande</td>
+      <td>1 249,00 €</td>
+      <td>1 249,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -5478,16 +5519,16 @@ ALMOST / CONFIRMED / GUARANTEED
     </tr>
     <tr>
       <td>2026-02</td>
-      <td>Italie</td>
-      <td>949,00 €</td>
-      <td>949,00 €</td>
+      <td>Irlande</td>
+      <td>999,00 €</td>
+      <td>999,00 €</td>
       <td>1</td>
     </tr>
     <tr>
       <td>2026-02</td>
-      <td>Japon</td>
-      <td>2 099,00 €</td>
-      <td>2 099,00 €</td>
+      <td>Italie</td>
+      <td>949,00 €</td>
+      <td>949,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -5499,30 +5540,16 @@ ALMOST / CONFIRMED / GUARANTEED
     </tr>
     <tr>
       <td>2026-02</td>
-      <td>Maurice</td>
-      <td>1 199,00 €</td>
-      <td>1 199,00 €</td>
+      <td>Thaïlande</td>
+      <td>1 699,00 €</td>
+      <td>1 699,00 €</td>
       <td>1</td>
     </tr>
     <tr>
       <td>2026-02</td>
-      <td>Ouzbékistan</td>
-      <td>1 149,00 €</td>
-      <td>1 149,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>2026-02</td>
-      <td>Sénégal</td>
-      <td>2 050,00 €</td>
-      <td>2 050,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>2026-03</td>
-      <td>Auvergne</td>
-      <td>549,00 €</td>
-      <td>549,00 €</td>
+      <td>Vietnam</td>
+      <td>1 049,00 €</td>
+      <td>1 049,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -5548,9 +5575,9 @@ ALMOST / CONFIRMED / GUARANTEED
     </tr>
     <tr>
       <td>2026-03</td>
-      <td>Islande</td>
-      <td>899,00 €</td>
-      <td>899,00 €</td>
+      <td>Japon</td>
+      <td>2 099,00 €</td>
+      <td>2 099,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -5562,37 +5589,37 @@ ALMOST / CONFIRMED / GUARANTEED
     </tr>
     <tr>
       <td>2026-03</td>
-      <td>Thaïlande</td>
-      <td>1 699,00 €</td>
-      <td>1 699,00 €</td>
+      <td>Mexique</td>
+      <td>1 399,00 €</td>
+      <td>1 399,00 €</td>
       <td>1</td>
     </tr>
     <tr>
       <td>2026-03</td>
-      <td>Turquie</td>
-      <td>1 349,00 €</td>
-      <td>1 349,00 €</td>
+      <td>Sénégal</td>
+      <td>2 050,00 €</td>
+      <td>2 050,00 €</td>
       <td>1</td>
     </tr>
     <tr>
       <td>2026-04</td>
-      <td>Albanie</td>
-      <td>549,00 €</td>
-      <td>549,00 €</td>
+      <td>Islande</td>
+      <td>899,00 €</td>
+      <td>899,00 €</td>
       <td>1</td>
     </tr>
     <tr>
       <td>2026-04</td>
-      <td>Guatemala</td>
-      <td>1 699,00 €</td>
-      <td>1 699,00 €</td>
+      <td>Maldives</td>
+      <td>1 179,00 €</td>
+      <td>1 179,00 €</td>
       <td>1</td>
     </tr>
     <tr>
-      <td>2026-05</td>
-      <td>Bordeaux</td>
-      <td>899,00 €</td>
-      <td>899,00 €</td>
+      <td>2026-04</td>
+      <td>Maurice</td>
+      <td>1 199,00 €</td>
+      <td>1 199,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -5610,10 +5637,31 @@ ALMOST / CONFIRMED / GUARANTEED
       <td>1</td>
     </tr>
     <tr>
+      <td>2026-05</td>
+      <td>Thaïlande</td>
+      <td>999,00 €</td>
+      <td>999,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-05</td>
+      <td>Turquie</td>
+      <td>1 349,00 €</td>
+      <td>1 349,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-05</td>
+      <td>États-Unis</td>
+      <td>1 699,00 €</td>
+      <td>1 699,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
       <td>2026-06</td>
-      <td>Bretagne</td>
-      <td>679,00 €</td>
-      <td>679,00 €</td>
+      <td>Auvergne</td>
+      <td>549,00 €</td>
+      <td>549,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -5631,17 +5679,31 @@ ALMOST / CONFIRMED / GUARANTEED
       <td>1</td>
     </tr>
     <tr>
-      <td>2026-06</td>
-      <td>États-Unis</td>
-      <td>1 699,00 €</td>
-      <td>1 699,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
       <td>2026-07</td>
       <td>Namibie</td>
       <td>2 299,00 €</td>
       <td>2 299,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-08</td>
+      <td>Espagne</td>
+      <td>999,00 €</td>
+      <td>999,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-08</td>
+      <td>France</td>
+      <td>599,00 €</td>
+      <td>599,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-08</td>
+      <td>Gran Canaria</td>
+      <td>599,00 €</td>
+      <td>599,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -5652,31 +5714,31 @@ ALMOST / CONFIRMED / GUARANTEED
       <td>1</td>
     </tr>
     <tr>
-      <td>2026-08</td>
-      <td>Maldives</td>
-      <td>1 179,00 €</td>
-      <td>1 179,00 €</td>
-      <td>1</td>
-    </tr>
-    <tr>
       <td>2026-09</td>
-      <td>Gran Canaria</td>
-      <td>599,00 €</td>
-      <td>599,00 €</td>
+      <td>Bretagne</td>
+      <td>679,00 €</td>
+      <td>679,00 €</td>
       <td>1</td>
     </tr>
     <tr>
-      <td>2026-09</td>
-      <td>Vietnam</td>
-      <td>1 049,00 €</td>
-      <td>1 049,00 €</td>
+      <td>2026-10</td>
+      <td>Bordeaux</td>
+      <td>899,00 €</td>
+      <td>899,00 €</td>
       <td>1</td>
     </tr>
     <tr>
-      <td>2026-11</td>
+      <td>2026-10</td>
       <td>Chine</td>
       <td>1 899,00 €</td>
       <td>1 899,00 €</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2026-10</td>
+      <td>Costa Rica</td>
+      <td>1 799,00 €</td>
+      <td>1 799,00 €</td>
       <td>1</td>
     </tr>
     <tr>
@@ -5729,6 +5791,16 @@ ALMOST / CONFIRMED / GUARANTEED
       <td>1619.0</td>
     </tr>
     <tr>
+      <td>Allemagne</td>
+      <td>1</td>
+      <td>599,00 €</td>
+      <td>599,00 €</td>
+      <td>599,00 €</td>
+      <td>100.0%</td>
+      <td>5.000000</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
       <td>Malte</td>
       <td>1</td>
       <td>639,00 €</td>
@@ -5747,16 +5819,6 @@ ALMOST / CONFIRMED / GUARANTEED
       <td>100.0%</td>
       <td>4.775000</td>
       <td>7637.0</td>
-    </tr>
-    <tr>
-      <td>Allemagne</td>
-      <td>1</td>
-      <td>649,00 €</td>
-      <td>649,00 €</td>
-      <td>649,00 €</td>
-      <td>100.0%</td>
-      <td>5.000000</td>
-      <td>1.0</td>
     </tr>
     <tr>
       <td>Bulgarie</td>
@@ -5819,16 +5881,6 @@ ALMOST / CONFIRMED / GUARANTEED
       <td>1024.0</td>
     </tr>
     <tr>
-      <td>Autriche</td>
-      <td>1</td>
-      <td>799,00 €</td>
-      <td>799,00 €</td>
-      <td>799,00 €</td>
-      <td>0.0%</td>
-      <td>NaN</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
       <td>Grèce</td>
       <td>3</td>
       <td>739,00 €</td>
@@ -5857,6 +5909,16 @@ ALMOST / CONFIRMED / GUARANTEED
       <td>100.0%</td>
       <td>5.000000</td>
       <td>8.0</td>
+    </tr>
+    <tr>
+      <td>Autriche</td>
+      <td>2</td>
+      <td>799,00 €</td>
+      <td>849,00 €</td>
+      <td>849,00 €</td>
+      <td>0.0%</td>
+      <td>NaN</td>
+      <td>0.0</td>
     </tr>
     <tr>
       <td>Estonie</td>
@@ -5889,6 +5951,16 @@ ALMOST / CONFIRMED / GUARANTEED
       <td>5324.0</td>
     </tr>
     <tr>
+      <td>Italie</td>
+      <td>6</td>
+      <td>519,00 €</td>
+      <td>934,00 €</td>
+      <td>897,33 €</td>
+      <td>16.7%</td>
+      <td>4.675000</td>
+      <td>2428.0</td>
+    </tr>
+    <tr>
       <td>Suisse</td>
       <td>1</td>
       <td>949,00 €</td>
@@ -5907,16 +5979,6 @@ ALMOST / CONFIRMED / GUARANTEED
       <td>100.0%</td>
       <td>4.700000</td>
       <td>4287.0</td>
-    </tr>
-    <tr>
-      <td>Italie</td>
-      <td>6</td>
-      <td>489,00 €</td>
-      <td>974,00 €</td>
-      <td>939,00 €</td>
-      <td>50.0%</td>
-      <td>4.660000</td>
-      <td>2939.0</td>
     </tr>
     <tr>
       <td>Sri Lanka</td>
@@ -5999,26 +6061,6 @@ ALMOST / CONFIRMED / GUARANTEED
       <td>2564.0</td>
     </tr>
     <tr>
-      <td>Portugal</td>
-      <td>3</td>
-      <td>699,00 €</td>
-      <td>1 119,00 €</td>
-      <td>1 172,33 €</td>
-      <td>33.3%</td>
-      <td>4.650000</td>
-      <td>1755.0</td>
-    </tr>
-    <tr>
-      <td>Inde</td>
-      <td>2</td>
-      <td>949,00 €</td>
-      <td>1 124,00 €</td>
-      <td>1 124,00 €</td>
-      <td>50.0%</td>
-      <td>4.800000</td>
-      <td>723.0</td>
-    </tr>
-    <tr>
       <td>Oman</td>
       <td>1</td>
       <td>1 149,00 €</td>
@@ -6027,6 +6069,16 @@ ALMOST / CONFIRMED / GUARANTEED
       <td>0.0%</td>
       <td>4.700000</td>
       <td>525.0</td>
+    </tr>
+    <tr>
+      <td>Inde</td>
+      <td>2</td>
+      <td>999,00 €</td>
+      <td>1 149,00 €</td>
+      <td>1 149,00 €</td>
+      <td>0.0%</td>
+      <td>4.800000</td>
+      <td>723.0</td>
     </tr>
     <tr>
       <td>Irlande</td>
@@ -6059,6 +6111,16 @@ ALMOST / CONFIRMED / GUARANTEED
       <td>323.0</td>
     </tr>
     <tr>
+      <td>Portugal</td>
+      <td>2</td>
+      <td>699,00 €</td>
+      <td>1 199,00 €</td>
+      <td>1 199,00 €</td>
+      <td>0.0%</td>
+      <td>4.700000</td>
+      <td>1169.0</td>
+    </tr>
+    <tr>
       <td>Thaïlande</td>
       <td>5</td>
       <td>999,00 €</td>
@@ -6073,8 +6135,8 @@ ALMOST / CONFIRMED / GUARANTEED
       <td>4</td>
       <td>899,00 €</td>
       <td>1 224,00 €</td>
-      <td>1 206,50 €</td>
-      <td>25.0%</td>
+      <td>1 286,50 €</td>
+      <td>0.0%</td>
       <td>4.800000</td>
       <td>7024.0</td>
     </tr>
@@ -6089,16 +6151,6 @@ ALMOST / CONFIRMED / GUARANTEED
       <td>26.0</td>
     </tr>
     <tr>
-      <td>Malaisie</td>
-      <td>2</td>
-      <td>1 105,00 €</td>
-      <td>1 247,00 €</td>
-      <td>1 247,00 €</td>
-      <td>100.0%</td>
-      <td>4.800000</td>
-      <td>204.0</td>
-    </tr>
-    <tr>
       <td>Kirghizistan</td>
       <td>2</td>
       <td>1 049,00 €</td>
@@ -6107,6 +6159,16 @@ ALMOST / CONFIRMED / GUARANTEED
       <td>0.0%</td>
       <td>5.000000</td>
       <td>2.0</td>
+    </tr>
+    <tr>
+      <td>Malaisie</td>
+      <td>2</td>
+      <td>1 105,00 €</td>
+      <td>1 352,00 €</td>
+      <td>1 352,00 €</td>
+      <td>50.0%</td>
+      <td>4.800000</td>
+      <td>204.0</td>
     </tr>
     <tr>
       <td>Réunion</td>
@@ -6211,9 +6273,9 @@ ALMOST / CONFIRMED / GUARANTEED
     <tr>
       <td>États-Unis d'Amérique</td>
       <td>5</td>
-      <td>799,00 €</td>
+      <td>819,00 €</td>
       <td>1 599,00 €</td>
-      <td>1 519,00 €</td>
+      <td>1 523,00 €</td>
       <td>20.0%</td>
       <td>4.760000</td>
       <td>5325.0</td>
