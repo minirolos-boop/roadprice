@@ -2,7 +2,7 @@ name: Weekly Prices Monitor
 
 on:
   schedule:
-    - cron: "0 16 * * *"        # 18:00 FR (16:00 UTC)
+    - cron: "0 16 * * *"        # 18:00 heure FR (16:00 UTC)
   workflow_dispatch: {}
 
 permissions:
@@ -18,6 +18,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # (optionnel) restaurer la DB du run précédent pour l'historique
       - name: Restore previous DB (artifact)
         uses: actions/download-artifact@v4
         with:
@@ -56,14 +57,15 @@ jobs:
       - name: Build single-page dashboard (docs/index.md)
         run: python summarize.py
 
-      # Debug pour vérifier que l'index est bien mis à jour
-      - name: Debug: list docs
+      # Debug: vérifier que summarize.py a bien écrit docs/index.md
+      - name: Debug list docs
         run: |
-          echo "=== docs/ ==="
+          echo "=== docs ==="
           ls -la docs
           echo "=== head docs/index.md ==="
-          head -n 40 docs/index.md || true
+          head -n 50 docs/index.md || true
 
+      # Artefacts techniques (facultatif)
       - name: Upload Excel artifact
         uses: actions/upload-artifact@v4
         with:
@@ -78,18 +80,24 @@ jobs:
           path: data/weroad.db
           retention-days: 90
 
-      # === PAGES via ACTIONS + build Jekyll ===
+      # === Déploiement GitHub Pages via Actions avec build Jekyll ===
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
-      # ⬇️ NOUVEAU : Build Jekyll (convertit index.md -> index.html)
+      # Build Jekyll (convertit docs/index.md -> _site/index.html)
       - name: Build with Jekyll
         uses: actions/jekyll-build-pages@v1
         with:
           source: ./docs
           destination: ./_site
 
-      # Upload le site construit (_site), PAS docs/
+      - name: Debug list _site
+        run: |
+          echo "=== _site ==="
+          ls -la _site | sed -n '1,120p'
+          test -f _site/index.html && echo "index.html OK" || (echo "index.html MISSING" && exit 1)
+
+      # Upload *le site compilé*, pas docs/
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
