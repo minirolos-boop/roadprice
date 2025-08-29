@@ -7,4 +7,15 @@ __pycache__/
 data/
 *.db
 *.xlsx
+
+# ignorer le dossier data par défaut…
+data/
+
+# …mais garder la DB et les archives :
 !data/weroad.db
+!data/archive/
+!data/archive/*.db.gz
+
+# si tu ignores *.db ailleurs, neutralise pour la DB suivie :
+!data/*.db
+
