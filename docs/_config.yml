@@ -1,10 +1,7 @@
-title: RoadPrice – Évolutions tarifaires
-description: Suivi hebdomadaire des prix WeRoad (KPIs, variations, alertes)
-
-# Désactive Jekyll pour que GitHub Pages serve les fichiers bruts (index.md -> index.html)
+title: RoadPrice
+description: Suivi hebdomadaire des prix WeRoad
+theme: jekyll-theme-cayman
 markdown: kramdown
 kramdown:
   input: GFM
-  hard_wrap: false
-
 lang: fr
