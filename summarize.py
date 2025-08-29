@@ -9,12 +9,17 @@ DOCS_DIR = Path("docs")
 OUT = DOCS_DIR / "index.md"
 DB = Path("data/weroad.db")
 
-# Aperçu des N derniers mois pour certaines sections (si utile)
+# Aperçu des N derniers mois (si utilisé)
 RECENT_MONTHS = 24
 
-# Seuils d'alertes (peuvent être surchargés par le workflow via env)
+# Seuils d'alertes (surchargeables via env dans le workflow)
 ALERT_PCT = float(os.getenv("ALERT_PCT", "0.10"))   # 10%
 ALERT_EUR = float(os.getenv("ALERT_EUR", "150"))    # 150 €
+
+# === UI: DataTables (vanilla JS) via CDN ===
+DATATABLES_CSS = "https://cdn.jsdelivr.net/npm/simple-datatables@9.0.4/dist/style.css"
+DATATABLES_JS  = "https://cdn.jsdelivr.net/npm/simple-datatables@9.0.4"
+
 
 # -------- Helpers --------
 def ensure_docs():
@@ -36,12 +41,11 @@ def decorate_movement(df: pd.DataFrame) -> pd.DataFrame:
     out["movement"] = [f"<code class='{c}'>{s}</code>" for c, s in zip(cls, m)]
     return out
 
-def html_table(df: pd.DataFrame, max_rows: int = 20) -> str:
+def html_table(df: pd.DataFrame, max_rows: int = 20, dt: bool = True, page: int = 25) -> str:
     """
-    Table HTML fiable, gestion précise des % et € :
-      - delta_pct = ratio (0..1) => affiché en % via x100
-      - *_pct (sauf delta_pct) = déjà 0..100 => affiché tel quel en %
-      - colonnes prix/€ formatées en euros
+    Rend une table HTML à partir d'un DataFrame.
+    - Formats: delta_pct (ratio 0..1) -> % via x100 ; *_pct (déjà 0..100) -> % direct ; € pour prix/deltas.
+    - dt=True => active Simple-DataTables (recherche/tri/pagination) côté client.
     """
     if df is None or df.empty:
         return "<p><em>Aucune donnée</em></p>"
@@ -53,7 +57,7 @@ def html_table(df: pd.DataFrame, max_rows: int = 20) -> str:
         s = pd.to_numeric(df["delta_pct"], errors="coerce")
         df["delta_pct"] = s.map(lambda v: f"{v*100:.1f}%" if pd.notna(v) else "")
 
-    # *_pct (déjà 0..100) -> format direct, sauf delta_pct traité plus haut
+    # *_pct (déjà 0..100), hors delta_pct traité plus haut
     for c in [c for c in df.columns if c.endswith("_pct") and c != "delta_pct"]:
         s = pd.to_numeric(df[c], errors="coerce")
         df[c] = s.map(lambda v: f"{v:.1f}%" if pd.notna(v) else "")
@@ -64,7 +68,14 @@ def html_table(df: pd.DataFrame, max_rows: int = 20) -> str:
         s = pd.to_numeric(df[c], errors="coerce")
         df[c] = s.map(lambda v: f"{v:,.0f} €".replace(",", " ").replace(".", ",") if pd.notna(v) else "")
 
-    return df.to_html(index=False, classes="rp-table", escape=False, border=0)
+    # Table HTML pandas
+    html = df.to_html(index=False, classes="rp-table", escape=False, border=0)
+
+    # Activer DataTables pour les tables "non minuscules"
+    if dt and len(df) >= 6:
+        html = html.replace("<table ", f'<table data-dt="1" data-page-size="{page}" ', 1)
+
+    return f'<div class="table-wrapper">{html}</div>'
 
 def load_last_and_prev_run_ts(conn):
     runs = safe_read_sql("SELECT DISTINCT run_ts FROM weekly_kpis ORDER BY run_ts", conn)
@@ -73,6 +84,7 @@ def load_last_and_prev_run_ts(conn):
     last = runs["run_ts"].iloc[-1]
     prev = runs["run_ts"].iloc[-2] if len(runs) > 1 else None
     return last, prev, runs
+
 
 # -------- Analyses métier --------
 def promo_watchlist(df: pd.DataFrame) -> pd.DataFrame:
@@ -90,18 +102,16 @@ def promo_watchlist(df: pd.DataFrame) -> pd.DataFrame:
         "title","destination_label","country_name",
         "price_eur","discount_pct","seatsToConfirm","maxPax","weroadersCount"
     ]
-    # lien : prioriser url_precise si présente, sinon url
     link_col = "url_precise" if "url_precise" in x.columns else ("url" if "url" in x.columns else None)
     if link_col:
         base.append(link_col)
     return x[[c for c in base if c in x.columns]].reset_index(drop=True)
 
 def big_movers(wk_diff: pd.DataFrame, pct_threshold=ALERT_PCT, abs_threshold=ALERT_EUR) -> pd.DataFrame:
-    """Variations très fortes sur le meilleur prix par destination (vs run précédent)."""
+    """Variations fortes sur le meilleur prix par destination (vs run précédent)."""
     if wk_diff.empty:
         return pd.DataFrame()
     x = wk_diff.copy()
-    # robustesse aux types
     x["delta_pct"] = pd.to_numeric(x.get("delta_pct"), errors="coerce").fillna(0.0)
     x["delta_abs"] = pd.to_numeric(x.get("delta_abs"), errors="coerce").fillna(0.0)
     x["flag"] = (x["delta_pct"].abs() > pct_threshold) | (x["delta_abs"].abs() > abs_threshold)
@@ -172,6 +182,7 @@ def price_buckets(df: pd.DataFrame):
     out.columns = ["tranche_prix", "nb_offres"]
     return out
 
+
 # -------- Main --------
 def main():
     ensure_docs()
@@ -208,7 +219,7 @@ def main():
         if not same_date.empty:
             same_date = decorate_movement(same_date)
 
-        # KPIs mensuels calculés et stockés pour ce run
+        # KPIs mensuels (calculés et stockés pour ce run)
         mo_all = safe_read_sql(
             "SELECT month, destination_label, prix_min, prix_avg, nb_depart "
             "FROM monthly_kpis WHERE run_ts = ? ORDER BY month, destination_label", conn, (last,)
@@ -232,20 +243,20 @@ def main():
     ts = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
     coverage = f"_Historique des runs : du **{runs['run_ts'].iloc[0]}** au **{runs['run_ts'].iloc[-1]}** ({len(runs)} exécutions)._" if not runs.empty else ""
 
-    # Rendus HTML
-    kpi_html        = html_table(kpi_last, max_rows=1) if not kpi_last.empty else "<p><em>Aucune donnée</em></p>"
-    kpi_hist_html   = html_table(kpi_hist, max_rows=500)
-    movers_html     = html_table(movers, max_rows=200) if not movers.empty else "<p><em>Aucune donnée</em></p>"
-    same_date_html  = html_table(same_date, max_rows=500) if not same_date.empty else "<p><em>Aucune donnée</em></p>"
-    bd_html         = html_table(bd, max_rows=400)
-    topm_html       = html_table(topm, max_rows=400)
-    ctry_html       = html_table(ctry, max_rows=200)
-    watch_html      = html_table(watch, max_rows=400)
-    buckets_html    = html_table(buckets, max_rows=50)
-    status_html     = html_table(status_count, max_rows=50)
+    # Rendus HTML (DataTables activé sur les gros tableaux)
+    kpi_html        = html_table(kpi_last, max_rows=1,   dt=False) if not kpi_last.empty else "<p><em>Aucune donnée</em></p>"
+    kpi_hist_html   = html_table(kpi_hist, max_rows=1000, dt=True,  page=25)
+    movers_html     = html_table(movers,   max_rows=500,  dt=True,  page=25) if not movers.empty else "<p><em>Aucune donnée</em></p>"
+    same_date_html  = html_table(same_date,max_rows=1000, dt=True,  page=25) if not same_date.empty else "<p><em>Aucune donnée</em></p>"
+    bd_html         = html_table(bd,       max_rows=600,  dt=True,  page=25)
+    topm_html       = html_table(topm,     max_rows=600,  dt=True,  page=25)
+    ctry_html       = html_table(ctry,     max_rows=400,  dt=True,  page=25)
+    watch_html      = html_table(watch,    max_rows=600,  dt=True,  page=25)
+    buckets_html    = html_table(buckets,  max_rows=50,   dt=False)
+    status_html     = html_table(status_count, max_rows=50, dt=False)
 
-    # Page unique
-    page = f"""---
+    # Corps de la page (Markdown + HTML)
+    content = f"""---
 title: RoadPrice – Évolutions tarifaires
 ---
 
@@ -305,9 +316,36 @@ title: RoadPrice – Évolutions tarifaires
 ## Répartition par **tranches de prix**
 {buckets_html}
 """
+
+    # Assets & initialisation Simple-DataTables (injectés une seule fois en bas)
+    datatable_assets = f"""
+<link rel="stylesheet" href="{DATATABLES_CSS}">
+<script src="{DATATABLES_JS}/umd/simple-datatables.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {{
+  document.querySelectorAll('table[data-dt="1"]').forEach(function(tbl) {{
+    var per = parseInt(tbl.getAttribute('data-page-size') || '25', 10);
+    new simpleDatatables.DataTable(tbl, {{
+      perPage: per,
+      perPageSelect: [10, 25, 50, 100],
+      labels: {{
+        placeholder: "Rechercher…",
+        perPage: "{'{'}select{'}'} lignes par page",
+        noRows: "Aucune ligne à afficher",
+        info: "Affichage { '{' }start{'}' }–{ '{' }end{'}' } sur { '{' }rows{'}' }"
+      }},
+      fixedHeight: true
+    }});
+  }});
+}});
+</script>
+"""
+    content += "\n\n" + datatable_assets
+
     ensure_docs()
-    OUT.write_text(page, encoding="utf-8")
+    OUT.write_text(content, encoding="utf-8")
     print(f"Wrote {OUT}")
+
 
 if __name__ == "__main__":
     main()
