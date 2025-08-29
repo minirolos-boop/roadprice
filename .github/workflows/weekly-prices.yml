@@ -2,13 +2,13 @@ name: Weekly Prices Monitor
 
 on:
   schedule:
-    - cron: "0 16 * * *"     # ex. tous les jours 18:00 heure FR (16:00 UTC, adapte si besoin)
+    - cron: "0 16 * * *"        # 18:00 FR (16:00 UTC)
   workflow_dispatch: {}
 
 permissions:
-  contents: write          # pour éventuels commits de fichiers légers (si tu en gardes)
-  pages: write             # ⬅️ nécessaire pour deploy-pages
-  id-token: write          # ⬅️ nécessaire pour deploy-pages
+  contents: write
+  pages: write
+  id-token: write
 
 jobs:
   build:
@@ -18,7 +18,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # (facultatif mais conseillé) récupérer la DB du run précédent
       - name: Restore previous DB (artifact)
         uses: actions/download-artifact@v4
         with:
@@ -57,7 +56,14 @@ jobs:
       - name: Build single-page dashboard (docs/index.md)
         run: python summarize.py
 
-      # Publier les artefacts “techniques” (optionnel)
+      # Debug pour vérifier que l'index est bien mis à jour
+      - name: Debug: list docs
+        run: |
+          echo "=== docs/ ==="
+          ls -la docs
+          echo "=== head docs/index.md ==="
+          head -n 40 docs/index.md || true
+
       - name: Upload Excel artifact
         uses: actions/upload-artifact@v4
         with:
@@ -72,14 +78,22 @@ jobs:
           path: data/weroad.db
           retention-days: 90
 
-      # === Déploiement GitHub Pages via Actions (sans commit) ===
+      # === PAGES via ACTIONS + build Jekyll ===
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
+      # ⬇️ NOUVEAU : Build Jekyll (convertit index.md -> index.html)
+      - name: Build with Jekyll
+        uses: actions/jekyll-build-pages@v1
+        with:
+          source: ./docs
+          destination: ./_site
+
+      # Upload le site construit (_site), PAS docs/
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./docs        # ce dossier contient index.md et assets éventuels
+          path: ./_site
 
   deploy:
     needs: build
