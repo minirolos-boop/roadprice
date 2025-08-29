@@ -17,6 +17,7 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s | %(levelname)s | %(
 API_TRAVELS = "https://api-catalog.weroad.fr/travels"
 API_TOURS   = "https://api-catalog.weroad.fr/travels/{slug}/tours"
 
+
 # -------- Utils --------
 def g(d, path, default=None):
     cur = d
@@ -44,6 +45,7 @@ def _sanitize_scalars(d: dict) -> dict:
 
 def ensure_data_dir():
     Path("data").mkdir(parents=True, exist_ok=True)
+
 
 # -------- HTTP session & fetch --------
 def session_with_headers() -> requests.Session:
@@ -77,6 +79,7 @@ def fetch_tours_for_slug(sess: requests.Session, slug: str, max_retry: int = 3) 
             time.sleep(backoff)
     return []
 
+
 # -------- Normalisation: 1 ligne = 1 départ (tour_id) --------
 def normalize_per_date(travels: list[dict], sess: requests.Session, sleep_between_slugs: float = 0.2) -> pd.DataFrame:
     rows = []
@@ -102,6 +105,7 @@ def normalize_per_date(travels: list[dict], sess: requests.Session, sleep_betwee
         }
 
         tours = fetch_tours_for_slug(sess, slug)
+
         # politesse API
         if sleep_between_slugs > 0:
             time.sleep(float(sleep_between_slugs))
@@ -155,6 +159,7 @@ def normalize_per_date(travels: list[dict], sess: requests.Session, sleep_betwee
 
     return df
 
+
 # -------- Analyses --------
 def weekly_kpis(df: pd.DataFrame) -> dict:
     out = {}
@@ -193,11 +198,15 @@ def weekly_diff(df_curr: pd.DataFrame, df_prev: pd.DataFrame | None) -> pd.DataF
         R = cheapest_by_destination(df_prev).rename(columns={"title":"title_prev","price_eur":"price_eur_prev"})
 
     diff = L.merge(R, on="destination_label", how="left", suffixes=("_curr","_prev"))
-    diff["delta_abs"] = pd.to_numeric(diff["price_eur_curr"], errors="coerce") - pd.to_numeric(diff["price_eur_prev"], errors="coerce")
-    base_prev = pd.to_numeric(diff["price_eur_prev"], errors="coerce")
-    diff["delta_pct"] = diff["delta_abs"] / base_prev
-    diff.replace([np.inf, -np.inf], np.nan, inplace=True)
-    diff["movement"] = diff["delta_abs"].apply(lambda v: "↓" if (pd.notna(v) and v < 0) else ("↑" if (pd.notna(v) and v > 0) else "="))
+    diff["price_eur_curr"] = pd.to_numeric(diff["price_eur_curr"], errors="coerce")
+    diff["price_eur_prev"] = pd.to_numeric(diff["price_eur_prev"], errors="coerce")
+    diff["delta_abs"] = diff["price_eur_curr"] - diff["price_eur_prev"]
+    diff["delta_pct"] = diff["delta_abs"] / diff["price_eur_prev"]
+    diff = diff.replace([np.inf, -np.inf], np.nan)  # <- sans inplace => plus de FutureWarning
+
+    diff["movement"] = diff["delta_abs"].apply(
+        lambda v: "↓" if (pd.notna(v) and v < 0) else ("↑" if (pd.notna(v) and v > 0) else "=")
+    )
     # prioriser url_precise si dispo
     diff["url"] = diff.get("url_precise_curr", pd.Series(index=diff.index)).fillna(diff.get("url_curr"))
     return diff.reset_index(drop=True)
@@ -217,7 +226,7 @@ def monthly_diff(mo: pd.DataFrame) -> pd.DataFrame:
         mo[f"delta_{col}"] = mo[col] - mo[f"{col}_prev"]
         if col != "nb_depart":
             mo[f"delta_{col}_pct"] = mo[f"delta_{col}"] / mo[f"{col}_prev"]
-    mo.replace([np.inf, -np.inf], np.nan, inplace=True)
+    mo = mo.replace([np.inf, -np.inf], np.nan)  # <- sans inplace
     return mo
 
 def find_alerts(weekly_diff_df: pd.DataFrame, pct_thr=0.10, abs_thr=150.0) -> pd.DataFrame:
@@ -243,11 +252,11 @@ def same_date_diff(df_curr: pd.DataFrame, df_prev: pd.DataFrame | None, min_abs_
     m = left.merge(right, on="tour_id", how="inner")
     m["price_eur_curr"] = pd.to_numeric(m["price_eur"], errors="coerce")
     m["price_eur_prev"] = pd.to_numeric(m["price_eur_prev"], errors="coerce")
-    m.drop(columns=["price_eur"], inplace=True)
+    m = m.drop(columns=["price_eur"])
 
     m["delta_abs"] = m["price_eur_curr"] - m["price_eur_prev"]
     m["delta_pct"] = m["delta_abs"] / m["price_eur_prev"]
-    m.replace([np.inf, -np.inf], np.nan, inplace=True)
+    m = m.replace([np.inf, -np.inf], np.nan)  # <- sans inplace
     m["movement"] = m["delta_abs"].apply(lambda v: "↓" if (pd.notna(v) and v < 0) else ("↑" if (pd.notna(v) and v > 0) else "="))
 
     if min_abs_eur > 0:
@@ -256,6 +265,7 @@ def same_date_diff(df_curr: pd.DataFrame, df_prev: pd.DataFrame | None, min_abs_
     cols = ["tour_id","slug","title","destination_label","country_name","best_starting_date",
             "price_eur_prev","price_eur_curr","delta_abs","delta_pct","movement","sales_status","url_precise","url"]
     return m[cols].sort_values(["best_starting_date","destination_label","delta_abs"], ascending=[True, True, False])
+
 
 # -------- Export & Persist --------
 def export_excel(df_curr, wk_kpis, wk_diff, mo_kpis, mo_diff, alerts, same_date, out="weekly_report.xlsx"):
@@ -296,18 +306,33 @@ def persist_sqlite(
     logging.info("Persisté SQLite: %s", db_path)
 
 def ensure_indexes(db_path: str):
+    """Crée les index UNIQUEMENT si les tables existent (évite 'no such table')."""
     conn = sqlite3.connect(db_path)
     try:
-        conn.executescript("""
-            CREATE INDEX IF NOT EXISTS idx_snapshots_run_ts ON snapshots(run_ts);
-            CREATE INDEX IF NOT EXISTS idx_snapshots_tour   ON snapshots(tour_id);
-            CREATE INDEX IF NOT EXISTS idx_weekly_diff_run  ON weekly_diff(run_ts);
-            CREATE INDEX IF NOT EXISTS idx_same_date_run    ON same_date_diff(run_ts);
-            CREATE INDEX IF NOT EXISTS idx_monthly_kpis_run ON monthly_kpis(run_ts);
-        """)
+        cur = conn.cursor()
+        cur.execute("SELECT name FROM sqlite_master WHERE type='table'")
+        tables = {row[0] for row in cur.fetchall()}
+
+        # Always-safe: only create index when the table is present.
+        if "snapshots" in tables:
+            cur.execute("CREATE INDEX IF NOT EXISTS idx_snapshots_run_ts ON snapshots(run_ts)")
+            cur.execute("CREATE INDEX IF NOT EXISTS idx_snapshots_tour   ON snapshots(tour_id)")
+            # unicité (si la table existe) : empêche doublons pour un run
+            cur.execute("CREATE UNIQUE INDEX IF NOT EXISTS ux_snapshots_run_ts_tour ON snapshots(run_ts, tour_id)")
+
+        if "weekly_diff" in tables:
+            cur.execute("CREATE INDEX IF NOT EXISTS idx_weekly_diff_run  ON weekly_diff(run_ts)")
+
+        if "same_date_diff" in tables:
+            cur.execute("CREATE INDEX IF NOT EXISTS idx_same_date_run    ON same_date_diff(run_ts)")
+
+        if "monthly_kpis" in tables:
+            cur.execute("CREATE INDEX IF NOT EXISTS idx_monthly_kpis_run ON monthly_kpis(run_ts)")
+
         conn.commit()
     finally:
         conn.close()
+
 
 # -------- Main --------
 def main():
@@ -331,7 +356,6 @@ def main():
 
     # Charger run précédent
     df_prev = None
-    last_ts_prev = None
     if args.sqlite and Path(args.sqlite).exists():
         conn = sqlite3.connect(args.sqlite)
         try:
