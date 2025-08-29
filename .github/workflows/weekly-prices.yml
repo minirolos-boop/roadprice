@@ -2,39 +2,38 @@ name: Weekly Prices Monitor
 
 on:
   schedule:
-    - cron: "0 16 * * *"         # exécution quotidienne 05:00 UTC (≈ 06h FR en hiver)
+    - cron: "0 16 * * *"     # ex. tous les jours 18:00 heure FR (16:00 UTC, adapte si besoin)
   workflow_dispatch: {}
 
-jobs:
-  run:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
+permissions:
+  contents: write          # pour éventuels commits de fichiers légers (si tu en gardes)
+  pages: write             # ⬅️ nécessaire pour deploy-pages
+  id-token: write          # ⬅️ nécessaire pour deploy-pages
 
-    env:
-      ALERT_PCT: "0.10"
-      ALERT_EUR: "150"
-      SAME_DATE_MIN_EUR: "5"
-      ARCHIVE_KEEP: "32"        # <-- nb de snapshots à conserver
-      SETUP_LFS: "true"         # <-- passe à "false" si tu préfères configurer LFS manuellement
+jobs:
+  build:
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout (with LFS)
+      - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          lfs: true
 
-      # Optionnel: configure Git LFS automatiquement si non présent
-      - name: Configure Git LFS (one-time if needed)
-        if: env.SETUP_LFS == 'true'
+      # (facultatif mais conseillé) récupérer la DB du run précédent
+      - name: Restore previous DB (artifact)
+        uses: actions/download-artifact@v4
+        with:
+          name: sqlite_snapshot
+          path: data
+        continue-on-error: true
+
+      - name: Ensure DB filename
         run: |
-          git lfs install --local
-          # on track la DB et les archives compressées
-          git lfs track "data/*.db"
-          git lfs track "data/archive/*.gz"
-          git add .gitattributes
-          # pas de commit immédiat ici : l'étape auto-commit le fera plus bas
+          mkdir -p data
+          if [ ! -f "data/weroad.db" ]; then
+            if ls data/*.db > /dev/null 2>&1; then
+              mv data/*.db data/weroad.db
+            fi
+          fi
 
       - name: Set up Python (with pip cache)
         uses: actions/setup-python@v5
@@ -48,46 +47,17 @@ jobs:
 
       - name: Run weekly monitor
         env:
-          ALERT_PCT: ${{ env.ALERT_PCT }}
-          ALERT_EUR: ${{ env.ALERT_EUR }}
-          SAME_DATE_MIN_EUR: ${{ env.SAME_DATE_MIN_EUR }}
+          ALERT_PCT: "0.10"
+          ALERT_EUR: "150"
           WEROAD_TOKEN: ${{ secrets.WEROAD_TOKEN }}
         run: |
           mkdir -p data
           python monitor.py --out weekly_report.xlsx --sqlite data/weroad.db
 
-      # --- ARCHIVE + ROTATION ---
-      - name: Archive and rotate DB
-        env:
-          ARCHIVE_KEEP: ${{ env.ARCHIVE_KEEP }}
-        run: |
-          set -e
-          mkdir -p data/archive
-          # snapshot daté (UTC)
-          DATE=$(date -u +%Y%m%d)
-          SNAP="data/archive/weroad-${DATE}.db"
-          cp -f data/weroad.db "${SNAP}"
-
-          # compression pour LFS/poids
-          gzip -f "${SNAP}"  # -> weroad-YYYYMMDD.db.gz
-
-          # rotation : on garde seulement les ARCHIVE_KEEP plus récents
-          ls -1t data/archive/*.db.gz 2>/dev/null | tail -n +$((ARCHIVE_KEEP+1)) | xargs -r rm -f
-
       - name: Build single-page dashboard (docs/index.md)
         run: python summarize.py
 
-      - name: Commit dashboard, DB & archives
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "chore: update dashboard & history (index + db + archive)"
-          file_pattern: |
-            .gitattributes
-            docs/index.md
-            data/weroad.db
-            data/archive/*.db.gz
-
-      # artifacts (optionnel)
+      # Publier les artefacts “techniques” (optionnel)
       - name: Upload Excel artifact
         uses: actions/upload-artifact@v4
         with:
@@ -100,4 +70,24 @@ jobs:
         with:
           name: sqlite_snapshot
           path: data/weroad.db
-          retention-days: 30
+          retention-days: 90
+
+      # === Déploiement GitHub Pages via Actions (sans commit) ===
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./docs        # ce dossier contient index.md et assets éventuels
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
