@@ -65,9 +65,6 @@ def fetch_travels():
 
 
 def normalize_travels(travels):
-    """
-    Vue 'bestTour' : 1 ligne par destination (le meilleur départ proposé aujourd'hui)
-    """
     rows = []
     for t in travels:
         bt = t.get("bestTour") or {}
@@ -132,7 +129,6 @@ def normalize_travels(travels):
 
 
 def fetch_tours_for_slug(slug: str) -> list[dict]:
-    """Retourne la liste brute des tours pour un slug."""
     url = API_TOURS.format(slug=slug)
     with _session() as s:
         r = s.get(url, timeout=45)
@@ -143,10 +139,6 @@ def fetch_tours_for_slug(slug: str) -> list[dict]:
 
 
 def normalize_tours(travels: list[dict]) -> pd.DataFrame:
-    """
-    Vue 'tours' : plusieurs lignes par destination (1 par date / tour_id)
-    On s'appuie sur la liste de travels pour récupérer les slugs à interroger.
-    """
     rows = []
     for t in travels:
         slug = t.get("slug")
@@ -163,7 +155,6 @@ def normalize_tours(travels: list[dict]) -> pd.DataFrame:
                 disc_val = base - price
                 disc_pct = round((base - price) / base * 100, 1)
 
-            # URLs
             url_dest    = f"https://www.weroad.fr/destinations/{slug}"
             url_precise = f"{url_dest}/{tour_id}" if tour_id else url_dest
 
@@ -190,11 +181,9 @@ def normalize_tours(travels: list[dict]) -> pd.DataFrame:
             )
 
     df = pd.DataFrame(rows)
-    # Nettoyage de 'sales_status'
     if not df.empty and "sales_status" in df.columns:
         df = df[df["sales_status"].astype(str).str.strip().ne("")]
         df = df.dropna(subset=["sales_status"])
-    # Unicité tour_id si jamais l'API retourne des doublons
     if "tour_id" in df.columns:
         df = df.drop_duplicates(subset=["tour_id"])
     return df
@@ -261,9 +250,6 @@ def weekly_diff(df_curr: pd.DataFrame, df_prev: pd.DataFrame | None) -> pd.DataF
 
 
 def same_date_diff(df_tours_curr: pd.DataFrame, df_tours_prev: pd.DataFrame) -> pd.DataFrame:
-    """
-    Compare les prix par 'tour_id' entre le run courant et précédent.
-    """
     if df_tours_curr.empty or df_tours_prev.empty:
         return pd.DataFrame()
 
@@ -298,6 +284,22 @@ def same_date_diff(df_tours_curr: pd.DataFrame, df_tours_prev: pd.DataFrame) -> 
 
 
 # -------------------- Export --------------------
+def _to_excel_sorted(df: pd.DataFrame, writer, sheet_name: str, by=None, ascending=None):
+    """
+    Ecrit df dans Excel. Si 'by' est fourni et présent dans les colonnes, tri avant écriture.
+    Tolérant si colonnes manquantes.
+    """
+    out = df.copy()
+    try:
+        if by:
+            cols = by if isinstance(by, (list, tuple)) else [by]
+            if all(c in out.columns for c in cols):
+                out = out.sort_values(by=cols, ascending=ascending if ascending is not None else True)
+    except Exception:
+        pass
+    out.to_excel(writer, index=False, sheet_name=sheet_name)
+
+
 def export_excel(
     df_curr: pd.DataFrame,
     wk_kpis: dict,
@@ -312,17 +314,13 @@ def export_excel(
     with pd.ExcelWriter(out, engine="openpyxl") as w:
         df_curr.to_excel(w, index=False, sheet_name="Voyages_Week")
         pd.DataFrame([wk_kpis]).to_excel(w, index=False, sheet_name="Weekly_KPIs")
-        wk_diff.sort_values(by=["delta_pct", "delta_abs"], ascending=[False, False]).to_excel(
-            w, index=False, sheet_name="Weekly_Diff"
-        )
+        _to_excel_sorted(wk_diff, w, "Weekly_Diff", by=["delta_pct", "delta_abs"], ascending=[False, False])
         alerts.to_excel(w, index=False, sheet_name="Alerts")
         mo_kpis.to_excel(w, index=False, sheet_name="Monthly_KPIs")
         mo_diff.to_excel(w, index=False, sheet_name="Monthly_Diff")
-        # nouveaux onglets
         df_tours.to_excel(w, index=False, sheet_name="Tours")
-        same_d.sort_values(by=["delta_pct", "delta_abs"], ascending=[False, False]).to_excel(
-            w, index=False, sheet_name="Same_Date_Diff"
-        )
+        # Tri seulement si colonnes présentes (sinon on écrit tel quel)
+        _to_excel_sorted(same_d, w, "Same_Date_Diff", by=["delta_pct", "delta_abs"], ascending=[False, False])
     logging.info("Exporté: %s", out)
 
 
@@ -355,7 +353,6 @@ def table_exists(conn: sqlite3.Connection, name: str) -> bool:
 
 def ensure_indexes(conn: sqlite3.Connection):
     try:
-        # historiques globaux
         if table_exists(conn, "snapshots"):
             conn.execute("CREATE INDEX IF NOT EXISTS idx_snapshots_run_ts ON snapshots(run_ts)")
             conn.execute("CREATE INDEX IF NOT EXISTS idx_snapshots_dest ON snapshots(destination_label)")
@@ -371,7 +368,6 @@ def ensure_indexes(conn: sqlite3.Connection):
         if table_exists(conn, "alerts"):
             conn.execute("CREATE INDEX IF NOT EXISTS idx_alerts_run_ts ON alerts(run_ts)")
 
-        # nouveaux : tours & same_date_diff
         if table_exists(conn, "tours"):
             conn.execute("CREATE INDEX IF NOT EXISTS idx_tours_run_ts ON tours(run_ts)")
             conn.execute("CREATE INDEX IF NOT EXISTS idx_tours_tour_id ON tours(tour_id)")
@@ -398,7 +394,6 @@ def persist_sqlite(
     Path(db_path).parent.mkdir(parents=True, exist_ok=True)
     conn = sqlite3.connect(db_path)
     try:
-        # snapshots
         df_snap = df_curr.copy()
         df_snap["run_ts"] = run_ts
         try:
@@ -407,7 +402,6 @@ def persist_sqlite(
             pass
         df_snap.to_sql("snapshots", conn, if_exists="append", index=False)
 
-        # weekly_kpis
         wk_k_df = pd.DataFrame([{**wk_kpis, "run_ts": run_ts}])
         try:
             ensure_sqlite_columns(conn, "weekly_kpis", wk_k_df)
@@ -415,7 +409,6 @@ def persist_sqlite(
             pass
         wk_k_df.to_sql("weekly_kpis", conn, if_exists="append", index=False)
 
-        # weekly_diff
         wk_diff2 = wk_diff.copy()
         wk_diff2["run_ts"] = run_ts
         try:
@@ -424,7 +417,6 @@ def persist_sqlite(
             pass
         wk_diff2.to_sql("weekly_diff", conn, if_exists="append", index=False)
 
-        # monthly_kpis
         mo_k_df = mo_kpis.copy()
         mo_k_df["run_ts"] = run_ts
         try:
@@ -433,7 +425,6 @@ def persist_sqlite(
             pass
         mo_k_df.to_sql("monthly_kpis", conn, if_exists="append", index=False)
 
-        # monthly_diff
         mo_diff2 = mo_diff.copy()
         mo_diff2["run_ts"] = run_ts
         try:
@@ -442,7 +433,6 @@ def persist_sqlite(
             pass
         mo_diff2.to_sql("monthly_diff", conn, if_exists="append", index=False)
 
-        # alerts
         alerts2 = alerts.copy()
         alerts2["run_ts"] = run_ts
         try:
@@ -451,7 +441,6 @@ def persist_sqlite(
             pass
         alerts2.to_sql("alerts", conn, if_exists="append", index=False)
 
-        # tours (nouveau)
         tours2 = df_tours.copy()
         tours2["run_ts"] = run_ts
         try:
@@ -460,7 +449,6 @@ def persist_sqlite(
             pass
         tours2.to_sql("tours", conn, if_exists="append", index=False)
 
-        # same_date_diff (nouveau)
         sdd2 = same_d.copy()
         sdd2["run_ts"] = run_ts
         try:
@@ -470,7 +458,6 @@ def persist_sqlite(
         sdd2.to_sql("same_date_diff", conn, if_exists="append", index=False)
 
         ensure_indexes(conn)
-
     finally:
         conn.close()
     logging.info("Persisté SQLite: %s", db_path)
@@ -488,14 +475,10 @@ def main():
     run_ts = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     logging.info("Run timestamp (UTC): %s", run_ts)
 
-    # 1) travels + normalisation bestTour
     travels = fetch_travels()
     df_curr  = normalize_travels(travels)
-
-    # 2) tours (par slug)
     df_tours_curr = normalize_tours(travels)
 
-    # 3) previous snapshots (pour diff)
     df_prev = pd.DataFrame()
     df_tours_prev = pd.DataFrame()
     if args.sqlite and Path(args.sqlite).exists():
@@ -505,7 +488,6 @@ def main():
             if not runs.empty:
                 last_ts = runs["run_ts"].iloc[-1]
                 df_prev = pd.read_sql_query("SELECT * FROM snapshots WHERE run_ts = ?", conn, params=(last_ts,))
-            # tours précédents si présents
             try:
                 runs_tours = pd.read_sql_query("SELECT DISTINCT run_ts FROM tours ORDER BY run_ts", conn)
                 if not runs_tours.empty:
@@ -516,34 +498,42 @@ def main():
         finally:
             conn.close()
 
-    # 4) KPIs & diff
     wk_k  = weekly_kpis(df_curr)
     wk_d  = weekly_diff(df_curr, df_prev)
-    mo_k  = (lambda d: d.dropna(subset=["month"]).groupby(["month", "destination_label"])
-             .agg(prix_min=("price_eur","min"), prix_avg=("price_eur","mean"), nb_depart=("best_starting_date","count"))
-             .reset_index())(df_curr) if not df_curr.empty else pd.DataFrame(columns=["month","destination_label","prix_min","prix_avg","nb_depart"])
-    mo_d  = (lambda m: (m.sort_values(["destination_label","month"])
-                        .assign(prix_min_prev=m.groupby("destination_label")["prix_min"].shift(1),
-                                prix_avg_prev=m.groupby("destination_label")["prix_avg"].shift(1),
-                                nb_depart_prev=m.groupby("destination_label")["nb_depart"].shift(1))
-                        .assign(delta_prix_min = lambda x: x["prix_min"]-x["prix_min_prev"],
-                                delta_prix_avg = lambda x: x["prix_avg"]-x["prix_avg_prev"],
-                                delta_nb_depart= lambda x: x["nb_depart"]-x["nb_depart_prev"])
-                        .assign(delta_prix_min_pct = lambda x: x["delta_prix_min"]/x["prix_min_prev"],
-                                delta_prix_avg_pct = lambda x: x["delta_prix_avg"]/x["prix_avg_prev"])
-                        .replace([np.inf,-np.inf], np.nan)))(mo_k) if not mo_k.empty else pd.DataFrame()
-    alerts = (lambda d, p, e: d.assign(flag=(d["delta_pct"].abs()>p) | (d["delta_abs"].abs()>e)) if not d.empty else d)(wk_d, float(os.getenv("ALERT_PCT",0.10)), float(os.getenv("ALERT_EUR",150.0)))
-    if not alerts.empty:
-        keep = ["destination_label","title_curr","price_eur_prev","price_eur_curr","delta_abs","delta_pct","movement","url"]
-        alerts = alerts[[c for c in keep if c in alerts.columns]]
 
-    # 5) same-date diff pour tours
+    if not df_curr.empty:
+        mo_k = df_curr.dropna(subset=["month"]).groupby(["month","destination_label"]).agg(
+            prix_min=("price_eur","min"),
+            prix_avg=("price_eur","mean"),
+            nb_depart=("best_starting_date","count"),
+        ).reset_index()
+        mo_k = mo_k.sort_values(["destination_label","month"])
+        mo_k["prix_min_prev"] = mo_k.groupby("destination_label")["prix_min"].shift(1)
+        mo_k["prix_avg_prev"] = mo_k.groupby("destination_label")["prix_avg"].shift(1)
+        mo_k["nb_depart_prev"] = mo_k.groupby("destination_label")["nb_depart"].shift(1)
+        mo_k["delta_prix_min"] = mo_k["prix_min"] - mo_k["prix_min_prev"]
+        mo_k["delta_prix_avg"] = mo_k["prix_avg"] - mo_k["prix_avg_prev"]
+        mo_k["delta_nb_depart"] = mo_k["nb_depart"] - mo_k["nb_depart_prev"]
+        mo_k["delta_prix_min_pct"] = mo_k["delta_prix_min"] / mo_k["prix_min_prev"]
+        mo_k["delta_prix_avg_pct"] = mo_k["delta_prix_avg"] / mo_k["prix_avg_prev"]
+        mo_k.replace([np.inf, -np.inf], np.nan, inplace=True)
+        mo_d = mo_k.copy()
+    else:
+        mo_k = pd.DataFrame(columns=["month","destination_label","prix_min","prix_avg","nb_depart"])
+        mo_d = pd.DataFrame()
+
+    alert_pct = float(os.getenv("ALERT_PCT", 0.10))
+    alert_eur = float(os.getenv("ALERT_EUR", 150.0))
+    if not wk_d.empty:
+        wk_d["flag"] = (wk_d["delta_pct"].abs() > alert_pct) | (wk_d["delta_abs"].abs() > alert_eur)
+        alerts = wk_d[wk_d["flag"]].copy()
+    else:
+        alerts = pd.DataFrame()
+
     sdd = same_date_diff(df_tours_curr, df_tours_prev)
 
-    # 6) export Excel
     export_excel(df_curr, wk_k, wk_d, mo_k, mo_d, alerts, df_tours_curr, sdd, out=args.out)
 
-    # 7) persistance SQLite
     if args.sqlite:
         persist_sqlite(df_curr, wk_k, wk_d, mo_k, mo_d, alerts, df_tours_curr, sdd, db_path=args.sqlite, run_ts=run_ts)
 
