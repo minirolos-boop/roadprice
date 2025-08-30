@@ -34,18 +34,59 @@ def to_month(s):
     except Exception:
         return None
 
-def _sanitize_scalars(d: dict) -> dict:
-    out = {}
-    for k, v in d.items():
-        if isinstance(v, (dict, list)):
-            out[k] = json.dumps(v, ensure_ascii=False)
-        else:
-            out[k] = v
-    return out
-
-def _dt_utc_now_iso():
-    # string ISO courte et stable: 2025-08-30T10:32:28Z
+def _now_iso_utc():
     return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+# ---------- SQLite helpers (compat & migration) ----------
+def table_exists(conn: sqlite3.Connection, name: str) -> bool:
+    cur = conn.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name=? LIMIT 1;", (name,))
+    return cur.fetchone() is not None
+
+def table_columns(conn: sqlite3.Connection, name: str) -> set[str]:
+    cur = conn.execute(f'PRAGMA table_info("{name}")')
+    return {row[1] for row in cur.fetchall()}
+
+def pandas_dtype_to_sql(s: pd.Series) -> str:
+    import pandas.api.types as pt
+    if pt.is_integer_dtype(s) or pt.is_bool_dtype(s):
+        return "INTEGER"
+    if pt.is_float_dtype(s):
+        return "REAL"
+    return "TEXT"
+
+def ensure_table_has_columns(conn: sqlite3.Connection, table: str, df: pd.DataFrame):
+    """Ajoute dans SQLite les colonnes manquantes pour accueillir df (ALTER TABLE ...)."""
+    if not table_exists(conn, table):
+        return  # to_sql créera la table au premier append
+    existing = table_columns(conn, table)
+    missing = [c for c in df.columns if c not in existing]
+    for c in missing:
+        coltype = pandas_dtype_to_sql(df[c])
+        conn.execute(f'ALTER TABLE "{table}" ADD COLUMN "{c}" {coltype}')
+    conn.commit()
+
+def pick_run_col(conn: sqlite3.Connection, table: str) -> str | None:
+    """Retourne 'run_date' ou 'run_ts' si présent dans la table, sinon None."""
+    if not table_exists(conn, table):
+        return None
+    cols = table_columns(conn, table)
+    if "run_date" in cols:
+        return "run_date"
+    if "run_ts" in cols:
+        return "run_ts"
+    return None
+
+def ensure_indexes(conn: sqlite3.Connection, table: str, run_col: str | None, extra: list[tuple[str,str]] = None):
+    try:
+        if run_col and table_exists(conn, table):
+            conn.execute(f'CREATE INDEX IF NOT EXISTS idx_{table}_{run_col} ON {table}({run_col});')
+        if extra:
+            for t, sql in extra:
+                if table_exists(conn, t):
+                    conn.execute(sql)
+        conn.commit()
+    except Exception as e:
+        logging.warning("ensure_indexes(%s): %s", table, e)
 
 # -------------------- Fetch --------------------
 def _session():
@@ -57,20 +98,20 @@ def _session():
     s.headers.update(headers)
     return s
 
-def fetch_travels():
-    s = _session()
-    r = s.get(API_TRAVELS, timeout=30)
-    r.raise_for_status()
-    data = r.json()
+def fetch_travels() -> list[dict]:
+    with _session() as s:
+        r = s.get(API_TRAVELS, timeout=45)
+        r.raise_for_status()
+        data = r.json()
     items = data.get("data", data) or []
     return items if isinstance(items, list) else []
 
 def fetch_tours_for_slug(slug: str) -> list[dict]:
-    s = _session()
-    url = API_TOURS.format(slug=slug)
-    r = s.get(url, timeout=30)
-    r.raise_for_status()
-    data = r.json()
+    with _session() as s:
+        url = API_TOURS.format(slug=slug)
+        r = s.get(url, timeout=45)
+        r.raise_for_status()
+        data = r.json()
     items = data.get("data", data) or []
     return items if isinstance(items, list) else []
 
@@ -130,13 +171,12 @@ def normalize_travels(travels: list[dict]) -> pd.DataFrame:
         )
     df = pd.DataFrame(rows)
     df["month"] = df["best_starting_date"].map(to_month)
-    # garder que les voyages avec un sales_status non vide
     if not df.empty:
         df = df.dropna(subset=["sales_status"])
         df = df[df["sales_status"].astype(str).str.strip() != ""]
     return df
 
-def normalize_tours(slug: str, tours_json: list[dict]) -> pd.DataFrame:
+def normalize_tours(slug: str, tours_json: list[dict], meta: dict) -> pd.DataFrame:
     rows = []
     for t in tours_json or []:
         rows.append({
@@ -151,6 +191,10 @@ def normalize_tours(slug: str, tours_json: list[dict]) -> pd.DataFrame:
             "coordinator_id": _get(t, ["coordinator", "id"]),
             "coordinator_nickname": (_get(t, ["coordinator", "nickname"]) or "").strip(),
             "coordinator_city": (_get(t, ["coordinator", "city"]) or "").strip(),
+            # meta from travels
+            "destination_label": meta.get("destination_label"),
+            "title": meta.get("title"),
+            "country_name": meta.get("country_name"),
         })
     df = pd.DataFrame(rows)
     if not df.empty:
@@ -164,38 +208,34 @@ def build_df_tours(df_curr: pd.DataFrame) -> pd.DataFrame:
     if df_curr is None or df_curr.empty:
         return pd.DataFrame()
     frames = []
-    for slug in sorted(df_curr["slug"].dropna().unique()):
+    for slug, meta in df_curr.set_index("slug")[["destination_label","title","country_name"]].dropna().to_dict("index").items():
         try:
             tours = fetch_tours_for_slug(slug)
-            frames.append(normalize_tours(slug, tours))
+            frames.append(normalize_tours(slug, tours, meta))
         except Exception as e:
             logging.warning("Tours fetch failed for slug %s: %s", slug, e)
     if not frames:
         return pd.DataFrame()
     out = pd.concat(frames, ignore_index=True)
-    # map some label for join convenience
-    lab = df_curr[["slug", "destination_label", "title", "country_name"]].drop_duplicates()
-    out = out.merge(lab, on="slug", how="left")
+    # filtre status vide
+    out = out[out["status"].astype(str).str.strip() != ""]
     return out
 
 # -------------------- Analyses --------------------
 def weekly_kpis(df: pd.DataFrame) -> dict:
     out = {}
     for c in ["price_eur", "base_price_eur", "discount_value_eur", "discount_pct"]:
-        series = df[c] if c in df else pd.Series(dtype=float)
-        series = series.dropna()
-        out[f"{c}_min"] = float(series.min()) if not series.empty else None
-        out[f"{c}_max"] = float(series.max()) if not series.empty else None
-        out[f"{c}_avg"] = float(series.mean()) if not series.empty else None
-        out[f"{c}_med"] = float(series.median()) if not series.empty else None
-
+        s = df[c] if c in df else pd.Series(dtype=float)
+        s = s.dropna()
+        out[f"{c}_min"] = float(s.min()) if not s.empty else None
+        out[f"{c}_max"] = float(s.max()) if not s.empty else None
+        out[f"{c}_avg"] = float(s.mean()) if not s.empty else None
+        out[f"{c}_med"] = float(s.median()) if not s.empty else None
     out["count_total"] = int(len(df))
-    out["count_promos"] = int(df["discount_pct"].notna().sum())
+    out["count_promos"] = int(df["discount_pct"].notna().sum()) if "discount_pct" in df.columns else 0
     out["promo_share_pct"] = round(100 * out["count_promos"] / out["count_total"], 1) if out["count_total"] else 0.0
-
-    s = df["month"].dropna()
-    depart_by_month = s.value_counts().sort_index().to_dict()
-    out["depart_by_month"] = json.dumps(depart_by_month, ensure_ascii=False)
+    s = df["month"].dropna() if "month" in df.columns else pd.Series([], dtype=object)
+    out["depart_by_month"] = json.dumps(s.value_counts().sort_index().to_dict(), ensure_ascii=False)
     return out
 
 def cheapest_by_destination(df: pd.DataFrame) -> pd.DataFrame:
@@ -204,10 +244,7 @@ def cheapest_by_destination(df: pd.DataFrame) -> pd.DataFrame:
         idx = pd.Index([], name="destination_label")
         return pd.DataFrame(columns=["title", "country_name", "price_eur", "url"]).set_index(idx)
     idxmin = base.groupby("destination_label")["price_eur"].idxmin()
-    return (
-        base.loc[idxmin, ["destination_label", "title", "country_name", "price_eur", "url"]]
-        .set_index("destination_label")
-    )
+    return base.loc[idxmin, ["destination_label", "title", "country_name", "price_eur", "url"]].set_index("destination_label")
 
 def weekly_diff(df_curr: pd.DataFrame, df_prev: pd.DataFrame | None) -> pd.DataFrame:
     L = cheapest_by_destination(df_curr)
@@ -216,28 +253,24 @@ def weekly_diff(df_curr: pd.DataFrame, df_prev: pd.DataFrame | None) -> pd.DataF
     diff["delta_abs"] = diff["price_eur_curr"] - diff["price_eur_prev"]
     diff["delta_pct"] = diff["delta_abs"] / diff["price_eur_prev"]
     diff.replace([np.inf, -np.inf], np.nan, inplace=True)
-    diff["movement"] = diff["delta_abs"].apply(
-        lambda v: "↓" if (pd.notna(v) and v < 0) else ("↑" if (pd.notna(v) and v > 0) else "=")
-    )
-    # url (curr)
-    diff = diff.reset_index()
-    url_map = df_curr.set_index(["destination_label"])["url"].to_dict()
-    diff["url"] = diff["destination_label"].map(url_map)
-    return diff
+    diff["movement"] = diff["delta_abs"].apply(lambda v: "↓" if (pd.notna(v) and v < 0) else ("↑" if (pd.notna(v) and v > 0) else "="))
+    out = diff.reset_index()
+    # url = url_curr si dispo sinon url_prev sinon None
+    if "url_curr" in out.columns:
+        out["url"] = out["url_curr"]
+    elif "url_prev" in out.columns:
+        out["url"] = out["url_prev"]
+    return out
 
 def monthly_kpis(df: pd.DataFrame) -> pd.DataFrame:
     base = df.dropna(subset=["month"]).copy()
-    grp = base.groupby(["month", "destination_label"], dropna=False)
-    agg = grp.agg(
-        prix_min=("price_eur", "min"),
-        prix_avg=("price_eur", "mean"),
-        nb_depart=("best_starting_date", "count"),
-    ).reset_index()
+    grp = base.groupby(["month","destination_label"], dropna=False)
+    agg = grp.agg(prix_min=("price_eur","min"), prix_avg=("price_eur","mean"), nb_depart=("best_starting_date","count")).reset_index()
     return agg
 
 def monthly_diff(mo: pd.DataFrame) -> pd.DataFrame:
-    mo = mo.sort_values(["destination_label", "month"]).copy()
-    for col in ["prix_min", "prix_avg", "nb_depart"]:
+    mo = mo.sort_values(["destination_label","month"]).copy()
+    for col in ["prix_min","prix_avg","nb_depart"]:
         mo[f"{col}_prev"] = mo.groupby("destination_label")[col].shift(1)
         mo[f"delta_{col}"] = mo[col] - mo[f"{col}_prev"]
         if col != "nb_depart":
@@ -245,179 +278,158 @@ def monthly_diff(mo: pd.DataFrame) -> pd.DataFrame:
     mo.replace([np.inf, -np.inf], np.nan, inplace=True)
     return mo
 
-def find_alerts(weekly_diff_df: pd.DataFrame, pct_threshold=0.10, abs_threshold=150.0) -> pd.DataFrame:
-    if weekly_diff_df is None or weekly_diff_df.empty:
+def find_alerts(wd: pd.DataFrame, pct_threshold=0.10, abs_threshold=150.0) -> pd.DataFrame:
+    if wd is None or wd.empty:
         return pd.DataFrame(columns=["destination_label","title_curr","price_eur_prev","price_eur_curr","delta_abs","delta_pct","movement","url"])
-    x = weekly_diff_df.copy()
+    x = wd.copy()
     x["flag"] = (x["delta_pct"].abs() > pct_threshold) | (x["delta_abs"].abs() > abs_threshold)
-    cols = ["destination_label","title_curr","price_eur_prev","price_eur_curr","delta_abs","delta_pct","movement","url"]
-    cols = [c for c in cols if c in x.columns]
-    out = x[x["flag"]].sort_values(["delta_pct","delta_abs"], ascending=[False,False])[cols].reset_index(drop=True)
-    return out
+    keep = ["destination_label","title_curr","price_eur_prev","price_eur_curr","delta_abs","delta_pct","movement","url","flag"]
+    return x[keep][x["flag"]].drop(columns=["flag"]).sort_values(["delta_pct","delta_abs"], ascending=[False,False])
 
 def same_date_price_diff(df_tours_curr: pd.DataFrame, df_tours_prev: pd.DataFrame) -> pd.DataFrame:
-    """Compare, pour un même tour_id, le prix courant vs précédent."""
     if df_tours_curr is None or df_tours_curr.empty or df_tours_prev is None or df_tours_prev.empty:
         return pd.DataFrame(columns=["tour_id","slug","destination_label","price_prev","price_curr","delta_abs","delta_pct","url_precise"])
-
     L = df_tours_curr[["tour_id","slug","destination_label","price_eur","url_precise"]].dropna(subset=["tour_id"]).copy()
-    R = df_tours_prev[["tour_id","price_eur"]].dropna(subset=["tour_id"]).copy()
-    R = R.rename(columns={"price_eur": "price_prev"})
+    R = df_tours_prev[["tour_id","price_eur"]].dropna(subset=["tour_id"]).copy().rename(columns={"price_eur":"price_prev"})
     diff = L.merge(R, on="tour_id", how="left")
     diff = diff[diff["price_prev"].notna()].copy()
-    diff.rename(columns={"price_eur": "price_curr"}, inplace=True)
+    diff.rename(columns={"price_eur":"price_curr"}, inplace=True)
     diff["delta_abs"] = diff["price_curr"] - diff["price_prev"]
     diff["delta_pct"] = diff["delta_abs"] / diff["price_prev"]
     diff.replace([np.inf, -np.inf], np.nan, inplace=True)
-    # tri par variation la plus forte
-    diff = diff.sort_values(["delta_pct","delta_abs"], ascending=[False, False]).reset_index(drop=True)
-    return diff
+    return diff.sort_values(["delta_pct","delta_abs"], ascending=[False,False]).reset_index(drop=True)
 
 def coordinator_stats(df_tours: pd.DataFrame) -> pd.DataFrame:
-    """Classement des coordinateurs (nb d'apparitions sur le run courant)."""
     if df_tours is None or df_tours.empty:
         return pd.DataFrame(columns=["coordinator_id","coordinator_nickname","appearances"])
     x = df_tours.dropna(subset=["coordinator_id"]).copy()
     x["coordinator_nickname"] = x["coordinator_nickname"].fillna("").replace("", "(sans pseudo)")
     grp = (x.groupby(["coordinator_id","coordinator_nickname"], dropna=False)
-             .size()
-             .reset_index(name="appearances")
-             .sort_values(["appearances","coordinator_nickname"], ascending=[False, True]))
+             .size().reset_index(name="appearances")
+             .sort_values(["appearances","coordinator_nickname"], ascending=[False,True]))
     return grp
 
-# -------------------- Export / Persist --------------------
-def export_excel(
-    df_curr: pd.DataFrame,
-    wk_kpis: dict,
-    wk_diff: pd.DataFrame,
-    mo_kpis: pd.DataFrame,
-    mo_diff: pd.DataFrame,
-    alerts: pd.DataFrame,
-    df_tours: pd.DataFrame,
-    same_date_diff: pd.DataFrame,
-    coord_stats: pd.DataFrame,
-    out="weekly_report.xlsx",
-):
+# -------------------- Export --------------------
+def _to_excel_sorted(df: pd.DataFrame, writer, sheet: str, by=None, ascending=None):
+    out = df.copy()
+    try:
+        if by:
+            cols = by if isinstance(by,(list,tuple)) else [by]
+            if all(c in out.columns for c in cols):
+                out = out.sort_values(by=cols, ascending=ascending if ascending is not None else True)
+    except Exception:
+        pass
+    out.to_excel(writer, index=False, sheet_name=sheet)
+
+def export_excel(df_curr, wk_kpis, wk_diff, mo_kpis, mo_diff, alerts, df_tours, same_d, coord_stats, out="weekly_report.xlsx"):
     with pd.ExcelWriter(out, engine="openpyxl") as w:
         df_curr.to_excel(w, index=False, sheet_name="Voyages_Week")
         pd.DataFrame([wk_kpis]).to_excel(w, index=False, sheet_name="Weekly_KPIs")
-        wk_diff.sort_values(by=["delta_pct", "delta_abs"], ascending=[False, False]).to_excel(
-            w, index=False, sheet_name="Weekly_Diff"
-        )
+        _to_excel_sorted(wk_diff, w, "Weekly_Diff", by=["delta_pct","delta_abs"], ascending=[False,False])
         alerts.to_excel(w, index=False, sheet_name="Alerts")
         mo_kpis.to_excel(w, index=False, sheet_name="Monthly_KPIs")
         mo_diff.to_excel(w, index=False, sheet_name="Monthly_Diff")
         df_tours.to_excel(w, index=False, sheet_name="Tours_View")
-        same_date_diff.to_excel(w, index=False, sheet_name="SameDateDiff")
+        _to_excel_sorted(same_d, w, "SameDateDiff", by=["delta_pct","delta_abs"], ascending=[False,False])
         coord_stats.to_excel(w, index=False, sheet_name="Coordinators")
     logging.info("Exporté: %s", out)
 
-def _table_exists(conn: sqlite3.Connection, name: str) -> bool:
-    cur = conn.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name=? LIMIT 1;", (name,))
-    return cur.fetchone() is not None
-
-def persist_sqlite(
-    df_curr: pd.DataFrame,
-    wk_kpis: dict,
-    wk_diff: pd.DataFrame,
-    mo_kpis: pd.DataFrame,
-    mo_diff: pd.DataFrame,
-    alerts: pd.DataFrame,
-    df_tours: pd.DataFrame,
-    same_date_diff: pd.DataFrame,
-    coord_stats: pd.DataFrame,
-    db_path: str,
-    run_ts: str,
-):
-    Path(db_path).parent.mkdir(parents=True, exist_ok=True)
-    conn = sqlite3.connect(db_path)
-    try:
-        df_curr.assign(run_date=run_ts).to_sql("snapshots", conn, if_exists="append", index=False)
-        pd.DataFrame([{"run_date": run_ts, **_sanitize_scalars(wk_kpis)}]).to_sql(
-            "weekly_kpis", conn, if_exists="append", index=False
-        )
-        wk_diff.assign(run_date=run_ts).to_sql("weekly_diff", conn, if_exists="append", index=False)
-        mo_kpis.assign(run_date=run_ts).to_sql("monthly_kpis", conn, if_exists="append", index=False)
-        mo_diff.assign(run_date=run_ts).to_sql("monthly_diff", conn, if_exists="append", index=False)
-        alerts.assign(run_date=run_ts).to_sql("alerts", conn, if_exists="append", index=False)
-        df_tours.assign(run_date=run_ts).to_sql("tours", conn, if_exists="append", index=False)
-        same_date_diff.assign(run_date=run_ts).to_sql("same_date_diff", conn, if_exists="append", index=False)
-        coord_stats.assign(run_date=run_ts).to_sql("coordinator_stats", conn, if_exists="append", index=False)
-    finally:
-        conn.close()
-    logging.info("Persisté SQLite: %s", db_path)
-
-def ensure_indexes(db_path: str):
-    conn = sqlite3.connect(db_path)
-    try:
-        # créer index uniquement si la table existe (évite "no such table")
-        def idx(table: str, sql: str):
-            if _table_exists(conn, table):
-                conn.execute(sql)
-
-        idx("tours", "CREATE INDEX IF NOT EXISTS idx_tours_run ON tours(run_date);")
-        idx("tours", "CREATE INDEX IF NOT EXISTS idx_tours_coord ON tours(coordinator_id);")
-
-        idx("coordinator_stats", "CREATE INDEX IF NOT EXISTS idx_coordstats_run ON coordinator_stats(run_date);")
-        idx("coordinator_stats", "CREATE INDEX IF NOT EXISTS idx_coordstats_coord ON coordinator_stats(coordinator_id);")
-
-        idx("same_date_diff", "CREATE INDEX IF NOT EXISTS idx_samedate_run ON same_date_diff(run_date);")
-        idx("weekly_diff", "CREATE INDEX IF NOT EXISTS idx_weeklydiff_run ON weekly_diff(run_date);")
-        idx("snapshots", "CREATE INDEX IF NOT EXISTS idx_snapshots_run ON snapshots(run_date);")
-    finally:
-        conn.close()
+# -------------------- Persist --------------------
+def persist_sqlite(conn: sqlite3.Connection, table: str, df: pd.DataFrame, run_iso: str):
+    """
+    Append df into table, ensuring:
+      - both run_date and run_ts columns exist (compat)
+      - all df columns exist (auto-migration)
+    """
+    if df is None:
+        return
+    df2 = df.copy()
+    # Ajoute les deux colonnes de run (compat)
+    df2["run_date"] = run_iso
+    df2["run_ts"] = run_iso
+    ensure_table_has_columns(conn, table, df2)
+    df2.to_sql(table, conn, if_exists="append", index=False)
 
 # -------------------- Main --------------------
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--out", default="weekly_report.xlsx", help="Chemin du rapport Excel")
-    ap.add_argument("--sqlite", default="data/weroad.db", help="Chemin de la base SQLite")
+    ap.add_argument("--out", default="weekly_report.xlsx")
+    ap.add_argument("--sqlite", default="data/weroad.db")
     ap.add_argument("--alert-pct", type=float, default=float(os.getenv("ALERT_PCT", 0.10)))
     ap.add_argument("--alert-eur", type=float, default=float(os.getenv("ALERT_EUR", 150.0)))
     args = ap.parse_args()
 
-    run_ts = _dt_utc_now_iso()
-    logging.info("Run timestamp (UTC): %s", run_ts)
+    run_iso = _now_iso_utc()
+    logging.info("Run timestamp (UTC): %s", run_iso)
 
     travels = fetch_travels()
-    df_curr = normalize_travels(travels)
+    df_curr  = normalize_travels(travels)
 
-    # Previous run snapshots (for weekly_diff)
-    df_prev = None
+    # Previous snapshots (compat run_date/run_ts)
+    df_prev = pd.DataFrame()
     df_tours_prev = pd.DataFrame()
-    last_run = None
     if args.sqlite and Path(args.sqlite).exists():
         conn = sqlite3.connect(args.sqlite)
         try:
-            runs = pd.read_sql_query(
-                "SELECT MAX(run_date) AS last_run FROM snapshots;", conn
-            )
-            if not runs.empty and pd.notna(runs.loc[0, "last_run"]):
-                last_run = runs.loc[0, "last_run"]
-                df_prev = pd.read_sql_query("SELECT * FROM snapshots WHERE run_date = ?", conn, params=(last_run,))
-                # tours du run précédent (pour same-date diff)
-                if _table_exists(conn, "tours"):
-                    df_tours_prev = pd.read_sql_query("SELECT * FROM tours WHERE run_date = ?", conn, params=(last_run,))
+            rc = pick_run_col(conn, "snapshots")
+            if rc:
+                runs = pd.read_sql_query(f"SELECT MAX({rc}) AS last_run FROM snapshots;", conn)
+                last_run = runs["last_run"].iloc[0] if not runs.empty else None
+                if last_run:
+                    df_prev = pd.read_sql_query(f"SELECT * FROM snapshots WHERE {rc} = ?", conn, params=(last_run,))
+            # tours prev
+            rtc = pick_run_col(conn, "tours")
+            if rtc:
+                runs_t = pd.read_sql_query(f"SELECT MAX({rtc}) AS last_run FROM tours;", conn)
+                last_t = runs_t["last_run"].iloc[0] if not runs_t.empty else None
+                if last_t:
+                    df_tours_prev = pd.read_sql_query(f"SELECT * FROM tours WHERE {rtc} = ?", conn, params=(last_t,))
         finally:
             conn.close()
 
-    wk_k = weekly_kpis(df_curr)
-    wk_d = weekly_diff(df_curr, df_prev)
-    mo_k = monthly_kpis(df_curr)
-    mo_d = monthly_diff(mo_k)
+    wk_k  = weekly_kpis(df_curr)
+    wk_d  = weekly_diff(df_curr, df_prev)
+    mo_k  = monthly_kpis(df_curr)
+    mo_d  = monthly_diff(mo_k)
     alerts = find_alerts(wk_d, pct_threshold=args.alert_pct, abs_threshold=args.alert_eur)
 
-    # tours (toutes dates de chaque slug)
+    # All tours (current)
     df_tours_curr = build_df_tours(df_curr)
-    same_date_diffs = same_date_price_diff(df_tours_curr, df_tours_prev)
+    same_d = same_date_price_diff(df_tours_curr, df_tours_prev)
     coord_stats = coordinator_stats(df_tours_curr)
 
-    export_excel(df_curr, wk_k, wk_d, mo_k, mo_d, alerts, df_tours_curr, same_date_diffs, coord_stats, out=args.out)
+    export_excel(df_curr, wk_k, wk_d, mo_k, mo_d, alerts, df_tours_curr, same_d, coord_stats, out=args.out)
 
     if args.sqlite:
-        persist_sqlite(df_curr, wk_k, wk_d, mo_k, mo_d, alerts, df_tours_curr, same_date_diffs, coord_stats,
-                       db_path=args.sqlite, run_ts=run_ts)
-        ensure_indexes(args.sqlite)
+        Path(args.sqlite).parent.mkdir(parents=True, exist_ok=True)
+        conn = sqlite3.connect(args.sqlite)
+        try:
+            persist_sqlite(conn, "snapshots", df_curr, run_iso)
+            persist_sqlite(conn, "weekly_kpis", pd.DataFrame([wk_kpis := wk_k]), run_iso)
+            persist_sqlite(conn, "weekly_diff", wk_d, run_iso)
+            persist_sqlite(conn, "monthly_kpis", mo_k, run_iso)
+            persist_sqlite(conn, "monthly_diff", mo_d, run_iso)
+            persist_sqlite(conn, "alerts", alerts, run_iso)
+            persist_sqlite(conn, "tours", df_tours_curr, run_iso)
+            persist_sqlite(conn, "same_date_diff", same_d, run_iso)
+            persist_sqlite(conn, "coordinator_stats", coord_stats, run_iso)
+
+            # indexes (crée selon colonnes présentes)
+            ensure_indexes(conn, "snapshots", pick_run_col(conn, "snapshots"))
+            ensure_indexes(conn, "weekly_kpis", pick_run_col(conn, "weekly_kpis"))
+            ensure_indexes(conn, "weekly_diff", pick_run_col(conn, "weekly_diff"))
+            ensure_indexes(conn, "monthly_kpis", pick_run_col(conn, "monthly_kpis"))
+            ensure_indexes(conn, "monthly_diff", pick_run_col(conn, "monthly_diff"))
+            ensure_indexes(conn, "alerts", pick_run_col(conn, "alerts"))
+            ensure_indexes(conn, "tours", pick_run_col(conn, "tours"),
+                           extra=[("tours", "CREATE INDEX IF NOT EXISTS idx_tours_tour_id ON tours(tour_id);"),
+                                  ("tours", "CREATE INDEX IF NOT EXISTS idx_tours_coord ON tours(coordinator_id);")])
+            ensure_indexes(conn, "same_date_diff", pick_run_col(conn, "same_date_diff"),
+                           extra=[("same_date_diff", "CREATE INDEX IF NOT EXISTS idx_same_tour ON same_date_diff(tour_id);")])
+            ensure_indexes(conn, "coordinator_stats", pick_run_col(conn, "coordinator_stats"),
+                           extra=[("coordinator_stats", "CREATE INDEX IF NOT EXISTS idx_coord_coord ON coordinator_stats(coordinator_id);")])
+        finally:
+            conn.close()
 
 if __name__ == "__main__":
     main()
