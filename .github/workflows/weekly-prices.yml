@@ -2,11 +2,12 @@ name: Weekly Prices Monitor
 
 on:
   schedule:
-    - cron: "0 16 * * *"        # 18:00 heure FR (16:00 UTC)
+    - cron: "0 16 * * *"     # 18:00 Paris (16:00 UTC)
   workflow_dispatch: {}
 
 permissions:
   contents: write
+  actions: read            # ⬅️ nécessaire pour lister les runs/artefacts
   pages: write
   id-token: write
 
@@ -18,13 +19,62 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # (optionnel) restaurer la DB du run précédent pour l'historique
+      # ─────────────────────────────────────────────────────────────
+      # Trouver le DERNIER run réussi de ce workflow et vérifier si
+      # un artifact 'sqlite_snapshot' y est présent (non expiré)
+      # ─────────────────────────────────────────────────────────────
+      - name: Find previous successful run that has sqlite_snapshot
+        id: find_previous
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const workflowFile = 'weekly-prices.yml'; // nom du fichier workflow
+            const { owner, repo } = context.repo;
+
+            // 1) Lister les derniers runs RÉUSSIS de CE workflow
+            const runs = await github.rest.actions.listWorkflowRuns({
+              owner, repo,
+              workflow_id: workflowFile,
+              status: 'success',
+              per_page: 25
+            });
+
+            // 2) Prendre le dernier run ≠ run courant
+            const prev = runs.data.workflow_runs
+              .filter(r => r.id !== context.runId)
+              .sort((a,b) => new Date(b.created_at) - new Date(a.created_at))[0];
+
+            if (!prev) {
+              core.setOutput('found', 'false');
+              return;
+            }
+
+            // 3) Lister ses artefacts et vérifier s'il y a sqlite_snapshot
+            const arts = await github.rest.actions.listWorkflowRunArtifacts({
+              owner, repo, run_id: prev.id
+            });
+
+            const art = arts.data.artifacts.find(a => a.name === 'sqlite_snapshot' && !a.expired);
+            if (art) {
+              core.setOutput('found', 'true');
+              core.setOutput('run_id', String(prev.id));
+            } else {
+              core.setOutput('found', 'false');
+            }
+
+      # ─────────────────────────────────────────────────────────────
+      # Télécharger l’artefact sqlite_snapshot du run précédent
+      # (uniquement s’il existe)
+      # ─────────────────────────────────────────────────────────────
       - name: Restore previous DB (artifact)
+        if: steps.find_previous.outputs.found == 'true'
         uses: actions/download-artifact@v4
         with:
           name: sqlite_snapshot
           path: data
-        continue-on-error: true
+          repository: ${{ github.repository }}
+          run-id: ${{ steps.find_previous.outputs.run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Ensure DB filename
         run: |
@@ -57,15 +107,6 @@ jobs:
       - name: Build single-page dashboard (docs/index.md)
         run: python summarize.py
 
-      # Debug: vérifier que summarize.py a bien écrit docs/index.md
-      - name: Debug list docs
-        run: |
-          echo "=== docs ==="
-          ls -la docs
-          echo "=== head docs/index.md ==="
-          head -n 50 docs/index.md || true
-
-      # Artefacts techniques (facultatif)
       - name: Upload Excel artifact
         uses: actions/upload-artifact@v4
         with:
@@ -80,28 +121,13 @@ jobs:
           path: data/weroad.db
           retention-days: 90
 
-      # === Déploiement GitHub Pages via Actions avec build Jekyll ===
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
-      # Build Jekyll (convertit docs/index.md -> _site/index.html)
-      - name: Build with Jekyll
-        uses: actions/jekyll-build-pages@v1
-        with:
-          source: ./docs
-          destination: ./_site
-
-      - name: Debug list _site
-        run: |
-          echo "=== _site ==="
-          ls -la _site | sed -n '1,120p'
-          test -f _site/index.html && echo "index.html OK" || (echo "index.html MISSING" && exit 1)
-
-      # Upload *le site compilé*, pas docs/
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./_site
+          path: ./docs
 
   deploy:
     needs: build
