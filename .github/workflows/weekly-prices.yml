@@ -5,16 +5,15 @@ on:
     - cron: "0 16 * * *"     # 18:00 Paris (16:00 UTC)
   workflow_dispatch: {}
 
-# évite les exécutions concurrentes qui se marchent dessus
 concurrency:
   group: pages-build
   cancel-in-progress: false
 
 permissions:
   contents: write
-  actions: read            # pour lister runs/artefacts
-  pages: write             # pour deploy-pages
-  id-token: write          # pour deploy-pages
+  actions: read        # nécessaire pour lister les runs/artefacts
+  pages: write
+  id-token: write
 
 jobs:
   build:
@@ -24,18 +23,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # ─────────────────────────────────────────────────────────────
-      # Trouver le DERNIER run réussi de CE workflow contenant
-      # l’artefact "sqlite_snapshot" (non expiré)
-      # ─────────────────────────────────────────────────────────────
+      # 1) Trouver le DERNIER run réussi de CE workflow possédant "sqlite_snapshot"
       - name: Find previous successful run that has sqlite_snapshot
         id: find_previous
         uses: actions/github-script@v7
         with:
           script: |
-            const workflowFile = 'weekly-prices.yml'; // ce fichier
+            const workflowFile = 'weekly-prices.yml'; // ce workflow
             const { owner, repo } = context.repo;
 
+            // Lister les runs réussis
             const runs = await github.rest.actions.listWorkflowRuns({
               owner, repo,
               workflow_id: workflowFile,
@@ -43,7 +40,7 @@ jobs:
               per_page: 25
             });
 
-            // prendre le dernier run ≠ run courant
+            // Prendre le dernier run ≠ run courant
             const prev = runs.data.workflow_runs
               .filter(r => r.id !== context.runId)
               .sort((a,b) => new Date(b.created_at) - new Date(a.created_at))[0];
@@ -53,6 +50,7 @@ jobs:
               return;
             }
 
+            // Lister les artefacts de ce run
             const arts = await github.rest.actions.listWorkflowRunArtifacts({
               owner, repo, run_id: prev.id
             });
@@ -65,16 +63,19 @@ jobs:
               core.setOutput('found', 'false');
             }
 
-      # ─────────────────────────────────────────────────────────────
-      # Télécharger l’artefact sqlite_snapshot du run précédent s’il existe
-      # ─────────────────────────────────────────────────────────────
+      # 2) Télécharger l’artefact 'sqlite_snapshot' depuis le run précédent
+      #    -> IMPORTANT: 'actions/download-artifact@v4' ne marche pas pour les runs précédents.
+      #       On utilise 'dawidd6/action-download-artifact@v2' qui supporte run_id.
       - name: Restore previous DB (artifact)
         if: steps.find_previous.outputs.found == 'true'
-        uses: actions/download-artifact@v4
+        uses: dawidd6/action-download-artifact@v2
         with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          run_id: ${{ steps.find_previous.outputs.run_id }}
           name: sqlite_snapshot
           path: data
-          run-id: ${{ steps.find_previous.outputs.run_id }}
+        # au cas où il n'y a finalement rien à récupérer (artefact expiré...), on ne bloque pas le job
+        continue-on-error: true
 
       - name: Ensure DB filename
         run: |
@@ -84,6 +85,7 @@ jobs:
               mv data/*.db data/weroad.db
             fi
           fi
+          ls -lah data || true
 
       - name: Set up Python (with pip cache)
         uses: actions/setup-python@v5
@@ -122,18 +124,17 @@ jobs:
           path: data/weroad.db
           retention-days: 90
 
-      # ───────────── GitHub Pages (avec build Jekyll) ──────────────
+      # --- Build + Publish GitHub Pages ---
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
-      # Convertit docs/ (index.md + _config.yml) → _site/index.html
+      # Compile docs/ (index.md) en HTML (_site)
       - name: Build with Jekyll
         uses: actions/jekyll-build-pages@v1
         with:
           source: ./docs
           destination: ./_site
 
-      # On publie le dossier _site (HTML prêt à servir) vers Pages
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
