@@ -1,4 +1,4 @@
-# summarize.py — page unique Markdown (docs/index.md)
+# summarize.py — docs/index.md
 from pathlib import Path
 from datetime import datetime, timezone
 import os
@@ -13,22 +13,34 @@ RECENT_MONTHS = 24
 ALERT_PCT = float(os.getenv("ALERT_PCT", "0.10"))
 ALERT_EUR = float(os.getenv("ALERT_EUR", "150"))
 
-# ---------- Helpers ----------
-def html_table(df: pd.DataFrame, max_rows: int = 20) -> str:
+# ---------- helpers ----------
+def ensure_docs():
+    DOCS_DIR.mkdir(parents=True, exist_ok=True)
+
+def pick_run_col(conn, table: str) -> str | None:
+    cur = conn.execute(f'PRAGMA table_info("{table}")')
+    cols = {row[1] for row in cur.fetchall()}
+    if "run_date" in cols: return "run_date"
+    if "run_ts" in cols: return "run_ts"
+    return None
+
+def safe_read_sql(sql: str, conn, params: tuple = ()) -> pd.DataFrame:
+    try:
+        return pd.read_sql_query(sql, conn, params=params)
+    except Exception:
+        return pd.DataFrame()
+
+def html_table(df: pd.DataFrame, max_rows=20) -> str:
     if df is None or df.empty:
         return "<p><em>Aucune donnée</em></p>"
     df = df.copy().head(max_rows)
-
     pct_cols = [c for c in df.columns if c.endswith("_pct") or c in ("promo_share_pct",)]
     for c in pct_cols:
         if c in df.columns:
             df[c] = df[c].map(lambda v: f"{v*100:.1f}%" if pd.notna(v) else "")
-
     money_cols = [c for c in df.columns if any(k in c for k in ["price", "prix", "delta_abs"])]
     for c in money_cols:
-        if c in df.columns:
-            df[c] = df[c].map(lambda v: f"{v:,.2f} €".replace(",", " ").replace(".", ",") if pd.notna(v) else "")
-
+        df[c] = df[c].map(lambda v: f"{v:,.2f} €".replace(",", " ").replace(".", ",") if pd.notna(v) else "")
     return df.to_html(index=False, classes="rp-table", escape=False)
 
 def decorate_movement(df: pd.DataFrame) -> pd.DataFrame:
@@ -40,91 +52,98 @@ def decorate_movement(df: pd.DataFrame) -> pd.DataFrame:
     out["movement"] = [f"<code class='{c}'>{s}</code>" for c, s in zip(cls, m)]
     return out
 
-def safe_read_sql(sql: str, conn, params: tuple = ()) -> pd.DataFrame:
-    try:
-        return pd.read_sql_query(sql, conn, params=params)
-    except Exception:
-        return pd.DataFrame()
-
-def ensure_docs():
-    DOCS_DIR.mkdir(parents=True, exist_ok=True)
-
-# ---------- Main ----------
+# ---------- main ----------
 def main():
     ensure_docs()
-
     if not DB.exists():
-        OUT.write_text("# RoadPrice\n\n_Base SQLite absente : `data/weroad.db`_", encoding="utf-8")
-        return
+        OUT.write_text("# RoadPrice\n\n_Base SQLite absente : `data/weroad.db`_", encoding="utf-8"); return
 
     conn = sqlite3.connect(DB)
     try:
-        last_df = safe_read_sql("SELECT MAX(run_date) AS r FROM weekly_kpis", conn)
-        last = last_df.loc[0, "r"] if (not last_df.empty and pd.notna(last_df.loc[0, "r"])) else None
+        # trouver last run (weekly_kpis prioritaire, sinon snapshots)
+        run_col = pick_run_col(conn, "weekly_kpis")
+        last = None
+        if run_col:
+            df_last = safe_read_sql(f"SELECT MAX({run_col}) AS r FROM weekly_kpis", conn)
+            last = df_last.loc[0, "r"] if (not df_last.empty and pd.notna(df_last.loc[0, "r"])) else None
         if not last:
-            OUT.write_text("# RoadPrice\n\n_Aucune donnée disponible pour l’instant._", encoding="utf-8")
-            return
+            run_col = pick_run_col(conn, "snapshots")
+            if run_col:
+                df_last2 = safe_read_sql(f"SELECT MAX({run_col}) AS r FROM snapshots", conn)
+                last = df_last2.loc[0, "r"] if (not df_last2.empty and pd.notna(df_last2.loc[0, "r"])) else None
+        if not last:
+            OUT.write_text("# RoadPrice\n\n_Aucune donnée disponible pour l’instant._", encoding="utf-8"); return
 
-        runs = safe_read_sql("SELECT DISTINCT run_date FROM weekly_kpis ORDER BY run_date", conn)
-        start_run = runs["run_date"].iloc[0] if not runs.empty else None
-        end_run   = runs["run_date"].iloc[-1] if not runs.empty else None
+        # runs coverage
+        rc_kpi = pick_run_col(conn, "weekly_kpis")
+        runs = safe_read_sql(f"SELECT DISTINCT {rc_kpi} AS run FROM weekly_kpis ORDER BY {rc_kpi}", conn) if rc_kpi else pd.DataFrame()
+        start_run = runs["run"].iloc[0] if not runs.empty else None
+        end_run   = runs["run"].iloc[-1] if not runs.empty else None
 
-        df_curr = safe_read_sql("SELECT * FROM snapshots WHERE run_date = ?", conn, (last,))
-        kpi_last = safe_read_sql("SELECT * FROM weekly_kpis WHERE run_date = ?", conn, (last,))
+        # data for last run
+        rc_snap = pick_run_col(conn, "snapshots")
+        df_curr = safe_read_sql(f"SELECT * FROM snapshots WHERE {rc_snap} = ?", conn, (last,)) if rc_snap else pd.DataFrame()
+
+        kpi_last = safe_read_sql(f"SELECT * FROM weekly_kpis WHERE {rc_kpi} = ?", conn, (last,)) if rc_kpi else pd.DataFrame()
         kpi_hist = safe_read_sql(
-            "SELECT run_date, price_eur_min, price_eur_med, price_eur_avg, count_total, count_promos, promo_share_pct "
-            "FROM weekly_kpis ORDER BY run_date", conn
-        )
-        wd = safe_read_sql("SELECT * FROM weekly_diff WHERE run_date = ?", conn, (last,))
+            f"SELECT {rc_kpi} AS run_date, price_eur_min, price_eur_med, price_eur_avg, count_total, count_promos, promo_share_pct "
+            f"FROM weekly_kpis ORDER BY {rc_kpi}", conn
+        ) if rc_kpi else pd.DataFrame()
+
+        rc_wd = pick_run_col(conn, "weekly_diff")
+        wd = safe_read_sql(f"SELECT * FROM weekly_diff WHERE {rc_wd} = ?", conn, (last,)) if rc_wd else pd.DataFrame()
         if not wd.empty:
             base_cols = ["destination_label","title_curr","price_eur_prev","price_eur_curr","delta_abs","delta_pct","movement","url"]
-            base_cols = [c for c in base_cols if c in wd.columns]
-            wd = wd[base_cols].copy()
+            wd = wd[[c for c in base_cols if c in wd.columns]]
+
+        rc_mk = pick_run_col(conn, "monthly_kpis")
         mo_all = safe_read_sql(
             "SELECT month, destination_label, prix_min, prix_avg, nb_depart "
             "FROM monthly_kpis ORDER BY month, destination_label", conn
-        )
+        ) if rc_mk else pd.DataFrame()
 
-        # tours / same-date diff / coord stats
+        # tours / same-date / coord
+        rc_tours = pick_run_col(conn, "tours")
         tours = safe_read_sql(
-            "SELECT slug, destination_label, tour_id, date_start, status, price_eur, base_price_eur, url_precise, "
-            "coordinator_id, coordinator_nickname, coordinator_city "
-            "FROM tours WHERE run_date = ? ORDER BY slug, date_start", conn, (last,)
-        )
+            f"SELECT slug, destination_label, tour_id, date_start, status, price_eur, base_price_eur, url_precise, "
+            f"coordinator_id, coordinator_nickname, coordinator_city "
+            f"FROM tours WHERE {rc_tours} = ? ORDER BY slug, date_start", conn, (last,)
+        ) if rc_tours else pd.DataFrame()
+
+        rc_sdd = pick_run_col(conn, "same_date_diff")
         same_d = safe_read_sql(
-            "SELECT tour_id, slug, destination_label, price_prev, price_curr, delta_abs, delta_pct, url_precise "
-            "FROM same_date_diff WHERE run_date = ? "
-            "ORDER BY delta_pct DESC, delta_abs DESC", conn, (last,)
-        )
+            f"SELECT tour_id, slug, destination_label, price_prev, price_curr, delta_abs, delta_pct, url_precise "
+            f"FROM same_date_diff WHERE {rc_sdd} = ? ORDER BY delta_pct DESC, delta_abs DESC", conn, (last,)
+        ) if rc_sdd else pd.DataFrame()
+
+        rc_cs = pick_run_col(conn, "coordinator_stats")
         coord = safe_read_sql(
-            "SELECT coordinator_id, coordinator_nickname, appearances "
-            "FROM coordinator_stats WHERE run_date = ? "
-            "ORDER BY appearances DESC, coordinator_nickname ASC", conn, (last,)
-        )
-        coord["coordinator_nickname"] = coord["coordinator_nickname"].fillna("").replace("", "(sans pseudo)")
+            f"SELECT coordinator_id, coordinator_nickname, appearances "
+            f"FROM coordinator_stats WHERE {rc_cs} = ? ORDER BY appearances DESC, coordinator_nickname ASC", conn, (last,)
+        ) if rc_cs else pd.DataFrame()
+        if not coord.empty:
+            coord["coordinator_nickname"] = coord["coordinator_nickname"].fillna("").replace("", "(sans pseudo)")
 
     finally:
         conn.close()
 
     ts = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
-    coverage = ""
-    if start_run and end_run:
-        coverage = f"_Historique des runs : du **{start_run}** au **{end_run}** ({len(runs)} exécutions)._"
+    coverage = f"_Historique des runs : du **{start_run}** au **{end_run}** ({len(runs)} exécutions)._ " if start_run and end_run else ""
 
-    # Render
+    # render
     kpi_html = html_table(kpi_last[[
         c for c in ["price_eur_min","price_eur_med","price_eur_avg","count_total","count_promos","promo_share_pct"]
         if c in kpi_last.columns
     ]], max_rows=1) if not kpi_last.empty else "<p><em>Aucune donnée</em></p>"
 
-    kpi_hist_html    = html_table(kpi_hist, max_rows=500) if not kpi_hist.empty else "<p><em>Aucune donnée</em></p>"
-    wd_html          = html_table(decorate_movement(wd), max_rows=400)
-    mo_all_html      = html_table(mo_all, max_rows=1000)
-    tours_html       = html_table(tours, max_rows=400)
-    same_html        = html_table(same_d, max_rows=400)
-    coord_html       = html_table(coord, max_rows=200)
+    kpi_hist_html = html_table(kpi_hist, max_rows=500) if not kpi_hist.empty else "<p><em>Aucune donnée</em></p>"
+    wd_html       = html_table(decorate_movement(wd), max_rows=400)
+    mo_all_html   = html_table(mo_all, max_rows=1000)
+    tours_html    = html_table(tours, max_rows=400)
+    same_html     = html_table(same_d, max_rows=400)
+    coord_html    = html_table(coord, max_rows=200)
 
-    total_offers = int(kpi_last["count_total"].iloc[0]) if "count_total" in kpi_last.columns and not kpi_last.empty else 0
+    total_offers = int(kpi_last["count_total"].iloc[0]) if (not kpi_last.empty and "count_total" in kpi_last.columns) else 0
 
     content = f"""---
 title: RoadPrice – Évolutions tarifaires
