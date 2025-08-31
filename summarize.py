@@ -186,6 +186,29 @@ def price_buckets(df: pd.DataFrame):
     out.columns = ["tranche_prix", "nb_offres"]
     return out
 
+def money_pot_per_destination(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Retourne un tableau 'MoneyPot par destination' :
+    slug, title, destination_label, money_pot_min_eur, money_pot_max_eur, url
+    (lignes où au moins une des valeurs min/max est définie)
+    """
+    if df.empty:
+        return pd.DataFrame()
+    cols_needed = ["slug","title","destination_label","money_pot_min_eur","money_pot_max_eur","url"]
+    present = [c for c in cols_needed if c in df.columns]
+    if not set(["money_pot_min_eur","money_pot_max_eur"]).issubset(df.columns):
+        return pd.DataFrame(columns=present)
+    x = df[present].copy()
+    # garder les lignes avec au moins une valeur
+    x = x[(x["money_pot_min_eur"].notna()) | (x["money_pot_max_eur"].notna())]
+    if x.empty:
+        return x
+    # ordonner par min puis max croissants
+    x["money_pot_min_eur"] = pd.to_numeric(x["money_pot_min_eur"], errors="coerce")
+    x["money_pot_max_eur"] = pd.to_numeric(x["money_pot_max_eur"], errors="coerce")
+    x = x.sort_values(["money_pot_min_eur","money_pot_max_eur","destination_label","title"], na_position="last")
+    return x.reset_index(drop=True)
+
 # -------- Main --------
 def main():
     ensure_docs()
@@ -231,6 +254,7 @@ def main():
         ctry    = country_summary(df_curr)
         watch   = promo_watchlist(df_curr)
         buckets = price_buckets(df_curr)
+        mppd    = money_pot_per_destination(df_curr)
 
         # Stats globales + statuts
         nb_depart = len(df_curr)
@@ -258,15 +282,16 @@ def main():
 
     # Rendus HTML des tableaux
     kpi_html        = html_table(kpi_last, max_rows=1,    dt=False) if not kpi_last.empty else "<p><em>Aucune donnée</em></p>"
-    kpi_hist_html   = html_table(kpi_hist, max_rows=1900, dt=True,  page=25)
+    kpi_hist_html   = html_table(kpi_hist, max_rows=1000, dt=True,  page=25)
     movers_html     = html_table(movers,   max_rows=500,  dt=True,  page=25) if not movers.empty else "<p><em>Aucune donnée</em></p>"
-    same_date_html  = html_table(same_date,max_rows=1900, dt=True,  page=25) if not same_date.empty else "<p><em>Aucune donnée</em></p>"
+    same_date_html  = html_table(same_date,max_rows=1000, dt=True,  page=25) if not same_date.empty else "<p><em>Aucune donnée</em></p>"
     bd_html         = html_table(bd,       max_rows=600,  dt=True,  page=25)
     topm_html       = html_table(topm,     max_rows=600,  dt=True,  page=25)
     ctry_html       = html_table(ctry,     max_rows=400,  dt=True,  page=25)
     watch_html      = html_table(watch,    max_rows=600,  dt=True,  page=25)
     buckets_html    = html_table(buckets,  max_rows=50,   dt=False)
     status_html     = html_table(status_count, max_rows=50, dt=False)
+    mppd_html       = html_table(mppd,     max_rows=800,  dt=True,  page=25)
 
     content = f"""---
 title: RoadPrice – Évolutions tarifaires
@@ -307,6 +332,11 @@ title: RoadPrice – Évolutions tarifaires
 
 ## Meilleures **dates à réserver** (prix mini par destination, vue actuelle)
 {bd_html}
+
+---
+
+## MoneyPot par destination
+{mppd_html}
 
 ---
 
