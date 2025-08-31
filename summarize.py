@@ -73,7 +73,7 @@ def html_table(df: pd.DataFrame, max_rows: int = 20, dt: bool = True, page: int 
     html = df.to_html(index=False, classes="rp-table", escape=False, border=0)
 
     # Active DataTables (recherche/tri/pagination) si tableau non minuscule
-    if dt and len(df) >= 6:
+    if dt && len(df) >= 6:
         html = html.replace("<table ", f'<table data-dt="1" data-page-size="{page}" ', 1)
 
     return f'<div class="table-wrapper">{html}</div>'
@@ -199,11 +199,9 @@ def money_pot_per_destination(df: pd.DataFrame) -> pd.DataFrame:
     if not set(["money_pot_min_eur","money_pot_max_eur"]).issubset(df.columns):
         return pd.DataFrame(columns=present)
     x = df[present].copy()
-    # garder les lignes avec au moins une valeur
     x = x[(x["money_pot_min_eur"].notna()) | (x["money_pot_max_eur"].notna())]
     if x.empty:
         return x
-    # ordonner par min puis max croissants
     x["money_pot_min_eur"] = pd.to_numeric(x["money_pot_min_eur"], errors="coerce")
     x["money_pot_max_eur"] = pd.to_numeric(x["money_pot_max_eur"], errors="coerce")
     x = x.sort_values(["money_pot_min_eur","money_pot_max_eur","destination_label","title"], na_position="last")
@@ -243,9 +241,21 @@ def main():
         wd = safe_read_sql("SELECT * FROM weekly_diff WHERE run_ts = ?", conn, (last,))
         movers = big_movers(wd, ALERT_PCT, ALERT_EUR) if not wd.empty else pd.DataFrame()
 
-        # Same-date diff
+        # Same-date diff (avec MoneyPot joint sur le run courant via slug)
         same_date = safe_read_sql("SELECT * FROM same_date_diff WHERE run_ts = ?", conn, (last,))
         if not same_date.empty:
+            # jointure MoneyPot (par slug) depuis df_curr
+            mcols = [c for c in ("slug","money_pot_min_eur","money_pot_max_eur") if c in df_curr.columns]
+            same_date = same_date.merge(df_curr[mcols].drop_duplicates("slug"), on="slug", how="left")
+            # ordre de colonnes: montrer MoneyPot juste après les deltas
+            preferred = [
+                "run_ts","tour_id","slug","destination_label","title","starting_date",
+                "price_eur_prev","price_eur_curr","delta_abs","delta_pct","movement",
+                "money_pot_min_eur","money_pot_max_eur",
+                "url_precise"
+            ]
+            cols = [c for c in preferred if c in same_date.columns] + [c for c in same_date.columns if c not in preferred]
+            same_date = same_date[cols]
             same_date = decorate_movement(same_date)
 
         # Vues dérivées
