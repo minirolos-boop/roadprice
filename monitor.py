@@ -1,7 +1,7 @@
 # monitor.py
 # Collector + KPIs + persistance SQLite (avec auto-migration de schéma)
 # + Récupération des TOURS (départs par date) et comparaison même-date
-# + Extraction du MoneyPot (min/max + texte brut) via /travels/{slug}
+# + Extraction du MoneyPot (min/max + texte brut) via data.travel.moneyPot.description
 
 import os
 import json
@@ -146,10 +146,100 @@ def parse_money_pot(description_html: str) -> Tuple[Optional[float], Optional[fl
         lo = hi = None
     return lo, hi, txt
 
+def _deep_find_money_pot(node):
+    """
+    Parcourt récursivement le JSON et retourne le premier dict 'moneyPot' trouvé,
+    ou un dict contenant une clé 'description' qui mentionne euros/€ (fallback).
+    """
+    stack = [node]
+    while stack:
+        cur = stack.pop()
+        if isinstance(cur, dict):
+            if "moneyPot" in cur and isinstance(cur["moneyPot"], dict):
+                return cur["moneyPot"]
+            for k, v in cur.items():
+                if k == "description" and isinstance(v, str) and re.search(r"(€|eur(?:o|os)?)", v, re.I):
+                    return {"description": v}
+                stack.append(v)
+        elif isinstance(cur, list):
+            stack.extend(cur)
+    return None
+
+def _collect_descriptions(node) -> list[str]:
+    """
+    Récupère toutes les chaînes qui ressemblent à des descriptions (fallback ultime).
+    """
+    out = []
+    stack = [node]
+    while stack:
+        cur = stack.pop()
+        if isinstance(cur, dict):
+            for k, v in cur.items():
+                if isinstance(v, str) and k.lower() in ("description", "money_pot_description", "content", "body", "info"):
+                    out.append(v)
+                stack.append(v)
+        elif isinstance(cur, list):
+            stack.extend(cur)
+    return out
+
+def extract_money_pot_from_travel_json(payload: dict) -> tuple[float | None, float | None, str]:
+    """
+    1) Cas nominal (exemple fourni) : data.travel.moneyPot.description
+    2) Fallback: recherche 'moneyPot' n'importe où (profonde)
+    3) Fallback ultime: 1ère description contenant € / euro
+    Retourne: (min_eur, max_eur, raw_text)
+    """
+    root = payload if isinstance(payload, dict) else {}
+
+    # 1) data.travel.moneyPot.description
+    try:
+        travel = root.get("data", {}).get("travel", {})
+        mp = travel.get("moneyPot")
+        if isinstance(mp, dict):
+            desc = mp.get("description")
+            if isinstance(desc, str) and desc.strip():
+                mn, mx, raw = parse_money_pot(desc)
+                return mn, mx, raw
+    except Exception:
+        pass
+
+    # 2) Recherche profonde générique
+    mp2 = _deep_find_money_pot(root)
+    if isinstance(mp2, dict) and isinstance(mp2.get("description"), str):
+        mn, mx, raw = parse_money_pot(mp2["description"])
+        return mn, mx, raw
+
+    # 3) Ratisser toutes les descriptions
+    for cand in _collect_descriptions(root):
+        if re.search(r"(€|eur(?:o|os)?)", cand, re.I):
+            mn, mx, raw = parse_money_pot(cand)
+            return mn, mx, raw
+
+    return None, None, ""
+
 def fetch_travel_detail(slug: str) -> dict:
-    url = API_TRAVEL_DETAIL.format(slug=slug)
-    data = _get_json(url)
-    return data or {}
+    """
+    Tente plusieurs variantes de l'endpoint pour maximiser les chances de trouver moneyPot :
+    - /travels/{slug}
+    - avec ?market=FR
+    - avec ?lang=fr-FR
+    Retourne toujours un dict (éventuellement vide).
+    """
+    base = API_TRAVEL_DETAIL.format(slug=slug)
+    candidates = [
+        base,
+        base + "?market=FR",
+        base + "?lang=fr-FR",
+        base + "?market=FR&lang=fr-FR",
+    ]
+    for url in candidates:
+        try:
+            data = _get_json(url)
+            if isinstance(data, dict) and data:
+                return data
+        except Exception as e:
+            logging.debug("fetch_travel_detail: %s failed: %s", url, e)
+    return {}
 
 def enrich_with_money_pot(df_travels: pd.DataFrame, max_workers: int = 12) -> pd.DataFrame:
     """
@@ -171,10 +261,7 @@ def enrich_with_money_pot(df_travels: pd.DataFrame, max_workers: int = 12) -> pd
     def _job(slug: str):
         try:
             data = fetch_travel_detail(slug)
-            root = (data.get("data") or data) if isinstance(data, dict) else {}
-            mp = (root or {}).get("moneyPot") if isinstance(root, dict) else None
-            desc = (mp or {}).get("description")
-            mn, mx, raw = parse_money_pot(desc)
+            mn, mx, raw = extract_money_pot_from_travel_json(data)
             return slug, mn, mx, raw
         except Exception as e:
             logging.warning("moneyPot fetch failed for %s: %s", slug, e)
@@ -190,6 +277,11 @@ def enrich_with_money_pot(df_travels: pd.DataFrame, max_workers: int = 12) -> pd
     out["money_pot_min_eur"] = out["slug"].map(lambda s: results.get(s, (None, None, None))[0])
     out["money_pot_max_eur"] = out["slug"].map(lambda s: results.get(s, (None, None, None))[1])
     out["money_pot_raw"]     = out["slug"].map(lambda s: results.get(s, (None, None, None))[2] or "")
+
+    found = int(out["money_pot_min_eur"].notna().sum())
+    total = int(out["slug"].notna().sum())
+    logging.info("MoneyPot détecté pour %d/%d voyages (%.1f%%)", found, total, 100.0 * found / max(total, 1))
+
     return out
 
 
