@@ -2,8 +2,34 @@ name: Weekly Prices Monitor
 
 on:
   schedule:
-    - cron: "0 6 * * 1"     # 18:00 Paris (16:00 UTC)
-  workflow_dispatch: {}
+    # Lundi 16:00 UTC (18:00 à Paris en été, 17:00 en hiver)
+    - cron: "0 16 * * 1"
+  workflow_dispatch:
+    inputs:
+      alert_pct:
+        description: "Seuil variation % (ex: 0.10 pour 10%)"
+        required: false
+        default: "0.10"
+      alert_eur:
+        description: "Seuil variation € (ex: 150)"
+        required: false
+        default: "150"
+      money_pot:
+        description: "Activer extraction MoneyPot ? (true/false)"
+        required: false
+        default: "true"
+      workers:
+        description: "Threads pour TOURS (ex: 12)"
+        required: false
+        default: "12"
+      money_pot_workers:
+        description: "Threads pour MoneyPot (ex: 12)"
+        required: false
+        default: "12"
+      skip_tours:
+        description: "Ne pas récupérer les TOURS ? (true/false)"
+        required: false
+        default: "false"
 
 concurrency:
   group: pages-build
@@ -11,7 +37,7 @@ concurrency:
 
 permissions:
   contents: write
-  actions: read        # nécessaire pour lister les runs/artefacts
+  actions: read
   pages: write
   id-token: write
 
@@ -32,7 +58,6 @@ jobs:
             const workflowFile = 'weekly-prices.yml'; // ce workflow
             const { owner, repo } = context.repo;
 
-            // Lister les runs réussis
             const runs = await github.rest.actions.listWorkflowRuns({
               owner, repo,
               workflow_id: workflowFile,
@@ -40,7 +65,6 @@ jobs:
               per_page: 25
             });
 
-            // Prendre le dernier run ≠ run courant
             const prev = runs.data.workflow_runs
               .filter(r => r.id !== context.runId)
               .sort((a,b) => new Date(b.created_at) - new Date(a.created_at))[0];
@@ -50,7 +74,6 @@ jobs:
               return;
             }
 
-            // Lister les artefacts de ce run
             const arts = await github.rest.actions.listWorkflowRunArtifacts({
               owner, repo, run_id: prev.id
             });
@@ -64,8 +87,7 @@ jobs:
             }
 
       # 2) Télécharger l’artefact 'sqlite_snapshot' depuis le run précédent
-      #    -> IMPORTANT: 'actions/download-artifact@v4' ne marche pas pour les runs précédents.
-      #       On utilise 'dawidd6/action-download-artifact@v2' qui supporte run_id.
+      #    (download d'un run précédent => action tierce)
       - name: Restore previous DB (artifact)
         if: steps.find_previous.outputs.found == 'true'
         uses: dawidd6/action-download-artifact@v2
@@ -74,7 +96,6 @@ jobs:
           run_id: ${{ steps.find_previous.outputs.run_id }}
           name: sqlite_snapshot
           path: data
-        # au cas où il n'y a finalement rien à récupérer (artefact expiré...), on ne bloque pas le job
         continue-on-error: true
 
       - name: Ensure DB filename
@@ -97,19 +118,44 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      # 3) Exécuter le collecteur
       - name: Run weekly monitor
         env:
-          ALERT_PCT: "0.10"
-          ALERT_EUR: "150"
           WEROAD_TOKEN: ${{ secrets.WEROAD_TOKEN }}
+          # Valeurs env par défaut (écrasées par workflow_dispatch si fourni)
+          ALERT_PCT: ${{ inputs.alert_pct || '0.10' }}
+          ALERT_EUR: ${{ inputs.alert_eur || '150' }}
         run: |
           mkdir -p data
-          python monitor.py --out weekly_report.xlsx --sqlite data/weroad.db
+
+          # Flags dynamiques
+          MP_FLAG=""
+          if [ "${{ inputs.money_pot || 'true' }}" = "true" ]; then
+            MP_FLAG="--money-pot --money-pot-workers ${{ inputs.money_pot_workers || '12' }}"
+          fi
+
+          TOURS_FLAGS=""
+          if [ "${{ inputs.skip_tours || 'false' }}" = "true" ]; then
+            TOURS_FLAGS="--skip-tours"
+          else
+            TOURS_FLAGS="--workers ${{ inputs.workers || '12' }}"
+          fi
+
+          echo "Running monitor with:"
+          echo "  ALERT_PCT=${ALERT_PCT}"
+          echo "  ALERT_EUR=${ALERT_EUR}"
+          echo "  ${MP_FLAG} ${TOURS_FLAGS}"
+
+          python monitor.py \
+            --out weekly_report.xlsx \
+            --sqlite data/weroad.db \
+            ${MP_FLAG} \
+            ${TOURS_FLAGS}
 
       - name: Build single-page dashboard (docs/index.md)
         run: python summarize.py
 
-      # Artefacts techniques (optionnels)
+      # Artefacts techniques
       - name: Upload Excel artifact
         uses: actions/upload-artifact@v4
         with:
@@ -128,7 +174,6 @@ jobs:
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
-      # Compile docs/ (index.md) en HTML (_site)
       - name: Build with Jekyll
         uses: actions/jekyll-build-pages@v1
         with:
