@@ -4,6 +4,8 @@ from datetime import datetime, timezone
 import os
 import sqlite3
 import pandas as pd
+import numpy as np
+import re
 
 DOCS_DIR = Path("docs")
 OUT = DOCS_DIR / "index.md"
@@ -38,6 +40,12 @@ def decorate_movement(df: pd.DataFrame) -> pd.DataFrame:
     out["movement"] = [f"<code class='{c}'>{s}</code>" for c, s in zip(cls, m)]
     return out
 
+def _pick_first_col(df: pd.DataFrame, *names):
+    for n in names:
+        if n in df.columns:
+            return n
+    return None
+
 def html_table(df: pd.DataFrame, max_rows: int = 20, dt: bool = True, page: int = 25) -> str:
     """to_html + formats € / %, et balise data-dt pour activer Simple-DataTables côté client."""
     if df is None or df.empty:
@@ -55,15 +63,17 @@ def html_table(df: pd.DataFrame, max_rows: int = 20, dt: bool = True, page: int 
         s = pd.to_numeric(df[c], errors="coerce")
         df[c] = s.map(lambda v: f"{v:.1f}%" if pd.notna(v) else "")
 
-    # Colonnes € (prix, delta_abs, value_eur, money_pot, total_price)
-    money_cols = [c for c in df.columns if any(k in c for k in ["price", "prix", "delta_abs", "value_eur", "money_pot"])]
+    # Colonnes € (prix, delta_abs, value_eur, etc.)
+    money_cols = [c for c in df.columns if any(k in c for k in [
+        "price", "prix", "delta_abs", "value_eur", "money_pot", "total_price"
+    ])]
     for c in money_cols:
         s = pd.to_numeric(df[c], errors="coerce")
         df[c] = s.map(lambda v: f"{v:,.0f} €".replace(",", " ").replace(".", ",") if pd.notna(v) else "")
 
     html = df.to_html(index=False, classes="rp-table", escape=False, border=0)
 
-    # Active DataTables (recherche/tri/pagination) si tableau non minuscule
+    # Active DataTables si tableau non minuscule
     if dt and len(df) >= 6:
         html = html.replace("<table ", f'<table data-dt="1" data-page-size="{page}" ', 1)
 
@@ -90,12 +100,15 @@ def promo_watchlist(df: pd.DataFrame) -> pd.DataFrame:
     base = [
         "sales_status","best_starting_date","best_ending_date",
         "title","destination_label","country_name",
-        "price_eur","discount_pct","seatsToConfirm","maxPax","weroadersCount","total_price_eur"
+        "price_eur","discount_pct","seatsToConfirm","maxPax","weroadersCount",
+        # MoneyPot + total si présents
+        "money_pot_min_eur","money_pot_max_eur","money_pot_med_eur","total_price_eur"
     ]
-    link_col = "url_precise" if "url_precise" in x.columns else ("url" if "url" in x.columns else None)
+    link_col = _pick_first_col(x, "url_precise", "url")
     if link_col:
         base.append(link_col)
-    return x[[c for c in base if c in x.columns]].reset_index(drop=True)
+    keep = [c for c in base if c in x.columns]
+    return x[keep].reset_index(drop=True)
 
 def big_movers(wk_diff: pd.DataFrame, pct_threshold=ALERT_PCT, abs_threshold=ALERT_EUR) -> pd.DataFrame:
     if wk_diff.empty:
@@ -105,11 +118,10 @@ def big_movers(wk_diff: pd.DataFrame, pct_threshold=ALERT_PCT, abs_threshold=ALE
     x["delta_abs"] = pd.to_numeric(x.get("delta_abs"), errors="coerce").fillna(0.0)
     x["flag"] = (x["delta_pct"].abs() > pct_threshold) | (x["delta_abs"].abs() > abs_threshold)
 
-    cols = ["destination_label","title_curr","price_eur_prev","price_eur_curr","delta_abs","delta_pct","movement","total_price_eur"]
-    if "url_precise" in x.columns:
-        cols.append("url_precise")
-    elif "url" in x.columns:
-        cols.append("url")
+    cols = ["destination_label","title_curr","price_eur_prev","price_eur_curr","delta_abs","delta_pct","movement"]
+    link_col = _pick_first_col(x, "url_precise", "url")
+    if link_col:
+        cols.append(link_col)
     cols = [c for c in cols if c in x.columns]
 
     out = x[x["flag"]].sort_values(["delta_pct","delta_abs"], ascending=[False,False])[cols].reset_index(drop=True)
@@ -119,14 +131,23 @@ def best_dates(df: pd.DataFrame) -> pd.DataFrame:
     base = df.dropna(subset=["destination_label", "price_eur"]).copy()
     if base.empty:
         return pd.DataFrame()
-    idx = base.groupby("destination_label")["total_price_eur"].idxmin()
-    out = base.loc[idx, [
+    idx = base.groupby("destination_label")["price_eur"].idxmin()
+
+    link_col = _pick_first_col(base, "url_precise", "url")
+
+    cols = [
         "destination_label","country_name","title",
-        "price_eur","money_pot_med_eur","total_price_eur",
-        "base_price_eur","discount_value_eur","discount_pct",
-        "sales_status","best_starting_date","best_ending_date","url_precise"
-    ]].sort_values(["country_name","destination_label"])
-    out = out.reset_index(drop=True).rename(columns={"url_precise":"url"})
+        "price_eur","base_price_eur","discount_value_eur","discount_pct",
+        "sales_status","best_starting_date","best_ending_date",
+        "money_pot_min_eur","money_pot_max_eur","money_pot_med_eur","total_price_eur"
+    ]
+    if link_col:
+        cols.append(link_col)
+
+    cols_avail = [c for c in cols if c in base.columns]
+    out = base.loc[idx, cols_avail].sort_values(["country_name","destination_label"]).reset_index(drop=True)
+    if link_col and link_col in out.columns:
+        out = out.rename(columns={link_col: "url"})
     return out
 
 def cheapest_by_month(df: pd.DataFrame, top_n: int = 15) -> pd.DataFrame:
@@ -135,12 +156,19 @@ def cheapest_by_month(df: pd.DataFrame, top_n: int = 15) -> pd.DataFrame:
         return pd.DataFrame()
     tmp["month_depart"] = pd.to_datetime(tmp["best_starting_date"], errors="coerce").dt.strftime("%Y-%m")
     tmp = tmp.dropna(subset=["month_depart"])
-    tmp["rk"] = tmp.groupby("month_depart")["total_price_eur"].rank(method="first")
-    out = tmp[tmp["rk"] <= top_n].sort_values(["month_depart","total_price_eur"])[[
+    tmp["rk"] = tmp.groupby("month_depart")["price_eur"].rank(method="first")
+    link_col = _pick_first_col(tmp, "url_precise", "url")
+    cols = [
         "month_depart","destination_label","title","country_name",
-        "price_eur","money_pot_med_eur","total_price_eur",
-        "discount_pct","sales_status","best_starting_date","url_precise"
-    ]].reset_index(drop=True).rename(columns={"url_precise":"url"})
+        "price_eur","discount_pct","sales_status","best_starting_date",
+        "money_pot_min_eur","money_pot_max_eur","money_pot_med_eur","total_price_eur"
+    ]
+    if link_col:
+        cols.append(link_col)
+    cols = [c for c in cols if c in tmp.columns]
+    out = tmp[tmp["rk"] <= top_n].sort_values(["month_depart","price_eur"])[cols].reset_index(drop=True)
+    if link_col and link_col in out.columns:
+        out = out.rename(columns={link_col: "url"})
     return out
 
 def country_summary(df: pd.DataFrame) -> pd.DataFrame:
@@ -149,9 +177,9 @@ def country_summary(df: pd.DataFrame) -> pd.DataFrame:
     g = df.groupby("country_name", dropna=False)
     out = pd.DataFrame({
         "nb_depart": g.size(),
-        "prix_min": pd.to_numeric(g["total_price_eur"], errors="coerce").min(),
-        "prix_med": pd.to_numeric(g["total_price_eur"], errors="coerce").median(),
-        "prix_moy": pd.to_numeric(g["total_price_eur"], errors="coerce").mean(),
+        "prix_min": pd.to_numeric(g["price_eur"], errors="coerce").min(),
+        "prix_med": pd.to_numeric(g["price_eur"], errors="coerce").median(),
+        "prix_moy": pd.to_numeric(g["price_eur"], errors="coerce").mean(),
         "taux_promos_pct": 100 * g["discount_pct"].apply(lambda s: pd.to_numeric(s, errors="coerce").notna().mean()),
         "rating_moy": pd.to_numeric(g["rating"], errors="coerce").mean(),
         "rating_count": pd.to_numeric(g["rating_count"], errors="coerce").sum(),
@@ -163,20 +191,11 @@ def price_buckets(df: pd.DataFrame):
         return pd.DataFrame()
     bins = [0, 800, 1000, 1200, 1500, 2000, 3000, 99999]
     labels = ["<800", "800–999", "1000–1199", "1200–1499", "1500–1999", "2000–2999", "≥3000"]
-    x = df.dropna(subset=["total_price_eur"]).copy()
-    x["bucket"] = pd.cut(pd.to_numeric(x["total_price_eur"], errors="coerce"), bins=bins, labels=labels, right=False)
+    x = df.dropna(subset=["price_eur"]).copy()
+    x["bucket"] = pd.cut(pd.to_numeric(x["price_eur"], errors="coerce"), bins=bins, labels=labels, right=False)
     out = x["bucket"].value_counts().reindex(labels, fill_value=0).reset_index()
     out.columns = ["tranche_prix", "nb_offres"]
     return out
-
-def money_pot_summary(df: pd.DataFrame) -> pd.DataFrame:
-    if df.empty:
-        return pd.DataFrame()
-    base = df.dropna(subset=["money_pot_min_eur","money_pot_max_eur"], how="all").copy()
-    if base.empty:
-        return pd.DataFrame()
-    out = base[["slug","title","destination_label","money_pot_min_eur","money_pot_max_eur","money_pot_med_eur","total_price_eur"]]
-    return out.sort_values("money_pot_med_eur")
 
 # -------- Main --------
 def main():
@@ -214,17 +233,19 @@ def main():
             "FROM monthly_kpis WHERE run_ts = ? ORDER BY month, destination_label", conn, (last,)
         )
 
+        # Vues dérivées (incluent moneypot & total si présents)
         bd      = best_dates(df_curr)
         topm    = cheapest_by_month(df_curr, top_n=15)
         ctry    = country_summary(df_curr)
         watch   = promo_watchlist(df_curr)
         buckets = price_buckets(df_curr)
-        moneyp  = money_pot_summary(df_curr)
 
         nb_depart = len(df_curr)
         nb_dest   = df_curr["destination_label"].nunique(dropna=True)
         nb_pays   = df_curr["country_name"].nunique(dropna=True)
-        status_count = df_curr["sales_status"].value_counts(dropna=False).to_frame("count").reset_index().rename(columns={"index":"sales_status"})
+        status_count = pd.DataFrame()
+        if "sales_status" in df_curr.columns:
+            status_count = df_curr["sales_status"].value_counts(dropna=False).to_frame("count").reset_index().rename(columns={"index":"sales_status"})
     finally:
         conn.close()
 
@@ -242,7 +263,6 @@ def main():
     watch_html      = html_table(watch,    max_rows=600,  dt=True,  page=25)
     buckets_html    = html_table(buckets,  max_rows=50,   dt=False)
     status_html     = html_table(status_count, max_rows=50, dt=False)
-    moneyp_html     = html_table(moneyp,   max_rows=600,  dt=True,  page=25)
 
     content = f"""---
 title: RoadPrice – Évolutions tarifaires
@@ -301,13 +321,8 @@ title: RoadPrice – Évolutions tarifaires
 
 ---
 
-## Répartition par **tranches de prix** (avec MoneyPot inclus)
+## Répartition par **tranches de prix**
 {buckets_html}
-
----
-
-## Section **MoneyPot par destination**
-{moneyp_html}
 """
 
     # Assets + init robuste (attend que la lib soit chargée)
@@ -338,6 +353,14 @@ title: RoadPrice – Évolutions tarifaires
   document.addEventListener('DOMContentLoaded', initDT);
 }})();
 </script>
+<style>
+.table-wrapper {{ overflow-x:auto; }}
+.rp-table {{ width:100%; border-collapse:collapse; }}
+.rp-table th, .rp-table td {{ padding:8px 10px; border-bottom:1px solid #eee; }}
+code.up {{ color:#0a7f2e; font-weight:700; }}
+code.down {{ color:#b00020; font-weight:700; }}
+code.equal {{ color:#555; }}
+</style>
 """
     content += "\n\n" + datatable_assets
 
