@@ -73,7 +73,7 @@ def html_table(df: pd.DataFrame, max_rows: int = 20, dt: bool = True, page: int 
     html = df.to_html(index=False, classes="rp-table", escape=False, border=0)
 
     # Active DataTables (recherche/tri/pagination) si tableau non minuscule
-    if dt && len(df) >= 6:
+    if dt and len(df) >= 6:
         html = html.replace("<table ", f'<table data-dt="1" data-page-size="{page}" ', 1)
 
     return f'<div class="table-wrapper">{html}</div>'
