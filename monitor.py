@@ -1,17 +1,17 @@
 # monitor.py
-# Collector + KPIs + persistance SQLite (auto-création/migration)
-# + Récupération des TOURS (départs par date) et comparaison même-date
-# + Extraction du MoneyPot (min/max + texte brut) depuis travels/{slug}
-# + Prix total = prix voyage + MoneyPot (médiane) dans tous les tableaux
+# Collector + KPIs + persistance SQLite (auto-migration de schéma)
+# + Récupération des TOURS (départs par date) et comparaison mêmes départs (tour_id identique)
+# + Extraction du MoneyPot (min/max + texte brut) via data.travel.moneyPot.description
+# + Prix total (price_eur + money_pot_med_eur) partout, y compris Same_Date_Diff
 
 import os
 import re
 import json
+import time
+import html as ihtml
 import sqlite3
 import argparse
 import logging
-import html as ihtml
-import time
 from pathlib import Path
 from datetime import datetime, timezone
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -21,10 +21,8 @@ import numpy as np
 import pandas as pd
 import requests
 
-# ---------------- Logging ----------------
 logging.basicConfig(level=logging.INFO, format="%(asctime)s | %(levelname)s | %(message)s")
 
-# ---------------- Endpoints ----------------
 API_TRAVELS       = "https://api-catalog.weroad.fr/travels"
 API_TOURS         = "https://api-catalog.weroad.fr/travels/{slug}/tours"
 API_TRAVEL_DETAIL = "https://api-catalog.weroad.fr/travels/{slug}"
@@ -33,7 +31,8 @@ DEFAULT_TIMEOUT = 45
 DEFAULT_RETRIES = 4
 DEFAULT_BACKOFF = 0.8  # seconds, exponential
 
-# ---------------- Utils ----------------
+
+# -------------------- Utils --------------------
 def g(d, path, default=None):
     cur = d
     for k in path:
@@ -42,8 +41,10 @@ def g(d, path, default=None):
         cur = cur[k]
     return cur
 
+
 def num(x):
     return x if isinstance(x, (int, float)) else None
+
 
 def to_month(s):
     try:
@@ -54,11 +55,12 @@ def to_month(s):
         except Exception:
             return None
 
+
 def _session():
     s = requests.Session()
     headers = {
         "accept": "application/json, text/plain, */*",
-        "user-agent": "weroad-monitor/1.0 (+analytics)",
+        "user-agent": "weroad-monitor/1.1 (+analytics)",
         "accept-language": "fr-FR,fr;q=0.9,en;q=0.8",
         "connection": "keep-alive",
     }
@@ -67,6 +69,7 @@ def _session():
         headers["authorization"] = f"Bearer {token}"
     s.headers.update(headers)
     return s
+
 
 def _get_json(url: str, params: Optional[Dict[str, Any]] = None,
               timeout: int = DEFAULT_TIMEOUT,
@@ -88,7 +91,8 @@ def _get_json(url: str, params: Optional[Dict[str, Any]] = None,
                 time.sleep(sleep)
     raise last_exc  # type: ignore[misc]
 
-# ---------------- MoneyPot extraction ----------------
+
+# -------------------- MoneyPot extraction --------------------
 _MONEYPOT_NUM_RE = re.compile(
     r"""
     (?P<a>\d{1,3}(?:[ . \u00A0]\d{3})*(?:[,.]\d+)?)     # premier nombre (1 200, 1.200, 200,50)
@@ -126,8 +130,15 @@ def parse_money_pot(description_html: str) -> Tuple[Optional[float], Optional[fl
 
     m = _MONEYPOT_NUM_RE.search(txt)
     if not m:
+        # fallback: au moins une valeur suivie d'une unité euros
         alt = re.search(r"(\d[\d . \u00A0,]*)\s*(?:€|eur(?:o|os)?)", txt, flags=re.IGNORECASE)
         if not alt:
+            # dernier recours : si "pot commun" apparait, autoriser un nombre nu (pas %)
+            if "pot commun" in txt.lower():
+                alt2 = re.search(r"(\d{2,5})(?!\s?%)", txt)
+                if alt2:
+                    a2 = _to_float_eur(alt2.group(1))
+                    return a2, a2, txt
             return None, None, txt
         a = _to_float_eur(alt.group(1))
         return a, a, txt
@@ -143,7 +154,7 @@ def parse_money_pot(description_html: str) -> Tuple[Optional[float], Optional[fl
     return lo, hi, txt
 
 def _deep_find_money_pot(node):
-    """Parcourt récursivement le JSON pour trouver un dict 'moneyPot' (ou description avec €)."""
+    """ Cherche un dict 'moneyPot' profond, sinon toute 'description' contenant € / euro. """
     stack = [node]
     while stack:
         cur = stack.pop()
@@ -173,30 +184,31 @@ def _collect_descriptions(node) -> list[str]:
     return out
 
 def extract_money_pot_from_travel_json(payload: dict) -> tuple[float | None, float | None, str]:
-    """
-    1) data.travel.moneyPot.description
-    2) Fallback: recherche 'moneyPot' profonde
-    3) Fallback: première 'description' contenant € / euro
-    """
     root = payload if isinstance(payload, dict) else {}
 
+    # 1) data.travel.moneyPot.description
     try:
         travel = root.get("data", {}).get("travel", {})
         mp = travel.get("moneyPot")
         if isinstance(mp, dict):
             desc = mp.get("description")
             if isinstance(desc, str) and desc.strip():
-                return parse_money_pot(desc)
+                mn, mx, raw = parse_money_pot(desc)
+                return mn, mx, raw
     except Exception:
         pass
 
+    # 2) recherche profonde
     mp2 = _deep_find_money_pot(root)
     if isinstance(mp2, dict) and isinstance(mp2.get("description"), str):
-        return parse_money_pot(mp2["description"])
+        mn, mx, raw = parse_money_pot(mp2["description"])
+        return mn, mx, raw
 
+    # 3) descriptions diverses
     for cand in _collect_descriptions(root):
-        if re.search(r"(€|eur(?:o|os)?)", cand, re.I):
-            return parse_money_pot(cand)
+        if re.search(r"(€|eur(?:o|os)?)", cand, re.I) or "pot commun" in cand.lower():
+            mn, mx, raw = parse_money_pot(cand)
+            return mn, mx, raw
 
     return None, None, ""
 
@@ -217,11 +229,8 @@ def fetch_travel_detail(slug: str) -> dict:
             logging.debug("fetch_travel_detail: %s failed: %s", url, e)
     return {}
 
+
 def enrich_with_money_pot(df_travels: pd.DataFrame, max_workers: int = 12) -> pd.DataFrame:
-    """
-    Ajoute money_pot_min_eur, money_pot_max_eur, money_pot_raw, money_pot_med_eur
-    et total_price_eur à df_travels en parallélisant GET /travels/{slug}.
-    """
     out = df_travels.copy()
     for c in ("money_pot_min_eur", "money_pot_max_eur", "money_pot_raw", "money_pot_med_eur", "total_price_eur"):
         if c not in out.columns:
@@ -254,12 +263,9 @@ def enrich_with_money_pot(df_travels: pd.DataFrame, max_workers: int = 12) -> pd
     out["money_pot_max_eur"] = out["slug"].map(lambda s: results.get(s, (None, None, None))[1])
     out["money_pot_raw"]     = out["slug"].map(lambda s: results.get(s, (None, None, None))[2] or "")
 
+    # médiane & total
     out["money_pot_med_eur"] = out[["money_pot_min_eur", "money_pot_max_eur"]].mean(axis=1, skipna=True)
-
-    if "price_eur" in out.columns:
-        out["total_price_eur"] = out["price_eur"].fillna(0) + out["money_pot_med_eur"].fillna(0)
-    else:
-        out["total_price_eur"] = out["money_pot_med_eur"].fillna(0)
+    out["total_price_eur"]   = out["price_eur"].astype(float).fillna(0) + out["money_pot_med_eur"].astype(float).fillna(0)
 
     found = int(out["money_pot_min_eur"].notna().sum())
     total = int(out["slug"].notna().sum())
@@ -267,11 +273,13 @@ def enrich_with_money_pot(df_travels: pd.DataFrame, max_workers: int = 12) -> pd
 
     return out
 
-# ---------------- Fetch + normalize ----------------
+
+# -------------------- Fetch + normalize --------------------
 def fetch_travels():
     data = _get_json(API_TRAVELS)
     items = data.get("data", data) or []
     return items if isinstance(items, list) else []
+
 
 def normalize_travels(travels):
     rows = []
@@ -296,14 +304,13 @@ def normalize_travels(travels):
             max_p = max(price, base)
 
         slug = t.get("slug")
-        url_dest = f"https://www.weroad.fr/destinations/{slug}" if slug else None
+        dest_url = f"https://www.weroad.fr/destinations/{slug}" if slug else None
 
         rows.append(
             {
                 "id": t.get("id"),
                 "slug": slug,
-                "url": url_dest,
-                "url_precise": url_dest,  # pour robustesse des scripts aval
+                "url": dest_url,
                 "title": t.get("title") or t.get("destinationLabel") or slug,
                 "destination_label": t.get("destinationLabel"),
                 "country_name": g(t, ["primaryDestination", "name"]),
@@ -337,18 +344,20 @@ def normalize_travels(travels):
         df = df.dropna(subset=["sales_status"])
     return df
 
+
 def fetch_tours_for_slug(slug: str) -> list[dict]:
     url = API_TOURS.format(slug=slug)
     data = _get_json(url)
     items = data.get("data", data) or []
     return items if isinstance(items, list) else []
 
-def normalize_tours(travels: list[dict], max_workers: int = 12, money_pot_by_slug: Optional[dict[str, float]] = None) -> pd.DataFrame:
+
+def normalize_tours(travels: list[dict], max_workers: int = 12) -> pd.DataFrame:
     """
-    Récupère /travels/{slug}/tours en parallèle et ajoute money_pot_med_eur + total_price_eur (par slug).
+    Récupère /travels/{slug}/tours en parallèle.
     """
     slugs = [t.get("slug") for t in travels if t.get("slug")]
-    slugs = list(dict.fromkeys(slugs))
+    slugs = list(dict.fromkeys(slugs))  # uniques en préservant l'ordre
 
     rows = []
 
@@ -373,7 +382,6 @@ def normalize_tours(travels: list[dict], max_workers: int = 12, money_pot_by_slu
         slug = t.get("slug")
         if not slug:
             continue
-        mp = (money_pot_by_slug or {}).get(slug)
         for tour in results.get(slug, []):
             tour_id = tour.get("id")
             price   = num(g(tour, ["price", "EUR"]))
@@ -386,8 +394,6 @@ def normalize_tours(travels: list[dict], max_workers: int = 12, money_pot_by_slu
 
             url_dest    = f"https://www.weroad.fr/destinations/{slug}"
             url_precise = f"{url_dest}/{tour_id}" if tour_id else url_dest
-
-            total_price = (price or 0.0) + (mp or 0.0)
 
             rows.append(
                 {
@@ -408,8 +414,6 @@ def normalize_tours(travels: list[dict], max_workers: int = 12, money_pot_by_slu
                     "weroadersCount": g(tour, ["groupInfo", "weroadersCount"]),
                     "url": url_dest,
                     "url_precise": url_precise,
-                    "money_pot_med_eur": mp,
-                    "total_price_eur": total_price,
                 }
             )
 
@@ -421,7 +425,8 @@ def normalize_tours(travels: list[dict], max_workers: int = 12, money_pot_by_slu
         df = df.drop_duplicates(subset=["tour_id"])
     return df
 
-# ---------------- Analyses ----------------
+
+# -------------------- Analyses --------------------
 def weekly_kpis(df: pd.DataFrame) -> dict:
     out = {}
     for c in ["price_eur", "base_price_eur", "discount_value_eur", "discount_pct", "total_price_eur"]:
@@ -441,6 +446,7 @@ def weekly_kpis(df: pd.DataFrame) -> dict:
     out["depart_by_month"] = json.dumps(depart_by_month, ensure_ascii=False)
     return out
 
+
 def cheapest_by_destination(df: pd.DataFrame) -> pd.DataFrame:
     base = df.dropna(subset=["destination_label", "price_eur"]).copy()
     if base.empty:
@@ -451,6 +457,7 @@ def cheapest_by_destination(df: pd.DataFrame) -> pd.DataFrame:
         base.loc[idxmin, ["destination_label", "title", "country_name", "price_eur", "url"]]
         .set_index("destination_label")
     )
+
 
 def weekly_diff(df_curr: pd.DataFrame, df_prev: pd.DataFrame | None) -> pd.DataFrame:
     L = cheapest_by_destination(df_curr)
@@ -479,16 +486,11 @@ def weekly_diff(df_curr: pd.DataFrame, df_prev: pd.DataFrame | None) -> pd.DataF
     cols = [c for c in keep if c in out.columns]
     return out[cols].copy()
 
-def same_date_diff(
-    df_tours_curr: pd.DataFrame,
-    df_tours_prev: pd.DataFrame,
-    money_pot_by_slug: dict[str, float] | None = None
-) -> pd.DataFrame:
+
+def same_date_diff(df_tours_curr: pd.DataFrame, df_tours_prev: pd.DataFrame, money_map: pd.DataFrame) -> pd.DataFrame:
     """
-    Compare les mêmes départs (tour_id). Ajoute:
-      - money_pot_med_eur (par slug)
-      - total_price_prev_eur / total_price_curr_eur (= price + moneypot)
-      - delta_abs_total / delta_pct_total / movement_total
+    Ajoute total_price (price + med money pot du slug) pour prev et curr.
+    money_map: DataFrame avec colonnes ['slug','money_pot_med_eur']
     """
     if df_tours_curr.empty or df_tours_prev.empty:
         return pd.DataFrame()
@@ -503,14 +505,8 @@ def same_date_diff(
     left  = L.loc[common_ids]
     right = R.loc[common_ids]
 
-    # MoneyPot par slug (fallback None -> 0)
-    mp_map = money_pot_by_slug or {}
-    mp_left  = left["slug"].map(lambda s: mp_map.get(s, np.nan))
-    mp_right = right["slug"].map(lambda s: mp_map.get(s, np.nan))  # on prend la map courante par simplicité
-
     out = pd.DataFrame({
         "tour_id": common_ids,
-        "run_ts": None,
         "slug": left.get("slug"),
         "destination_label": left.get("destination_label"),
         "title": left.get("title"),
@@ -518,10 +514,16 @@ def same_date_diff(
         "url_precise": left.get("url_precise"),
         "price_eur_prev": right.get("price_eur"),
         "price_eur_curr": left.get("price_eur"),
-        "money_pot_med_eur": mp_left,  # visible dans la table
     }).reset_index(drop=True)
 
-    # Deltas prix "nu"
+    # inject money pot median per slug
+    mp = money_map[["slug", "money_pot_med_eur"]].drop_duplicates()
+    out = out.merge(mp, on="slug", how="left", suffixes=("", "_mp"))
+    out.rename(columns={"money_pot_med_eur": "money_pot_med_eur_slug"}, inplace=True)
+
+    out["total_price_prev"] = out["price_eur_prev"].astype(float).fillna(0) + out["money_pot_med_eur_slug"].astype(float).fillna(0)
+    out["total_price_curr"] = out["price_eur_curr"].astype(float).fillna(0) + out["money_pot_med_eur_slug"].astype(float).fillna(0)
+
     out["delta_abs"] = out["price_eur_curr"] - out["price_eur_prev"]
     den = out["price_eur_prev"].replace({0: np.nan})
     out["delta_pct"] = out["delta_abs"] / den
@@ -529,19 +531,10 @@ def same_date_diff(
     out["movement"] = out["delta_abs"].apply(
         lambda v: "↓" if (pd.notna(v) and v < 0) else ("↑" if (pd.notna(v) and v > 0) else "=")
     )
-
-    # Totaux avec MoneyPot
-    out["total_price_prev_eur"] = out["price_eur_prev"].fillna(0) + mp_right.fillna(0)
-    out["total_price_curr_eur"] = out["price_eur_curr"].fillna(0) + mp_left.fillna(0)
-    out["delta_abs_total"] = out["total_price_curr_eur"] - out["total_price_prev_eur"]
-    den_t = out["total_price_prev_eur"].replace({0: np.nan})
-    out["delta_pct_total"] = out["delta_abs_total"] / den_t
-    out["movement_total"] = out["delta_abs_total"].apply(
-        lambda v: "↓" if (pd.notna(v) and v < 0) else ("↑" if (pd.notna(v) and v > 0) else "=")
-    )
     return out
 
-# ---------------- Export Excel ----------------
+
+# -------------------- Export --------------------
 def _to_excel_sorted(df: pd.DataFrame, writer, sheet_name: str, by=None, ascending=None):
     out = df.copy()
     try:
@@ -552,6 +545,7 @@ def _to_excel_sorted(df: pd.DataFrame, writer, sheet_name: str, by=None, ascendi
     except Exception:
         pass
     out.to_excel(writer, index=False, sheet_name=sheet_name)
+
 
 def export_excel(
     df_curr: pd.DataFrame,
@@ -572,19 +566,36 @@ def export_excel(
         mo_kpis.to_excel(w, index=False, sheet_name="Monthly_KPIs")
         mo_diff.to_excel(w, index=False, sheet_name="Monthly_Diff")
         df_tours.to_excel(w, index=False, sheet_name="Tours")
-        _to_excel_sorted(same_d, w, "Same_Date_Diff", by=["delta_pct_total", "delta_abs_total"], ascending=[False, False])
+        _to_excel_sorted(same_d, w, "Same_Date_Diff", by=["delta_pct", "delta_abs"], ascending=[False, False])
     logging.info("Exporté: %s", out)
 
-# ---------------- SQLite schema (create + migrate) ----------------
-def ensure_all_tables(conn: sqlite3.Connection) -> None:
+
+# ---------- SQLite helpers: creation + migration ----------
+def table_exists(conn: sqlite3.Connection, name: str) -> bool:
+    cur = conn.execute(
+        "SELECT 1 FROM sqlite_master WHERE type='table' AND name=? LIMIT 1", (name,)
+    )
+    return cur.fetchone() is not None
+
+def add_missing_columns(conn: sqlite3.Connection, table: str, columns_sql: Dict[str, str]):
+    """Ajoute les colonnes si manquantes: columns_sql = {'col':'TYPE', ...}"""
+    if not table_exists(conn, table):
+        return
+    cur = conn.execute(f'PRAGMA table_info("{table}")')
+    existing = {row[1] for row in cur.fetchall()}
+    for col, typ in columns_sql.items():
+        if col not in existing:
+            conn.execute(f'ALTER TABLE "{table}" ADD COLUMN "{col}" {typ}')
+    conn.commit()
+
+def ensure_all_tables(conn: sqlite3.Connection):
+    # snapshots
     conn.executescript("""
-    -- Snapshots des voyages (best tour par destination)
     CREATE TABLE IF NOT EXISTS snapshots (
       run_ts TEXT,
       id TEXT,
       slug TEXT,
       url TEXT,
-      url_precise TEXT,
       title TEXT,
       destination_label TEXT,
       country_name TEXT,
@@ -615,8 +626,9 @@ def ensure_all_tables(conn: sqlite3.Connection) -> None:
       total_price_eur REAL,
       money_pot_raw TEXT
     );
-
-    -- KPIs hebdo et diffs hebdo
+    """)
+    # weekly_kpis
+    conn.executescript("""
     CREATE TABLE IF NOT EXISTS weekly_kpis (
       run_ts TEXT,
       price_eur_min REAL, price_eur_max REAL, price_eur_avg REAL, price_eur_med REAL,
@@ -627,7 +639,9 @@ def ensure_all_tables(conn: sqlite3.Connection) -> None:
       count_total INTEGER, count_promos INTEGER, promo_share_pct REAL,
       depart_by_month TEXT
     );
-
+    """)
+    # weekly_diff (inclut flag)
+    conn.executescript("""
     CREATE TABLE IF NOT EXISTS weekly_diff (
       run_ts TEXT,
       destination_label TEXT,
@@ -638,10 +652,12 @@ def ensure_all_tables(conn: sqlite3.Connection) -> None:
       delta_abs REAL,
       delta_pct REAL,
       movement TEXT,
-      url TEXT
+      url TEXT,
+      flag INTEGER
     );
-
-    -- KPIs mensuels et diffs
+    """)
+    # monthly_kpis
+    conn.executescript("""
     CREATE TABLE IF NOT EXISTS monthly_kpis (
       run_ts TEXT,
       month TEXT,
@@ -651,38 +667,51 @@ def ensure_all_tables(conn: sqlite3.Connection) -> None:
       nb_depart INTEGER,
       prix_min_prev REAL,
       prix_avg_prev REAL,
-      nb_depart_prev INTEGER,
+      nb_depart_prev REAL,
       delta_prix_min REAL,
       delta_prix_avg REAL,
       delta_nb_depart REAL,
       delta_prix_min_pct REAL,
       delta_prix_avg_pct REAL
     );
-
+    """)
+    # monthly_diff (on stocke la copie des monthly_kpis pour cohérence)
+    conn.executescript("""
     CREATE TABLE IF NOT EXISTS monthly_diff (
       run_ts TEXT,
       month TEXT,
       destination_label TEXT,
+      prix_min REAL,
+      prix_avg REAL,
+      nb_depart INTEGER,
+      prix_min_prev REAL,
+      prix_avg_prev REAL,
+      nb_depart_prev REAL,
       delta_prix_min REAL,
       delta_prix_avg REAL,
       delta_nb_depart REAL,
       delta_prix_min_pct REAL,
       delta_prix_avg_pct REAL
     );
-
+    """)
+    # alerts
+    conn.executescript("""
     CREATE TABLE IF NOT EXISTS alerts (
       run_ts TEXT,
       destination_label TEXT,
       title_curr TEXT,
+      country_name_curr TEXT,
       price_eur_prev REAL,
       price_eur_curr REAL,
       delta_abs REAL,
       delta_pct REAL,
       movement TEXT,
-      url TEXT
+      url TEXT,
+      flag INTEGER
     );
-
-    -- TOURS (tous les départs)
+    """)
+    # tours
+    conn.executescript("""
     CREATE TABLE IF NOT EXISTS tours (
       run_ts TEXT,
       tour_id TEXT,
@@ -701,12 +730,11 @@ def ensure_all_tables(conn: sqlite3.Connection) -> None:
       maxPax INTEGER,
       weroadersCount INTEGER,
       url TEXT,
-      url_precise TEXT,
-      money_pot_med_eur REAL,
-      total_price_eur REAL
+      url_precise TEXT
     );
-
-    -- Diff sur mêmes départs
+    """)
+    # same_date_diff (+ total_price prev/curr + money pot slug)
+    conn.executescript("""
     CREATE TABLE IF NOT EXISTS same_date_diff (
       run_ts TEXT,
       tour_id TEXT,
@@ -717,28 +745,17 @@ def ensure_all_tables(conn: sqlite3.Connection) -> None:
       url_precise TEXT,
       price_eur_prev REAL,
       price_eur_curr REAL,
+      money_pot_med_eur_slug REAL,
+      total_price_prev REAL,
+      total_price_curr REAL,
       delta_abs REAL,
       delta_pct REAL,
-      movement TEXT,
-      money_pot_med_eur REAL,
-      total_price_prev_eur REAL,
-      total_price_curr_eur REAL,
-      delta_abs_total REAL,
-      delta_pct_total REAL,
-      movement_total TEXT
+      movement TEXT
     );
     """)
     conn.commit()
 
-def add_missing_columns(conn: sqlite3.Connection, table: str, cols_types: dict[str, str]) -> None:
-    cur = conn.execute(f'PRAGMA table_info("{table}")')
-    existing = {row[1] for row in cur.fetchall()}
-    for col, typ in cols_types.items():
-        if col not in existing:
-            conn.execute(f'ALTER TABLE "{table}" ADD COLUMN "{col}" {typ}')
-    conn.commit()
-
-def ensure_indexes(conn: sqlite3.Connection):
+    # indexations
     try:
         conn.execute("CREATE INDEX IF NOT EXISTS idx_snapshots_run_ts ON snapshots(run_ts)")
         conn.execute("CREATE INDEX IF NOT EXISTS idx_snapshots_dest ON snapshots(destination_label)")
@@ -756,7 +773,8 @@ def ensure_indexes(conn: sqlite3.Connection):
         conn.execute("CREATE INDEX IF NOT EXISTS idx_same_date_diff_tour_id ON same_date_diff(tour_id)")
         conn.commit()
     except Exception as e:
-        logging.warning("ensure_indexes: %s", e)
+        logging.warning("ensure indexes: %s", e)
+
 
 def persist_sqlite(
     df_curr: pd.DataFrame,
@@ -773,6 +791,7 @@ def persist_sqlite(
     Path(db_path).parent.mkdir(parents=True, exist_ok=True)
     conn = sqlite3.connect(db_path)
     try:
+        # pragmas
         try:
             conn.execute("PRAGMA journal_mode=WAL;")
             conn.execute("PRAGMA synchronous=NORMAL;")
@@ -791,24 +810,25 @@ def persist_sqlite(
         wk_k_df = pd.DataFrame([{**wk_kpis, "run_ts": run_ts}])
         wk_k_df.to_sql("weekly_kpis", conn, if_exists="append", index=False)
 
-        # weekly_diff
+        # weekly_diff (+ migration souple: flag)
         wk_diff2 = wk_diff.copy()
         wk_diff2["run_ts"] = run_ts
+        add_missing_columns(conn, "weekly_diff", {"flag": "INTEGER"})
         wk_diff2.to_sql("weekly_diff", conn, if_exists="append", index=False)
 
-        # monthly_kpis
+        # monthly_kpis + monthly_diff
         mo_k_df = mo_kpis.copy()
         mo_k_df["run_ts"] = run_ts
         mo_k_df.to_sql("monthly_kpis", conn, if_exists="append", index=False)
 
-        # monthly_diff
         mo_diff2 = mo_diff.copy()
         mo_diff2["run_ts"] = run_ts
         mo_diff2.to_sql("monthly_diff", conn, if_exists="append", index=False)
 
-        # alerts
+        # alerts (mêmes colonnes que weekly_diff + flag)
         alerts2 = alerts.copy()
         alerts2["run_ts"] = run_ts
+        add_missing_columns(conn, "alerts", {"flag": "INTEGER"})
         alerts2.to_sql("alerts", conn, if_exists="append", index=False)
 
         # tours
@@ -819,29 +839,39 @@ def persist_sqlite(
         # same_date_diff
         sdd2 = same_d.copy()
         sdd2["run_ts"] = run_ts
+        sdd_cols = {
+            "money_pot_med_eur_slug": "REAL",
+            "total_price_prev": "REAL",
+            "total_price_curr": "REAL",
+        }
+        add_missing_columns(conn, "same_date_diff", sdd_cols)
         sdd2.to_sql("same_date_diff", conn, if_exists="append", index=False)
 
-        ensure_indexes(conn)
     finally:
         conn.close()
     logging.info("Persisté SQLite: %s", db_path)
 
-# ---------------- Main ----------------
+
+# -------------------- Main --------------------
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default="weekly_report.xlsx", help="Chemin du rapport Excel")
     ap.add_argument("--sqlite", default="data/weroad.db", help="Chemin de la base SQLite (ou vide pour désactiver)")
     ap.add_argument("--alert-pct", type=float, default=float(os.getenv("ALERT_PCT", 0.10)), help="Seuil variation % (0.10=10%)")
     ap.add_argument("--alert-eur", type=float, default=float(os.getenv("ALERT_EUR", 150.0)), help="Seuil variation absolue €")
-    ap.add_argument("--workers", type=int, default=int(os.getenv("WORKERS", 12)), help="Threads pour récupérer les tours")
-    ap.add_argument("--skip-tours", action="store_true", help="Désactiver la récupération des TOURS")
-    ap.add_argument("--money-pot", action="store_true", help="Activer l'extraction du MoneyPot par voyage")
-    ap.add_argument("--money-pot-workers", type=int, default=int(os.getenv("MONEYPOT_WORKERS", 12)), help="Threads MoneyPot")
+    ap.add_argument("--workers", type=int, default=int(os.getenv("WORKERS", 12)),
+                    help="Nombre de threads pour récupérer les tours")
+    ap.add_argument("--skip-tours", action="store_true",
+                    help="Désactiver la récupération des TOURS (plus rapide)")
+    ap.add_argument("--money-pot", action="store_true",
+                    help="Active l'extraction du moneypot par voyage")
+    ap.add_argument("--money-pot-workers", type=int, default=int(os.getenv("MONEYPOT_WORKERS", 12)),
+                    help="Nombre de threads pour récupérer le moneypot")
     args = ap.parse_args()
 
     run_ts = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     logging.info("Run timestamp (UTC): %s", run_ts)
-    logging.info("Fetching travels list… (workers=%d; money-pot-workers=%d)", args.workers, args.money_pot_workers)
+    logging.info("Fetching travels list… (workers=%s; money-pot-workers=%s)", args.workers, args.money_pot_workers)
 
     # --- Fetch & snapshots courants ---
     travels = fetch_travels()
@@ -850,30 +880,30 @@ def main():
     if args.money_pot:
         df_curr = enrich_with_money_pot(df_curr, max_workers=args.money_pot_workers)
     else:
+        # colonnes vides mais présentes
         for c in ("money_pot_min_eur","money_pot_max_eur","money_pot_raw","money_pot_med_eur","total_price_eur"):
             if c not in df_curr.columns:
                 df_curr[c] = None
-
-    # Map MoneyPot par slug (pour TOURS et same-date)
-    mp_map = {r["slug"]: r["money_pot_med_eur"] for _, r in df_curr[["slug","money_pot_med_eur"]].dropna().iterrows()} if not df_curr.empty else {}
+        # calcul total si prix seul
+        if df_curr["total_price_eur"].isna().all():
+            df_curr["total_price_eur"] = df_curr["price_eur"].astype(float).fillna(0)
 
     if args.skip_tours:
         df_tours_curr = pd.DataFrame(columns=[
             "tour_id","slug","title","destination_label","country_name",
             "starting_date","ending_date","price_eur","base_price_eur",
             "discount_value_eur","discount_pct","sales_status","seatsToConfirm",
-            "maxPax","weroadersCount","url","url_precise","money_pot_med_eur","total_price_eur"
+            "maxPax","weroadersCount","url","url_precise"
         ])
     else:
-        df_tours_curr = normalize_tours(travels, max_workers=args.workers, money_pot_by_slug=mp_map)
+        df_tours_curr = normalize_tours(travels, max_workers=args.workers)
 
-    # --- Fetch snapshots précédents ---
+    # --- Fetch snapshots précédents (si DB existante) ---
     df_prev = pd.DataFrame()
     df_tours_prev = pd.DataFrame()
     if args.sqlite and Path(args.sqlite).exists():
         conn = sqlite3.connect(args.sqlite)
         try:
-            ensure_all_tables(conn)
             runs = pd.read_sql_query("SELECT DISTINCT run_ts FROM snapshots ORDER BY run_ts", conn)
             if not runs.empty:
                 last_ts = runs["run_ts"].iloc[-1]
@@ -913,7 +943,7 @@ def main():
         mo_k = pd.DataFrame(columns=["month","destination_label","prix_min","prix_avg","nb_depart"])
         mo_d = pd.DataFrame()
 
-    # --- Alerts ---
+    # --- Alerts (utilise les arguments CLI) ---
     alert_pct = args.alert_pct
     alert_eur = args.alert_eur
     if not wk_d.empty:
@@ -922,8 +952,9 @@ def main():
     else:
         alerts = pd.DataFrame()
 
-    # --- Same-date diff (avec total & moneypot) ---
-    sdd = same_date_diff(df_tours_curr, df_tours_prev, money_pot_by_slug=mp_map)
+    # --- Same-date diff (avec total_price en utilisant money_pot median par slug) ---
+    money_map = df_curr[["slug", "money_pot_med_eur"]].drop_duplicates()
+    sdd = same_date_diff(df_tours_curr, df_tours_prev, money_map)
 
     # --- Export Excel ---
     export_excel(df_curr, wk_k, wk_d, mo_k, mo_d, alerts, df_tours_curr, sdd, out=args.out)
@@ -931,6 +962,7 @@ def main():
     # --- Persist SQLite ---
     if args.sqlite:
         persist_sqlite(df_curr, wk_k, wk_d, mo_k, mo_d, alerts, df_tours_curr, sdd, db_path=args.sqlite, run_ts=run_ts)
+
 
 if __name__ == "__main__":
     main()
