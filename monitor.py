@@ -59,31 +59,45 @@ def fetch_travels_list(token: str):
     headers = {"Authorization": f"Bearer {token}"} if token else {}
     resp = requests.get(API_TRAVELS, headers=headers, timeout=30)
     resp.raise_for_status()
-    return resp.json()["data"]
+    data = resp.json()
+    return data.get("data", data)  # compat
 
 def fetch_travel_detail(slug: str, token: str):
     url = API_TRAVEL.format(slug=slug)
     headers = {"Authorization": f"Bearer {token}"} if token else {}
     resp = requests.get(url, headers=headers, timeout=30)
     resp.raise_for_status()
-    return resp.json()["data"]["travel"]
+    data = resp.json()
+    # certaines réponses sont sous {"data": {"travel": {...}}}
+    if isinstance(data, dict) and "data" in data and isinstance(data["data"], dict) and "travel" in data["data"]:
+        return data["data"]["travel"]
+    # sinon, retour direct
+    return data
 
 # ----------------- MoneyPot Enrichment -----------------
 def enrich_with_money_pot(df_travels: pd.DataFrame, token: str, max_workers: int = 12) -> pd.DataFrame:
     results = {}
 
+    slugs = df_travels["slug"].dropna().unique().tolist()
+
     def process(slug):
         try:
             detail = fetch_travel_detail(slug, token)
-            mp = detail.get("moneyPot", {})
+            mp = (detail or {}).get("moneyPot", {}) if isinstance(detail, dict) else {}
             return slug, extract_money_pot_eur(mp.get("description"))
         except Exception as e:
             logging.warning("Fail moneyPot %s: %s", slug, e)
             return slug, (None, None, None)
 
-    with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as ex:
-        for slug, (vmin, vmax, raw) in ex.map(process, df_travels["slug"].dropna().unique()):
-            results[slug] = (vmin, vmax, raw)
+    if max_workers and max_workers > 1:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as ex:
+            for slug, (vmin, vmax, raw) in ex.map(process, slugs):
+                results[slug] = (vmin, vmax, raw)
+    else:
+        for slug in slugs:
+            s, vals = process(slug), None  # just to keep structure obvious
+            slug_out, (vmin, vmax, raw) = s
+            results[slug_out] = (vmin, vmax, raw)
 
     out = df_travels.copy()
     out["money_pot_min_eur"] = out["slug"].map(lambda s: results.get(s, (None, None, None))[0])
@@ -99,8 +113,9 @@ def enrich_with_money_pot(df_travels: pd.DataFrame, token: str, max_workers: int
     else:
         out["total_price_eur"] = out["money_pot_med_eur"].fillna(0)
 
-    logging.info("MoneyPot enrichi: %d/%d voyages détectés", 
-                 out["money_pot_min_eur"].notna().sum(),
+    found = int(out["money_pot_min_eur"].notna().sum() | out["money_pot_max_eur"].notna().sum())
+    logging.info("MoneyPot enrichi: ~%d/%d voyages détectés", 
+                 out[["money_pot_min_eur","money_pot_max_eur"]].notna().any(axis=1).sum(),
                  len(out))
     return out
 
@@ -144,37 +159,48 @@ def save_snapshot(conn: sqlite3.Connection, run_ts: str, df: pd.DataFrame):
 # ----------------- Main -----------------
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--sqlite", type=str, default="data/weroad.db")
-    parser.add_argument("--out", type=str, default="weekly_report.xlsx")
-    parser.add_argument("--money-pot", action="store_true", help="Activer l’enrichissement MoneyPot")
+    parser.add_argument("--sqlite", type=str, default="data/weroad.db",
+                        help="Chemin du fichier SQLite")
+    parser.add_argument("--out", type=str, default="weekly_report.xlsx",
+                        help="Chemin du rapport Excel")
+    parser.add_argument("--money-pot", action="store_true",
+                        help="Activer l’enrichissement MoneyPot")
+    parser.add_argument("--workers", type=int, default=12,
+                        help="(Accepté) Nombre de workers pour la collecte principale (réservé)")
+    parser.add_argument("--money-pot-workers", type=int, default=12,
+                        help="Nombre de workers pour l’enrichissement MoneyPot")
     args = parser.parse_args()
 
     token = os.getenv("WEROAD_TOKEN", "")
 
-    logging.info("Fetching travels list…")
+    logging.info("Fetching travels list… (workers=%s; money-pot-workers=%s)",
+                 args.workers, args.money_pot_workers)
     travels = fetch_travels_list(token)
     rows = []
     for t in travels:
-        best = t.get("bestTour", {})
+        best = t.get("bestTour", {}) or {}
+        price_eur = (best.get("price") or {}).get("EUR")
+        base_eur  = (best.get("basePrice") or {}).get("EUR")
         rows.append({
             "slug": t.get("slug"),
             "title": t.get("title"),
-            "destination_label": t.get("primaryDestination", {}).get("name"),
-            "country_name": t.get("breadcrumbs", {}).get("destination", {}).get("name"),
-            "price_eur": best.get("price", {}).get("EUR"),
-            "base_price_eur": best.get("basePrice", {}).get("EUR"),
-            "discount_value_eur": (best.get("basePrice", {}).get("EUR") or 0) - (best.get("price", {}).get("EUR") or 0),
+            "destination_label": (t.get("primaryDestination") or {}).get("name"),
+            "country_name": ((t.get("breadcrumbs") or {}).get("destination") or {}).get("name"),
+            "price_eur": price_eur,
+            "base_price_eur": base_eur,
+            "discount_value_eur": (base_eur or 0) - (price_eur or 0) if (price_eur is not None or base_eur is not None) else None,
             "discount_pct": best.get("discountPercentage"),
-            "best_starting_date": t.get("firstTour", {}).get("startingDate"),
-            "best_ending_date": t.get("firstTour", {}).get("endingDate"),
-            "url_precise": f"https://www.weroad.fr/travel/{t.get('slug')}",
-            "rating": t.get("userRating", {}).get("rating"),
-            "rating_count": t.get("userRating", {}).get("count"),
+            "best_starting_date": (t.get("firstTour") or {}).get("startingDate"),
+            "best_ending_date": (t.get("firstTour") or {}).get("endingDate"),
+            "url_precise": f"https://www.weroad.fr/travel/{t.get('slug')}" if t.get("slug") else None,
+            "rating": ((t.get("userRating") or {})).get("rating"),
+            "rating_count": ((t.get("userRating") or {})).get("count"),
+            # certains champs (sales_status, seatsToConfirm, ...) ne sont pas au niveau "travels" mais au niveau tour
         })
     df = pd.DataFrame(rows)
 
     if args.money_pot:
-        df = enrich_with_money_pot(df, token=token)
+        df = enrich_with_money_pot(df, token=token, max_workers=args.money_pot_workers)
     else:
         for c in ["money_pot_min_eur","money_pot_max_eur","money_pot_raw"]:
             if c not in df.columns:
