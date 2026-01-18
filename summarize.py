@@ -188,6 +188,28 @@ def price_buckets_total(df: pd.DataFrame):
     out.columns = ["tranche_total", "nb_offres"]
     return out
 
+# --- NOUVEAU RAPPORT : Pas de chambre privée gratuite ---
+def no_free_private_room_report(df_tours: pd.DataFrame) -> pd.DataFrame:
+    # On vérifie si la colonne existe (pour éviter le crash si monitor.py n'a pas été mis à jour)
+    if df_tours.empty or "private_room_free" not in df_tours.columns:
+        return pd.DataFrame()
+
+    # Filtre: on garde ceux où private_room_free est 0 (False)
+    # Attention: SQLite stocke les booléens comme 0 ou 1.
+    mask = (df_tours["private_room_free"] == 0)
+    df = df_tours[mask].copy()
+
+    if df.empty:
+        return pd.DataFrame()
+
+    # Sélection des colonnes
+    cols = ["destination_label", "title", "starting_date", "price_eur", "sales_status", "url"]
+    cols = [c for c in cols if c in df.columns]
+    
+    # Tri par destination puis date
+    return df[cols].sort_values(["destination_label", "starting_date"]).reset_index(drop=True)
+
+
 # -------- Main --------
 def main():
     ensure_docs()
@@ -206,6 +228,9 @@ def main():
 
         df_curr = safe_read_sql("SELECT * FROM snapshots WHERE run_ts = ?", conn, (last,))
         df_prev = safe_read_sql("SELECT * FROM snapshots WHERE run_ts = ?", conn, (prev,)) if prev else pd.DataFrame()
+        
+        # On charge aussi la table 'tours' pour le rapport 'chambre privée'
+        df_tours_last = safe_read_sql("SELECT * FROM tours WHERE run_ts = ?", conn, (last,))
 
         kpi_last = safe_read_sql("SELECT * FROM weekly_kpis WHERE run_ts = ?", conn, (last,))
         kpi_hist = safe_read_sql(
@@ -232,6 +257,9 @@ def main():
         watch   = promo_watchlist(df_curr)
         buckets = price_buckets(df_curr)
         buckets_total = price_buckets_total(df_curr)
+        
+        # Génération du rapport Chambre Privée
+        no_free_pvt = no_free_private_room_report(df_tours_last)
 
         nb_depart = len(df_curr)
         nb_dest   = df_curr["destination_label"].nunique(dropna=True)
@@ -243,18 +271,21 @@ def main():
     ts = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
     coverage = f"_Historique des runs : du **{runs['run_ts'].iloc[0]}** au **{runs['run_ts'].iloc[-1]}** ({len(runs)} exécutions)._" if not runs.empty else ""
 
-    # Rendus
-    kpi_html        = html_table(kpi_last, max_rows=1,    dt=False) if not kpi_last.empty else "<p><em>Aucune donnée</em></p>"
-    kpi_hist_html   = html_table(kpi_hist, max_rows=1000, dt=True,  page=25)
-    movers_html     = html_table(movers,   max_rows=500,  dt=True,  page=25) if not movers.empty else "<p><em>Aucune donnée</em></p>"
-    same_date_html  = html_table(same_date,max_rows=1000, dt=True,  page=25) if not same_date.empty else "<p><em>Aucune donnée</em></p>"
-    bd_html         = html_table(bd,       max_rows=600,  dt=True,  page=25)
-    topm_html       = html_table(topm,     max_rows=600,  dt=True,  page=25)
-    ctry_html       = html_table(ctry,     max_rows=400,  dt=True,  page=25)
-    watch_html      = html_table(watch,    max_rows=600,  dt=True,  page=25)
-    buckets_html    = html_table(buckets,  max_rows=50,   dt=False)
+    # Rendus HTML
+    kpi_html            = html_table(kpi_last, max_rows=1,    dt=False) if not kpi_last.empty else "<p><em>Aucune donnée</em></p>"
+    kpi_hist_html       = html_table(kpi_hist, max_rows=1000, dt=True,  page=25)
+    movers_html         = html_table(movers,   max_rows=500,  dt=True,  page=25) if not movers.empty else "<p><em>Aucune donnée</em></p>"
+    same_date_html      = html_table(same_date,max_rows=1000, dt=True,  page=25) if not same_date.empty else "<p><em>Aucune donnée</em></p>"
+    bd_html             = html_table(bd,       max_rows=600,  dt=True,  page=25)
+    topm_html           = html_table(topm,     max_rows=600,  dt=True,  page=25)
+    ctry_html           = html_table(ctry,     max_rows=400,  dt=True,  page=25)
+    watch_html          = html_table(watch,    max_rows=600,  dt=True,  page=25)
+    buckets_html        = html_table(buckets,  max_rows=50,   dt=False)
     buckets_total_html = html_table(buckets_total, max_rows=50, dt=False)
-    status_html     = html_table(status_count, max_rows=50, dt=False)
+    status_html         = html_table(status_count, max_rows=50, dt=False)
+    
+    # Rendu HTML pour le nouveau rapport
+    no_free_pvt_html    = html_table(no_free_pvt, max_rows=1000, dt=True, page=25) if not no_free_pvt.empty else "<p><em>Toutes les destinations semblent avoir l'option gratuite (ou donnée manquante).</em></p>"
 
     content = f"""---
 title: RoadPrice – Évolutions tarifaires
@@ -263,8 +294,7 @@ title: RoadPrice – Évolutions tarifaires
 # RoadPrice — synthèse
 
 **Dernier run (UTC)** : `{last}` — Build : `{ts}`  
-**Départs suivis : {nb_depart}** — **Destinations : {nb_dest}** — **Pays : {nb_pays}**  
-{coverage}
+**Départs suivis : {nb_depart}** — **Destinations : {nb_dest}** — **Pays : {nb_pays}** {coverage}
 
 ---
 
@@ -300,6 +330,12 @@ title: RoadPrice – Évolutions tarifaires
 
 ## Top offres par **mois** (les moins chères)
 {topm_html}
+
+---
+
+## 🚫 Destinations sans "Chambre privée gratuite"
+_Liste des départs où l'option `privateRoomForFree` n'est pas disponible._
+{no_free_pvt_html}
 
 ---
 
