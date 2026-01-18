@@ -3,6 +3,7 @@
 # + Récupération des TOURS (départs par date)
 # + DOUBLE CHECK: Récupération du détail d'un tour par destination pour "whatsIncluded" (Lits partagés)
 # + Extraction du MoneyPot, MaxPax corrigé, Private Room Free.
+# + LOGS DÉTAILLÉS pour le débogage des lits partagés
 
 import os
 import re
@@ -25,13 +26,12 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s | %(levelname)s | %(
 
 API_TRAVELS       = "https://api-catalog.weroad.fr/travels"
 API_TOURS         = "https://api-catalog.weroad.fr/travels/{slug}/tours"
-API_TOUR_DETAIL   = "https://api-catalog.weroad.fr/travels/{slug}/tours/{tour_id}" # NOUVEAU ENDPOINT
+API_TOUR_DETAIL   = "https://api-catalog.weroad.fr/travels/{slug}/tours/{tour_id}" 
 API_TRAVEL_DETAIL = "https://api-catalog.weroad.fr/travels/{slug}"
 
 DEFAULT_TIMEOUT = 45
 DEFAULT_RETRIES = 4
-DEFAULT_BACKOFF = 0.8  # seconds, exponential
-
+DEFAULT_BACKOFF = 0.8 
 
 # -------------------- Utils --------------------
 def g(d, path, default=None):
@@ -42,10 +42,8 @@ def g(d, path, default=None):
         cur = cur[k]
     return cur
 
-
 def num(x):
     return x if isinstance(x, (int, float)) else None
-
 
 def to_month(s):
     try:
@@ -55,7 +53,6 @@ def to_month(s):
             return pd.to_datetime(s).strftime("%Y-%m")
         except Exception:
             return None
-
 
 def _session():
     s = requests.Session()
@@ -70,7 +67,6 @@ def _session():
         headers["authorization"] = f"Bearer {token}"
     s.headers.update(headers)
     return s
-
 
 def _get_json(url: str, params: Optional[Dict[str, Any]] = None,
               timeout: int = DEFAULT_TIMEOUT,
@@ -90,16 +86,15 @@ def _get_json(url: str, params: Optional[Dict[str, Any]] = None,
                 logging.warning("GET %s failed (attempt %d/%d): %s; retrying in %.2fs",
                                 url, attempt + 1, retries + 1, e, sleep)
                 time.sleep(sleep)
-    raise last_exc  # type: ignore[misc]
-
+    raise last_exc
 
 # -------------------- MoneyPot extraction --------------------
 _MONEYPOT_NUM_RE = re.compile(
     r"""
-    (?P<a>\d{1,3}(?:[ . \u00A0]\d{3})*(?:[,.]\d+)?)     # premier nombre
+    (?P<a>\d{1,3}(?:[ . \u00A0]\d{3})*(?:[,.]\d+)?)
     (?:\s*(?:-|–|à|a|to|en|aux|and|et)\s* (?P<b>\d{1,3}(?:[ . \u00A0]\d{3})*(?:[,.]\d+)?)
     )?
-    \s*(?:€|eur(?:o|os)?)                               # € / euro(s)
+    \s*(?:€|eur(?:o|os)?)
     """,
     re.IGNORECASE | re.VERBOSE,
 )
@@ -209,7 +204,6 @@ def fetch_travel_detail(slug: str) -> dict:
             logging.debug("fetch_travel_detail: %s failed: %s", url, e)
     return {}
 
-
 def enrich_with_money_pot(df_travels: pd.DataFrame, max_workers: int = 12) -> pd.DataFrame:
     out = df_travels.copy()
     for c in ("money_pot_min_eur", "money_pot_max_eur", "money_pot_raw", "money_pot_med_eur", "total_price_eur"):
@@ -250,13 +244,11 @@ def enrich_with_money_pot(df_travels: pd.DataFrame, max_workers: int = 12) -> pd
 
     return out
 
-
 # -------------------- Fetch + normalize --------------------
 def fetch_travels():
     data = _get_json(API_TRAVELS)
     items = data.get("data", data) or []
     return items if isinstance(items, list) else []
-
 
 def normalize_travels(travels):
     rows = []
@@ -321,153 +313,163 @@ def normalize_travels(travels):
         df = df.dropna(subset=["sales_status"])
     return df
 
-
 def fetch_tours_for_slug(slug: str) -> list[dict]:
     url = API_TOURS.format(slug=slug)
     data = _get_json(url)
     items = data.get("data", data) or []
     return items if isinstance(items, list) else []
 
+# -------------------- CORE LOGIC: TOURS + BED DETECTION --------------------
+
+def check_shared_bed_in_detail(slug: str, tour_id: str) -> int:
+    """
+    Vérifie si le détail du tour mentionne un lit partagé.
+    Loggue l'URL utilisée pour le debug.
+    Gère les formats LISTE et OBJET pour 'whatsIncluded'.
+    """
+    # Mots clés étendus
+    BED_KEYWORDS = [
+        "à partager", 
+        "queen size", "queen-size", 
+        "chambre quadruple", 
+        "2 lits doubles"
+    ]
+    try:
+        url = API_TOUR_DETAIL.format(slug=slug, tour_id=tour_id)
+        
+        # --- LOG URL ---
+        #logging.info(f"🔎 Checking sample for {slug}: {url}")
+        # ---------------
+
+        data = _get_json(url)
+        
+        # --- GESTION ROBUSTE DU CHEMIN JSON (LISTE vs DICT) ---
+        root_data = data.get("data", data)
+        raw_wi = root_data.get("travel", {}).get("whatsIncluded")
+        
+        # Fallback si pas trouvé dans travel
+        if not raw_wi:
+             raw_wi = root_data.get("whatsIncluded")
+        
+        items = []
+        if isinstance(raw_wi, list):
+            # Cas normal : c'est une liste
+            items = raw_wi
+        elif isinstance(raw_wi, dict) and "list" in raw_wi:
+            # Cas Floride : c'est un dict avec une clé "list"
+            items = raw_wi.get("list", [])
+            logging.info(f"   ✅ Format DICT détecté pour {slug}")
+        
+        # ---------------------------
+        
+        for item in items:
+            raw_desc = item.get("description")
+            if isinstance(raw_desc, str):
+                # 1. Décodage HTML
+                txt = ihtml.unescape(raw_desc)
+                # 2. Remplacement balises par espaces
+                txt = re.sub(r"<[^>]+>", " ", txt)
+                # 3. Nettoyage
+                txt = re.sub(r"\s+", " ", txt).strip().lower()
+                
+                for kw in BED_KEYWORDS:
+                    if kw in txt:
+                        logging.info(f"🚨 LIT PARTAGÉ DÉTECTÉ [{slug}] : '{kw}' trouvé dans '{txt[:40]}...'")
+                        return 1
+    except Exception as e:
+        # En cas d'erreur sur le détail, on ignore
+        pass
+    return 0
+
+def process_one_destination(travel_info: dict) -> list[dict]:
+    """
+    Traite UNE destination : Récupère TOUS les tours, check 1 échantillon,
+    puis renvoie TOUTES les lignes enrichies.
+    """
+    slug = travel_info.get("slug")
+    if not slug: return []
+
+    # 1. Récupération de TOUS les départs (La liste complète)
+    tours = fetch_tours_for_slug(slug)
+    if not tours: return []
+
+    # 2. Échantillonnage : On vérifie le lit sur le premier tour disponible
+    shared_flag = 0
+    sample_id = tours[0].get("id")
+    if sample_id:
+        shared_flag = check_shared_bed_in_detail(slug, sample_id)
+
+    # 3. Construction des lignes pour TOUS les départs
+    rows = []
+    for tour in tours:
+        tour_id = tour.get("id")
+        price = num(g(tour, ["price", "EUR"]))
+        base  = num(g(tour, ["basePrice", "EUR"]))
+        
+        disc_val = disc_pct = None
+        if price and base and base > price:
+            disc_val = base - price
+            disc_pct = round((base - price) / base * 100, 1)
+
+        # Correction MaxPax
+        max_pax = g(tour, ["maxPax"]) or g(tour, ["groupInfo", "expectedGroupSizeCount"])
+        
+        rows.append({
+            "tour_id": tour_id,
+            "slug": slug,
+            "title": travel_info.get("title") or slug,
+            "destination_label": travel_info.get("destinationLabel"),
+            "country_name": g(travel_info, ["primaryDestination", "name"]),
+            "starting_date": g(tour, ["startingDate"]),
+            "ending_date": g(tour, ["endingDate"]),
+            "price_eur": price,
+            "base_price_eur": base,
+            "discount_value_eur": disc_val,
+            "discount_pct": disc_pct,
+            "sales_status": g(tour, ["salesStatus"]),
+            "seatsToConfirm": g(tour, ["seatsToConfirm"]),
+            "maxPax": max_pax,
+            "weroadersCount": g(tour, ["groupInfo", "weroadersCount"]),
+            
+            # --- DATA ENRICHIES (Propagées à tous les tours) ---
+            "private_room_free": g(tour, ["bookingPillars", "privateRoomForFree"]),
+            "shared_bed": shared_flag, 
+            
+            "url": f"https://www.weroad.fr/destinations/{slug}",
+            "url_precise": f"https://www.weroad.fr/destinations/{slug}/{tour_id}" if tour_id else None
+        })
+    return rows
 
 def normalize_tours(travels: list[dict], max_workers: int = 12) -> pd.DataFrame:
-    """
-    Récupère /travels/{slug}/tours en parallèle.
-    Enrichi avec :
-    - Private Room Free (Booking Pillars)
-    - Shared Bed detection (VIA UN APPEL DÉTAILLÉ SUPPLEMENTAIRE PAR SLUG)
-    - Correction MaxPax
-    """
-    slugs = [t.get("slug") for t in travels if t.get("slug")]
-    slugs = list(dict.fromkeys(slugs))  # uniques
-
-    rows = []
-
-    # Mots-clés pour détection lits partagés
-    # On reste large pour attraper "chambre quadruple" ou "lits doubles"
-    BED_KEYWORDS = [
-        "à partager",
-        "queen size",
-        "queen-size",
-        "chambre quadruple",
-        "2 lits doubles",
-        "lits doubles"
-    ]
-
-    def _fetch_slug_with_detail(slug: str):
-        """
-        Récupère la liste des tours, PUIS récupère le détail du PREMIER tour
-        pour analyser 'whatsIncluded' (lits partagés), car cette info
-        n'est PAS dans la liste.
-        """
-        try:
-            # 1. Liste des tours
-            tours = fetch_tours_for_slug(slug)
-            
-            # 2. Analyse détaillée (Shared Bed) sur le premier tour disponible
-            shared_bed_detected = 0
-            if tours:
-                # On prend le premier tour comme échantillon pour la destination
-                sample_id = tours[0].get("id")
-                if sample_id:
-                    try:
-                        detail_url = API_TOUR_DETAIL.format(slug=slug, tour_id=sample_id)
-                        detail_data = _get_json(detail_url)
-                        
-                        # Analyse whatsIncluded dans le détail
-                        whats_included = detail_data.get("data", detail_data).get("whatsIncluded") or []
-                        for item in whats_included:
-                            raw_desc = item.get("description")
-                            if isinstance(raw_desc, str):
-                                # NETTOYAGE HTML IMPORTANT ICI
-                                clean_txt = ihtml.unescape(raw_desc)
-                                clean_txt = re.sub(r"<[^>]+>", " ", clean_txt) # Enleve les balises
-                                clean_txt = re.sub(r"\s+", " ", clean_txt).strip().lower()
-                                
-                                for kw in BED_KEYWORDS:
-                                    if kw in clean_txt:
-                                        shared_bed_detected = 1
-                                        logging.info(f"🚨 LIT PARTAGÉ [{slug}] via détail : '{kw}' trouvé dans '{clean_txt[:30]}...'")
-                                        break
-                                if shared_bed_detected: break
-                    except Exception as e:
-                        logging.warning(f"Detail fetch failed for {slug}/{sample_id}: {e}")
-
-            return slug, tours, shared_bed_detected
-        except Exception as e:
-            logging.warning("fetch_tours_for_slug(%s) failed: %s", slug, e)
-            return slug, [], 0
-
-    if not slugs:
-        return pd.DataFrame()
-
-    results: Dict[str, Tuple[list[dict], int]] = {}
+    logging.info(f"Analyse des départs pour {len(travels)} destinations (Workers={max_workers})...")
+    
+    all_rows = []
+    
     with ThreadPoolExecutor(max_workers=max_workers) as ex:
-        futs = {ex.submit(_fetch_slug_with_detail, slug): slug for slug in slugs}
-        for fut in as_completed(futs):
-            slug, tours, shared_flag = fut.result()
-            results[slug] = (tours, shared_flag)
-
-    for t in travels:
-        slug = t.get("slug")
-        if not slug:
-            continue
+        # On lance un job par destination qui fait tout (liste + detail)
+        # On passe l'objet travel entier pour avoir le titre, pays, etc.
+        futures = {ex.submit(process_one_destination, t): t.get("slug") for t in travels if t.get("slug")}
         
-        tours, shared_bed_flag = results.get(slug, ([], 0))
-        
-        for tour in tours:
-            tour_id = tour.get("id")
-            price   = num(g(tour, ["price", "EUR"]))
-            base    = num(g(tour, ["basePrice", "EUR"]))
+        for fut in as_completed(futures):
+            try:
+                rows = fut.result()
+                all_rows.extend(rows)
+            except Exception as e:
+                logging.warning(f"Erreur process destination: {e}")
 
-            disc_val = disc_pct = None
-            if price is not None and base is not None and base > price:
-                disc_val = base - price
-                disc_pct = round((base - price) / base * 100, 1)
-
-            url_dest    = f"https://www.weroad.fr/destinations/{slug}"
-            url_precise = f"{url_dest}/{tour_id}" if tour_id else url_dest
-
-            # Info groupe
-            max_pax = g(tour, ["maxPax"]) or g(tour, ["groupInfo", "expectedGroupSizeCount"])
-
-            rows.append(
-                {
-                    "tour_id": tour_id,
-                    "slug": slug,
-                    "title": t.get("title") or t.get("destinationLabel") or slug,
-                    "destination_label": t.get("destinationLabel"),
-                    "country_name": g(t, ["primaryDestination", "name"]),
-                    "starting_date": g(tour, ["startingDate"]),
-                    "ending_date": g(tour, ["endingDate"]),
-                    "price_eur": price,
-                    "base_price_eur": base,
-                    "discount_value_eur": disc_val,
-                    "discount_pct": disc_pct,
-                    "sales_status": g(tour, ["salesStatus"]),
-                    "seatsToConfirm": g(tour, ["seatsToConfirm"]),
-                    "maxPax": max_pax,
-                    "weroadersCount": g(tour, ["groupInfo", "weroadersCount"]),
-                    
-                    # NOUVEAUX CHAMPS
-                    "private_room_free": g(tour, ["bookingPillars", "privateRoomForFree"]),
-                    # On applique le flag détecté sur le détail du premier tour à tous les tours
-                    "shared_bed": shared_bed_flag,
-                    
-                    "url": url_dest,
-                    "url_precise": url_precise,
-                }
-            )
-
-    df = pd.DataFrame(rows)
+    df = pd.DataFrame(all_rows)
+    
+    # Nettoyage
     if not df.empty and "sales_status" in df.columns:
         df = df[df["sales_status"].astype(str).str.strip().ne("")]
         df = df.dropna(subset=["sales_status"])
-    if "tour_id" in df.columns:
+    if not df.empty and "tour_id" in df.columns:
         df = df.drop_duplicates(subset=["tour_id"])
+    
+    logging.info(f"Terminé. Total départs récupérés : {len(df)}")
     return df
 
-
-# -------------------- Analyses --------------------
+# -------------------- KPI & DB Utils --------------------
 def weekly_kpis(df: pd.DataFrame) -> dict:
     out = {}
     for c in ["price_eur", "base_price_eur", "discount_value_eur", "discount_pct", "total_price_eur"]:
@@ -487,7 +489,6 @@ def weekly_kpis(df: pd.DataFrame) -> dict:
     out["depart_by_month"] = json.dumps(depart_by_month, ensure_ascii=False)
     return out
 
-
 def cheapest_by_destination(df: pd.DataFrame) -> pd.DataFrame:
     base = df.dropna(subset=["destination_label", "price_eur"]).copy()
     if base.empty:
@@ -498,7 +499,6 @@ def cheapest_by_destination(df: pd.DataFrame) -> pd.DataFrame:
         base.loc[idxmin, ["destination_label", "title", "country_name", "price_eur", "url"]]
         .set_index("destination_label")
     )
-
 
 def weekly_diff(df_curr: pd.DataFrame, df_prev: pd.DataFrame | None) -> pd.DataFrame:
     L = cheapest_by_destination(df_curr)
@@ -527,7 +527,6 @@ def weekly_diff(df_curr: pd.DataFrame, df_prev: pd.DataFrame | None) -> pd.DataF
     cols = [c for c in keep if c in out.columns]
     return out[cols].copy()
 
-
 def same_date_diff(df_tours_curr: pd.DataFrame, df_tours_prev: pd.DataFrame, money_map: pd.DataFrame) -> pd.DataFrame:
     if df_tours_curr.empty or df_tours_prev.empty:
         return pd.DataFrame()
@@ -553,7 +552,6 @@ def same_date_diff(df_tours_curr: pd.DataFrame, df_tours_prev: pd.DataFrame, mon
         "price_eur_curr": left.get("price_eur"),
     }).reset_index(drop=True)
 
-    # inject money pot median per slug
     mp = money_map[["slug", "money_pot_med_eur"]].drop_duplicates()
     out = out.merge(mp, on="slug", how="left", suffixes=("", "_mp"))
     out.rename(columns={"money_pot_med_eur": "money_pot_med_eur_slug"}, inplace=True)
@@ -570,7 +568,6 @@ def same_date_diff(df_tours_curr: pd.DataFrame, df_tours_prev: pd.DataFrame, mon
     )
     return out
 
-
 # -------------------- Export --------------------
 def _to_excel_sorted(df: pd.DataFrame, writer, sheet_name: str, by=None, ascending=None):
     out = df.copy()
@@ -582,7 +579,6 @@ def _to_excel_sorted(df: pd.DataFrame, writer, sheet_name: str, by=None, ascendi
     except Exception:
         pass
     out.to_excel(writer, index=False, sheet_name=sheet_name)
-
 
 def export_excel(
     df_curr: pd.DataFrame,
@@ -605,7 +601,6 @@ def export_excel(
         df_tours.to_excel(w, index=False, sheet_name="Tours")
         _to_excel_sorted(same_d, w, "Same_Date_Diff", by=["delta_pct", "delta_abs"], ascending=[False, False])
     logging.info("Exporté: %s", out)
-
 
 # ---------- SQLite helpers: creation + migration ----------
 def table_exists(conn: sqlite3.Connection, name: str) -> bool:
@@ -698,7 +693,6 @@ def ensure_all_tables(conn: sqlite3.Connection):
     except Exception as e:
         logging.warning("ensure indexes: %s", e)
 
-
 def persist_sqlite(
     df_curr: pd.DataFrame,
     wk_kpis: dict,
@@ -769,7 +763,6 @@ def persist_sqlite(
     finally:
         conn.close()
     logging.info("Persisté SQLite: %s", db_path)
-
 
 # -------------------- Main --------------------
 def main():
@@ -872,7 +865,6 @@ def main():
 
     if args.sqlite:
         persist_sqlite(df_curr, wk_k, wk_d, mo_k, mo_d, alerts, df_tours_curr, sdd, db_path=args.sqlite, run_ts=run_ts)
-
 
 if __name__ == "__main__":
     main()
