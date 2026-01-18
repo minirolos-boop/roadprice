@@ -343,6 +343,7 @@ def normalize_tours(travels: list[dict], max_workers: int = 12) -> pd.DataFrame:
     rows = []
 
     # Mots-clés pour détection lits partagés
+    # On reste large pour attraper "chambre quadruple" ou "lits doubles"
     BED_KEYWORDS = [
         "à partager",
         "queen size",
@@ -377,14 +378,15 @@ def normalize_tours(travels: list[dict], max_workers: int = 12) -> pd.DataFrame:
                         for item in whats_included:
                             raw_desc = item.get("description")
                             if isinstance(raw_desc, str):
+                                # NETTOYAGE HTML IMPORTANT ICI
                                 clean_txt = ihtml.unescape(raw_desc)
-                                clean_txt = re.sub(r"<[^>]+>", " ", clean_txt)
+                                clean_txt = re.sub(r"<[^>]+>", " ", clean_txt) # Enleve les balises
                                 clean_txt = re.sub(r"\s+", " ", clean_txt).strip().lower()
                                 
                                 for kw in BED_KEYWORDS:
                                     if kw in clean_txt:
                                         shared_bed_detected = 1
-                                        logging.info(f"🚨 LIT PARTAGÉ [{slug}] via détail : '{kw}'")
+                                        logging.info(f"🚨 LIT PARTAGÉ [{slug}] via détail : '{kw}' trouvé dans '{clean_txt[:30]}...'")
                                         break
                                 if shared_bed_detected: break
                     except Exception as e:
