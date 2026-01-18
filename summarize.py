@@ -188,27 +188,48 @@ def price_buckets_total(df: pd.DataFrame):
     out.columns = ["tranche_total", "nb_offres"]
     return out
 
-# --- NOUVEAU RAPPORT : Pas de chambre privée gratuite ---
+# --- RAPPORT : Pas de chambre privée gratuite (DÉDOUBLONNÉ) ---
 def no_free_private_room_report(df_tours: pd.DataFrame) -> pd.DataFrame:
     # On vérifie si la colonne existe (pour éviter le crash si monitor.py n'a pas été mis à jour)
     if df_tours.empty or "private_room_free" not in df_tours.columns:
         return pd.DataFrame()
 
     # Filtre: on garde ceux où private_room_free est 0 (False)
-    # Attention: SQLite stocke les booléens comme 0 ou 1.
     mask = (df_tours["private_room_free"] == 0)
     df = df_tours[mask].copy()
 
     if df.empty:
         return pd.DataFrame()
 
-    # Sélection des colonnes
-    cols = ["destination_label", "title", "starting_date", "price_eur", "sales_status", "url"]
-    cols = [c for c in cols if c in df.columns]
-    
-    # Tri par destination puis date
-    return df[cols].sort_values(["destination_label", "starting_date"]).reset_index(drop=True)
+    # Dédoublonnage par destination (on garde la 1ère occurrence trouvée)
+    df_unique = df.drop_duplicates(subset=["destination_label"]).sort_values("destination_label")
 
+    # Sélection des colonnes (pas de date, car on veut juste la destination)
+    cols = ["destination_label", "title", "country_name", "url"]
+    cols = [c for c in cols if c in df_unique.columns]
+    
+    return df_unique[cols].reset_index(drop=True)
+
+# --- RAPPORT : Lits partagés (DÉDOUBLONNÉ) ---
+def shared_bed_report(df_tours: pd.DataFrame) -> pd.DataFrame:
+    if df_tours.empty or "shared_bed" not in df_tours.columns:
+        return pd.DataFrame()
+
+    # Filtre: shared_bed == 1
+    mask = (df_tours["shared_bed"] == 1)
+    df = df_tours[mask].copy()
+
+    if df.empty:
+        return pd.DataFrame()
+
+    # Dédoublonnage
+    df_unique = df.drop_duplicates(subset=["destination_label"]).sort_values("destination_label")
+
+    # Sélection
+    cols = ["destination_label", "title", "country_name", "url"]
+    cols = [c for c in cols if c in df_unique.columns]
+    
+    return df_unique[cols].reset_index(drop=True)
 
 # -------- Main --------
 def main():
@@ -229,7 +250,7 @@ def main():
         df_curr = safe_read_sql("SELECT * FROM snapshots WHERE run_ts = ?", conn, (last,))
         df_prev = safe_read_sql("SELECT * FROM snapshots WHERE run_ts = ?", conn, (prev,)) if prev else pd.DataFrame()
         
-        # On charge aussi la table 'tours' pour le rapport 'chambre privée'
+        # On charge aussi la table 'tours' pour les rapports spécifiques
         df_tours_last = safe_read_sql("SELECT * FROM tours WHERE run_ts = ?", conn, (last,))
 
         kpi_last = safe_read_sql("SELECT * FROM weekly_kpis WHERE run_ts = ?", conn, (last,))
@@ -258,8 +279,9 @@ def main():
         buckets = price_buckets(df_curr)
         buckets_total = price_buckets_total(df_curr)
         
-        # Génération du rapport Chambre Privée
+        # --- Rapports spécifiques dédoublonnés ---
         no_free_pvt = no_free_private_room_report(df_tours_last)
+        bed_alert   = shared_bed_report(df_tours_last)
 
         nb_depart = len(df_curr)
         nb_dest   = df_curr["destination_label"].nunique(dropna=True)
@@ -284,8 +306,9 @@ def main():
     buckets_total_html = html_table(buckets_total, max_rows=50, dt=False)
     status_html         = html_table(status_count, max_rows=50, dt=False)
     
-    # Rendu HTML pour le nouveau rapport
-    no_free_pvt_html    = html_table(no_free_pvt, max_rows=1000, dt=True, page=25) if not no_free_pvt.empty else "<p><em>Toutes les destinations semblent avoir l'option gratuite (ou donnée manquante).</em></p>"
+    # Rendu HTML pour les rapports spécifiques
+    no_free_pvt_html = html_table(no_free_pvt, max_rows=1000, dt=True, page=25) if not no_free_pvt.empty else "<p><em>Toutes les destinations semblent avoir l'option gratuite (ou donnée manquante).</em></p>"
+    bed_alert_html   = html_table(bed_alert, max_rows=1000, dt=True, page=25) if not bed_alert.empty else "<p><em>Aucun lit partagé détecté.</em></p>"
 
     content = f"""---
 title: RoadPrice – Évolutions tarifaires
@@ -334,8 +357,14 @@ title: RoadPrice – Évolutions tarifaires
 ---
 
 ## 🚫 Destinations sans "Chambre privée gratuite"
-_Liste des départs où l'option `privateRoomForFree` n'est pas disponible._
+_Destinations (uniques) où l'option `privateRoomForFree` n'est pas disponible._
 {no_free_pvt_html}
+
+---
+
+## 🛏️ Alertes "Lits Partagés"
+_Destinations (uniques) où la description mentionne des lits doubles à partager ou chambres quadruples._
+{bed_alert_html}
 
 ---
 
