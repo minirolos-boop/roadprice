@@ -1,9 +1,8 @@
 # monitor.py
 # Collector + KPIs + persistance SQLite (auto-migration de schéma)
-# + Récupération des TOURS (départs par date) et comparaison mêmes départs (tour_id identique)
-# + Extraction du MoneyPot (min/max + texte brut) via data.travel.moneyPot.description
-# + Prix total (price_eur + money_pot_med_eur) partout, y compris Same_Date_Diff
-# + Détection "Private Room Free" et "Shared Bed" (Lits partagés)
+# + Récupération des TOURS (départs par date)
+# + DOUBLE CHECK: Récupération du détail d'un tour par destination pour "whatsIncluded" (Lits partagés)
+# + Extraction du MoneyPot, MaxPax corrigé, Private Room Free.
 
 import os
 import re
@@ -26,6 +25,7 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s | %(levelname)s | %(
 
 API_TRAVELS       = "https://api-catalog.weroad.fr/travels"
 API_TOURS         = "https://api-catalog.weroad.fr/travels/{slug}/tours"
+API_TOUR_DETAIL   = "https://api-catalog.weroad.fr/travels/{slug}/tours/{tour_id}" # NOUVEAU ENDPOINT
 API_TRAVEL_DETAIL = "https://api-catalog.weroad.fr/travels/{slug}"
 
 DEFAULT_TIMEOUT = 45
@@ -96,9 +96,8 @@ def _get_json(url: str, params: Optional[Dict[str, Any]] = None,
 # -------------------- MoneyPot extraction --------------------
 _MONEYPOT_NUM_RE = re.compile(
     r"""
-    (?P<a>\d{1,3}(?:[ . \u00A0]\d{3})*(?:[,.]\d+)?)     # premier nombre (1 200, 1.200, 200,50)
-    (?:\s*(?:-|–|à|a|to|en|aux|and|et)\s* # séparateur de plage éventuel
-       (?P<b>\d{1,3}(?:[ . \u00A0]\d{3})*(?:[,.]\d+)?)
+    (?P<a>\d{1,3}(?:[ . \u00A0]\d{3})*(?:[,.]\d+)?)     # premier nombre
+    (?:\s*(?:-|–|à|a|to|en|aux|and|et)\s* (?P<b>\d{1,3}(?:[ . \u00A0]\d{3})*(?:[,.]\d+)?)
     )?
     \s*(?:€|eur(?:o|os)?)                               # € / euro(s)
     """,
@@ -109,20 +108,15 @@ def _to_float_eur(s: str) -> Optional[float]:
     if s is None:
         return None
     s = s.replace("\u00A0", " ")
-    s = s.replace(".", "")     # 1.200 -> 1200
-    s = s.replace(" ", "")     # 1 200 -> 1200
-    s = s.replace(",", ".")    # 200,50 -> 200.50
+    s = s.replace(".", "")
+    s = s.replace(" ", "")
+    s = s.replace(",", ".")
     try:
         return float(s)
     except Exception:
         return None
 
 def parse_money_pot(description_html: str) -> Tuple[Optional[float], Optional[float], str]:
-    """
-    Retourne (min_eur, max_eur, raw_text).
-    Si une seule valeur détectée => min=max.
-    Si rien trouvé => (None, None, raw_text).
-    """
     if not description_html:
         return None, None, ""
     txt = ihtml.unescape(description_html)
@@ -131,10 +125,8 @@ def parse_money_pot(description_html: str) -> Tuple[Optional[float], Optional[fl
 
     m = _MONEYPOT_NUM_RE.search(txt)
     if not m:
-        # fallback: au moins une valeur suivie d'une unité euros
         alt = re.search(r"(\d[\d . \u00A0,]*)\s*(?:€|eur(?:o|os)?)", txt, flags=re.IGNORECASE)
         if not alt:
-            # dernier recours : si "pot commun" apparait, autoriser un nombre nu (pas %)
             if "pot commun" in txt.lower():
                 alt2 = re.search(r"(\d{2,5})(?!\s?%)", txt)
                 if alt2:
@@ -155,7 +147,6 @@ def parse_money_pot(description_html: str) -> Tuple[Optional[float], Optional[fl
     return lo, hi, txt
 
 def _deep_find_money_pot(node):
-    """ Cherche un dict 'moneyPot' profond, sinon toute 'description' contenant € / euro. """
     stack = [node]
     while stack:
         cur = stack.pop()
@@ -186,8 +177,6 @@ def _collect_descriptions(node) -> list[str]:
 
 def extract_money_pot_from_travel_json(payload: dict) -> tuple[float | None, float | None, str]:
     root = payload if isinstance(payload, dict) else {}
-
-    # 1) data.travel.moneyPot.description
     try:
         travel = root.get("data", {}).get("travel", {})
         mp = travel.get("moneyPot")
@@ -198,29 +187,19 @@ def extract_money_pot_from_travel_json(payload: dict) -> tuple[float | None, flo
                 return mn, mx, raw
     except Exception:
         pass
-
-    # 2) recherche profonde
     mp2 = _deep_find_money_pot(root)
     if isinstance(mp2, dict) and isinstance(mp2.get("description"), str):
         mn, mx, raw = parse_money_pot(mp2["description"])
         return mn, mx, raw
-
-    # 3) descriptions diverses
     for cand in _collect_descriptions(root):
         if re.search(r"(€|eur(?:o|os)?)", cand, re.I) or "pot commun" in cand.lower():
             mn, mx, raw = parse_money_pot(cand)
             return mn, mx, raw
-
     return None, None, ""
 
 def fetch_travel_detail(slug: str) -> dict:
     base = API_TRAVEL_DETAIL.format(slug=slug)
-    candidates = [
-        base,
-        base + "?market=FR",
-        base + "?lang=fr-FR",
-        base + "?market=FR&lang=fr-FR",
-    ]
+    candidates = [base, base + "?market=FR", base + "?lang=fr-FR"]
     for url in candidates:
         try:
             data = _get_json(url)
@@ -250,7 +229,6 @@ def enrich_with_money_pot(df_travels: pd.DataFrame, max_workers: int = 12) -> pd
             mn, mx, raw = extract_money_pot_from_travel_json(data)
             return slug, mn, mx, raw
         except Exception as e:
-            logging.warning("moneyPot fetch failed for %s: %s", slug, e)
             return slug, None, None, None
 
     results: Dict[str, Tuple[Optional[float], Optional[float], Optional[str]]] = {}
@@ -263,8 +241,6 @@ def enrich_with_money_pot(df_travels: pd.DataFrame, max_workers: int = 12) -> pd
     out["money_pot_min_eur"] = out["slug"].map(lambda s: results.get(s, (None, None, None))[0])
     out["money_pot_max_eur"] = out["slug"].map(lambda s: results.get(s, (None, None, None))[1])
     out["money_pot_raw"]     = out["slug"].map(lambda s: results.get(s, (None, None, None))[2] or "")
-
-    # médiane & total
     out["money_pot_med_eur"] = out[["money_pot_min_eur", "money_pot_max_eur"]].mean(axis=1, skipna=True)
     out["total_price_eur"]   = out["price_eur"].astype(float).fillna(0) + out["money_pot_med_eur"].astype(float).fillna(0)
 
@@ -358,7 +334,7 @@ def normalize_tours(travels: list[dict], max_workers: int = 12) -> pd.DataFrame:
     Récupère /travels/{slug}/tours en parallèle.
     Enrichi avec :
     - Private Room Free (Booking Pillars)
-    - Shared Bed detection (Scanning 'whatsIncluded')
+    - Shared Bed detection (VIA UN APPEL DÉTAILLÉ SUPPLEMENTAIRE PAR SLUG)
     - Correction MaxPax
     """
     slugs = [t.get("slug") for t in travels if t.get("slug")]
@@ -366,35 +342,77 @@ def normalize_tours(travels: list[dict], max_workers: int = 12) -> pd.DataFrame:
 
     rows = []
 
-    # Mots-clés pour détection lits partagés (minuscule)
+    # Mots-clés pour détection lits partagés
     BED_KEYWORDS = [
-        "lits doubles queen size à partager",
-        "chambre quadruple (2 lits doubles)",
-        "(lits queen-size)"
+        "à partager",
+        "queen size",
+        "queen-size",
+        "chambre quadruple",
+        "2 lits doubles",
+        "lits doubles"
     ]
 
-    def _fetch(slug: str):
+    def _fetch_slug_with_detail(slug: str):
+        """
+        Récupère la liste des tours, PUIS récupère le détail du PREMIER tour
+        pour analyser 'whatsIncluded' (lits partagés), car cette info
+        n'est PAS dans la liste.
+        """
         try:
-            return slug, fetch_tours_for_slug(slug)
+            # 1. Liste des tours
+            tours = fetch_tours_for_slug(slug)
+            
+            # 2. Analyse détaillée (Shared Bed) sur le premier tour disponible
+            shared_bed_detected = 0
+            if tours:
+                # On prend le premier tour comme échantillon pour la destination
+                sample_id = tours[0].get("id")
+                if sample_id:
+                    try:
+                        detail_url = API_TOUR_DETAIL.format(slug=slug, tour_id=sample_id)
+                        detail_data = _get_json(detail_url)
+                        
+                        # Analyse whatsIncluded dans le détail
+                        whats_included = detail_data.get("data", detail_data).get("whatsIncluded") or []
+                        for item in whats_included:
+                            raw_desc = item.get("description")
+                            if isinstance(raw_desc, str):
+                                clean_txt = ihtml.unescape(raw_desc)
+                                clean_txt = re.sub(r"<[^>]+>", " ", clean_txt)
+                                clean_txt = re.sub(r"\s+", " ", clean_txt).strip().lower()
+                                
+                                for kw in BED_KEYWORDS:
+                                    if kw in clean_txt:
+                                        shared_bed_detected = 1
+                                        logging.info(f"🚨 LIT PARTAGÉ [{slug}] via détail : '{kw}'")
+                                        break
+                                if shared_bed_detected: break
+                    except Exception as e:
+                        logging.warning(f"Detail fetch failed for {slug}/{sample_id}: {e}")
+
+            return slug, tours, shared_bed_detected
         except Exception as e:
             logging.warning("fetch_tours_for_slug(%s) failed: %s", slug, e)
-            return slug, []
+            return slug, [], 0
 
     if not slugs:
         return pd.DataFrame()
 
-    results: Dict[str, list[dict]] = {}
+    results: Dict[str, Tuple[list[dict], int]] = {}
     with ThreadPoolExecutor(max_workers=max_workers) as ex:
-        futs = {ex.submit(_fetch, slug): slug for slug in slugs}
+        futs = {ex.submit(_fetch_slug_with_detail, slug): slug for slug in slugs}
         for fut in as_completed(futs):
-            slug, tours = fut.result()
-            results[slug] = tours
+            slug, tours, shared_flag = fut.result()
+            results[slug] = (tours, shared_flag)
 
     for t in travels:
         slug = t.get("slug")
         if not slug:
             continue
-        for tour in results.get(slug, []):
+        
+        tours, shared_bed_flag = results.get(slug, ([], 0))
+        
+        for tour in tours:
             tour_id = tour.get("id")
             price   = num(g(tour, ["price", "EUR"]))
             base    = num(g(tour, ["basePrice", "EUR"]))
@@ -407,19 +425,7 @@ def normalize_tours(travels: list[dict], max_workers: int = 12) -> pd.DataFrame:
             url_dest    = f"https://www.weroad.fr/destinations/{slug}"
             url_precise = f"{url_dest}/{tour_id}" if tour_id else url_dest
 
-            # --- DÉTECTION LITS PARTAGÉS ---
-            shared_bed = 0
-            whats_included = tour.get("whatsIncluded") or []
-            for item in whats_included:
-                desc = item.get("description")
-                if isinstance(desc, str):
-                    desc_lower = desc.lower()
-                    if any(k.lower() in desc_lower for k in BED_KEYWORDS):
-                        shared_bed = 1
-                        break
-            # -------------------------------
-
-            # Info groupe (correction: fallback sur expectedGroupSizeCount)
+            # Info groupe
             max_pax = g(tour, ["maxPax"]) or g(tour, ["groupInfo", "expectedGroupSizeCount"])
 
             rows.append(
@@ -437,13 +443,13 @@ def normalize_tours(travels: list[dict], max_workers: int = 12) -> pd.DataFrame:
                     "discount_pct": disc_pct,
                     "sales_status": g(tour, ["salesStatus"]),
                     "seatsToConfirm": g(tour, ["seatsToConfirm"]),
-                    
                     "maxPax": max_pax,
                     "weroadersCount": g(tour, ["groupInfo", "weroadersCount"]),
                     
                     # NOUVEAUX CHAMPS
                     "private_room_free": g(tour, ["bookingPillars", "privateRoomForFree"]),
-                    "shared_bed": shared_bed,
+                    # On applique le flag détecté sur le détail du premier tour à tous les tours
+                    "shared_bed": shared_bed_flag,
                     
                     "url": url_dest,
                     "url_precise": url_precise,
@@ -521,10 +527,6 @@ def weekly_diff(df_curr: pd.DataFrame, df_prev: pd.DataFrame | None) -> pd.DataF
 
 
 def same_date_diff(df_tours_curr: pd.DataFrame, df_tours_prev: pd.DataFrame, money_map: pd.DataFrame) -> pd.DataFrame:
-    """
-    Ajoute total_price (price + med money pot du slug) pour prev et curr.
-    money_map: DataFrame avec colonnes ['slug','money_pot_med_eur']
-    """
     if df_tours_curr.empty or df_tours_prev.empty:
         return pd.DataFrame()
 
@@ -611,7 +613,6 @@ def table_exists(conn: sqlite3.Connection, name: str) -> bool:
     return cur.fetchone() is not None
 
 def add_missing_columns(conn: sqlite3.Connection, table: str, columns_sql: Dict[str, str]):
-    """Ajoute les colonnes si manquantes: columns_sql = {'col':'TYPE', ...}"""
     if not table_exists(conn, table):
         return
     cur = conn.execute(f'PRAGMA table_info("{table}")')
@@ -622,178 +623,60 @@ def add_missing_columns(conn: sqlite3.Connection, table: str, columns_sql: Dict[
     conn.commit()
 
 def ensure_all_tables(conn: sqlite3.Connection):
-    # snapshots
     conn.executescript("""
     CREATE TABLE IF NOT EXISTS snapshots (
-      run_ts TEXT,
-      id TEXT,
-      slug TEXT,
-      url TEXT,
-      title TEXT,
-      destination_label TEXT,
-      country_name TEXT,
-      continent TEXT,
-      status TEXT,
-      isBookable INTEGER,
-      days INTEGER,
-      style TEXT,
-      types TEXT,
-      price_eur REAL,
-      base_price_eur REAL,
-      discount_value_eur REAL,
-      discount_pct REAL,
-      sales_status TEXT,
-      seatsToConfirm INTEGER,
-      maxPax INTEGER,
-      weroadersCount INTEGER,
-      min_price_eur REAL,
-      max_price_eur REAL,
-      best_starting_date TEXT,
-      best_ending_date TEXT,
-      rating REAL,
-      rating_count INTEGER,
-      month TEXT,
-      money_pot_min_eur REAL,
-      money_pot_max_eur REAL,
-      money_pot_med_eur REAL,
-      total_price_eur REAL,
-      money_pot_raw TEXT
+      run_ts TEXT, id TEXT, slug TEXT, url TEXT, title TEXT, destination_label TEXT,
+      country_name TEXT, continent TEXT, status TEXT, isBookable INTEGER, days INTEGER,
+      style TEXT, types TEXT, price_eur REAL, base_price_eur REAL, discount_value_eur REAL,
+      discount_pct REAL, sales_status TEXT, seatsToConfirm INTEGER, maxPax INTEGER,
+      weroadersCount INTEGER, min_price_eur REAL, max_price_eur REAL, best_starting_date TEXT,
+      best_ending_date TEXT, rating REAL, rating_count INTEGER, month TEXT,
+      money_pot_min_eur REAL, money_pot_max_eur REAL, money_pot_med_eur REAL,
+      total_price_eur REAL, money_pot_raw TEXT
     );
-    """)
-    # weekly_kpis
-    conn.executescript("""
     CREATE TABLE IF NOT EXISTS weekly_kpis (
-      run_ts TEXT,
-      price_eur_min REAL, price_eur_max REAL, price_eur_avg REAL, price_eur_med REAL,
+      run_ts TEXT, price_eur_min REAL, price_eur_max REAL, price_eur_avg REAL, price_eur_med REAL,
       base_price_eur_min REAL, base_price_eur_max REAL, base_price_eur_avg REAL, base_price_eur_med REAL,
       discount_value_eur_min REAL, discount_value_eur_max REAL, discount_value_eur_avg REAL, discount_value_eur_med REAL,
       discount_pct_min REAL, discount_pct_max REAL, discount_pct_avg REAL, discount_pct_med REAL,
       total_price_eur_min REAL, total_price_eur_max REAL, total_price_eur_avg REAL, total_price_eur_med REAL,
-      count_total INTEGER, count_promos INTEGER, promo_share_pct REAL,
-      depart_by_month TEXT
+      count_total INTEGER, count_promos INTEGER, promo_share_pct REAL, depart_by_month TEXT
     );
-    """)
-    # weekly_diff (inclut flag)
-    conn.executescript("""
     CREATE TABLE IF NOT EXISTS weekly_diff (
-      run_ts TEXT,
-      destination_label TEXT,
-      title_curr TEXT,
-      country_name_curr TEXT,
-      price_eur_prev REAL,
-      price_eur_curr REAL,
-      delta_abs REAL,
-      delta_pct REAL,
-      movement TEXT,
-      url TEXT,
-      flag INTEGER
+      run_ts TEXT, destination_label TEXT, title_curr TEXT, country_name_curr TEXT,
+      price_eur_prev REAL, price_eur_curr REAL, delta_abs REAL, delta_pct REAL,
+      movement TEXT, url TEXT, flag INTEGER
     );
-    """)
-    # monthly_kpis
-    conn.executescript("""
     CREATE TABLE IF NOT EXISTS monthly_kpis (
-      run_ts TEXT,
-      month TEXT,
-      destination_label TEXT,
-      prix_min REAL,
-      prix_avg REAL,
-      nb_depart INTEGER,
-      prix_min_prev REAL,
-      prix_avg_prev REAL,
-      nb_depart_prev REAL,
-      delta_prix_min REAL,
-      delta_prix_avg REAL,
-      delta_nb_depart REAL,
-      delta_prix_min_pct REAL,
-      delta_prix_avg_pct REAL
+      run_ts TEXT, month TEXT, destination_label TEXT, prix_min REAL, prix_avg REAL, nb_depart INTEGER,
+      prix_min_prev REAL, prix_avg_prev REAL, nb_depart_prev REAL, delta_prix_min REAL,
+      delta_prix_avg REAL, delta_nb_depart REAL, delta_prix_min_pct REAL, delta_prix_avg_pct REAL
     );
-    """)
-    # monthly_diff (on stocke la copie des monthly_kpis pour cohérence)
-    conn.executescript("""
     CREATE TABLE IF NOT EXISTS monthly_diff (
-      run_ts TEXT,
-      month TEXT,
-      destination_label TEXT,
-      prix_min REAL,
-      prix_avg REAL,
-      nb_depart INTEGER,
-      prix_min_prev REAL,
-      prix_avg_prev REAL,
-      nb_depart_prev REAL,
-      delta_prix_min REAL,
-      delta_prix_avg REAL,
-      delta_nb_depart REAL,
-      delta_prix_min_pct REAL,
-      delta_prix_avg_pct REAL
+      run_ts TEXT, month TEXT, destination_label TEXT, prix_min REAL, prix_avg REAL, nb_depart INTEGER,
+      prix_min_prev REAL, prix_avg_prev REAL, nb_depart_prev REAL, delta_prix_min REAL,
+      delta_prix_avg REAL, delta_nb_depart REAL, delta_prix_min_pct REAL, delta_prix_avg_pct REAL
     );
-    """)
-    # alerts
-    conn.executescript("""
     CREATE TABLE IF NOT EXISTS alerts (
-      run_ts TEXT,
-      destination_label TEXT,
-      title_curr TEXT,
-      country_name_curr TEXT,
-      price_eur_prev REAL,
-      price_eur_curr REAL,
-      delta_abs REAL,
-      delta_pct REAL,
-      movement TEXT,
-      url TEXT,
-      flag INTEGER
+      run_ts TEXT, destination_label TEXT, title_curr TEXT, country_name_curr TEXT,
+      price_eur_prev REAL, price_eur_curr REAL, delta_abs REAL, delta_pct REAL,
+      movement TEXT, url TEXT, flag INTEGER
     );
-    """)
-    # tours
-    # === MODIFICATION ICI: AJOUT COLONNES private_room_free ET shared_bed ===
-    conn.executescript("""
     CREATE TABLE IF NOT EXISTS tours (
-      run_ts TEXT,
-      tour_id TEXT,
-      slug TEXT,
-      title TEXT,
-      destination_label TEXT,
-      country_name TEXT,
-      starting_date TEXT,
-      ending_date TEXT,
-      price_eur REAL,
-      base_price_eur REAL,
-      discount_value_eur REAL,
-      discount_pct REAL,
-      sales_status TEXT,
-      seatsToConfirm INTEGER,
-      maxPax INTEGER,
-      weroadersCount INTEGER,
-      private_room_free INTEGER,
-      shared_bed INTEGER,
-      url TEXT,
-      url_precise TEXT
+      run_ts TEXT, tour_id TEXT, slug TEXT, title TEXT, destination_label TEXT, country_name TEXT,
+      starting_date TEXT, ending_date TEXT, price_eur REAL, base_price_eur REAL,
+      discount_value_eur REAL, discount_pct REAL, sales_status TEXT, seatsToConfirm INTEGER,
+      maxPax INTEGER, weroadersCount INTEGER, private_room_free INTEGER, shared_bed INTEGER,
+      url TEXT, url_precise TEXT
     );
-    """)
-    # =========================================================
-
-    # same_date_diff (+ total_price prev/curr + money pot slug)
-    conn.executescript("""
     CREATE TABLE IF NOT EXISTS same_date_diff (
-      run_ts TEXT,
-      tour_id TEXT,
-      slug TEXT,
-      destination_label TEXT,
-      title TEXT,
-      starting_date TEXT,
-      url_precise TEXT,
-      price_eur_prev REAL,
-      price_eur_curr REAL,
-      money_pot_med_eur_slug REAL,
-      total_price_prev REAL,
-      total_price_curr REAL,
-      delta_abs REAL,
-      delta_pct REAL,
-      movement TEXT
+      run_ts TEXT, tour_id TEXT, slug TEXT, destination_label TEXT, title TEXT, starting_date TEXT,
+      url_precise TEXT, price_eur_prev REAL, price_eur_curr REAL, money_pot_med_eur_slug REAL,
+      total_price_prev REAL, total_price_curr REAL, delta_abs REAL, delta_pct REAL, movement TEXT
     );
     """)
     conn.commit()
 
-    # indexations
     try:
         conn.execute("CREATE INDEX IF NOT EXISTS idx_snapshots_run_ts ON snapshots(run_ts)")
         conn.execute("CREATE INDEX IF NOT EXISTS idx_snapshots_dest ON snapshots(destination_label)")
@@ -829,7 +712,6 @@ def persist_sqlite(
     Path(db_path).parent.mkdir(parents=True, exist_ok=True)
     conn = sqlite3.connect(db_path)
     try:
-        # pragmas
         try:
             conn.execute("PRAGMA journal_mode=WAL;")
             conn.execute("PRAGMA synchronous=NORMAL;")
@@ -839,22 +721,18 @@ def persist_sqlite(
 
         ensure_all_tables(conn)
 
-        # snapshots
         df_snap = df_curr.copy()
         df_snap["run_ts"] = run_ts
         df_snap.to_sql("snapshots", conn, if_exists="append", index=False)
 
-        # weekly_kpis
         wk_k_df = pd.DataFrame([{**wk_kpis, "run_ts": run_ts}])
         wk_k_df.to_sql("weekly_kpis", conn, if_exists="append", index=False)
 
-        # weekly_diff (+ migration souple: flag)
         wk_diff2 = wk_diff.copy()
         wk_diff2["run_ts"] = run_ts
         add_missing_columns(conn, "weekly_diff", {"flag": "INTEGER"})
         wk_diff2.to_sql("weekly_diff", conn, if_exists="append", index=False)
 
-        # monthly_kpis + monthly_diff
         mo_k_df = mo_kpis.copy()
         mo_k_df["run_ts"] = run_ts
         mo_k_df.to_sql("monthly_kpis", conn, if_exists="append", index=False)
@@ -863,24 +741,19 @@ def persist_sqlite(
         mo_diff2["run_ts"] = run_ts
         mo_diff2.to_sql("monthly_diff", conn, if_exists="append", index=False)
 
-        # alerts (mêmes colonnes que weekly_diff + flag)
         alerts2 = alerts.copy()
         alerts2["run_ts"] = run_ts
         add_missing_columns(conn, "alerts", {"flag": "INTEGER"})
         alerts2.to_sql("alerts", conn, if_exists="append", index=False)
 
-        # tours
         tours2 = df_tours.copy()
         tours2["run_ts"] = run_ts
-        # === MODIFICATION ICI: Migration auto colonnes ===
         add_missing_columns(conn, "tours", {
             "private_room_free": "INTEGER", 
             "shared_bed": "INTEGER"
         })
-        # ================================================
         tours2.to_sql("tours", conn, if_exists="append", index=False)
 
-        # same_date_diff
         sdd2 = same_d.copy()
         sdd2["run_ts"] = run_ts
         sdd_cols = {
@@ -917,18 +790,15 @@ def main():
     logging.info("Run timestamp (UTC): %s", run_ts)
     logging.info("Fetching travels list… (workers=%s; money-pot-workers=%s)", args.workers, args.money_pot_workers)
 
-    # --- Fetch & snapshots courants ---
     travels = fetch_travels()
     df_curr  = normalize_travels(travels)
 
     if args.money_pot:
         df_curr = enrich_with_money_pot(df_curr, max_workers=args.money_pot_workers)
     else:
-        # colonnes vides mais présentes
         for c in ("money_pot_min_eur","money_pot_max_eur","money_pot_raw","money_pot_med_eur","total_price_eur"):
             if c not in df_curr.columns:
                 df_curr[c] = None
-        # calcul total si prix seul
         if df_curr["total_price_eur"].isna().all():
             df_curr["total_price_eur"] = df_curr["price_eur"].astype(float).fillna(0)
 
@@ -942,7 +812,6 @@ def main():
     else:
         df_tours_curr = normalize_tours(travels, max_workers=args.workers)
 
-    # --- Fetch snapshots précédents (si DB existante) ---
     df_prev = pd.DataFrame()
     df_tours_prev = pd.DataFrame()
     if args.sqlite and Path(args.sqlite).exists():
@@ -962,7 +831,6 @@ def main():
         finally:
             conn.close()
 
-    # --- KPI & Diffs ---
     wk_k  = weekly_kpis(df_curr)
     wk_d  = weekly_diff(df_curr, df_prev)
 
@@ -987,7 +855,6 @@ def main():
         mo_k = pd.DataFrame(columns=["month","destination_label","prix_min","prix_avg","nb_depart"])
         mo_d = pd.DataFrame()
 
-    # --- Alerts (utilise les arguments CLI) ---
     alert_pct = args.alert_pct
     alert_eur = args.alert_eur
     if not wk_d.empty:
@@ -996,14 +863,11 @@ def main():
     else:
         alerts = pd.DataFrame()
 
-    # --- Same-date diff (avec total_price en utilisant money_pot median par slug) ---
     money_map = df_curr[["slug", "money_pot_med_eur"]].drop_duplicates()
     sdd = same_date_diff(df_tours_curr, df_tours_prev, money_map)
 
-    # --- Export Excel ---
     export_excel(df_curr, wk_k, wk_d, mo_k, mo_d, alerts, df_tours_curr, sdd, out=args.out)
 
-    # --- Persist SQLite ---
     if args.sqlite:
         persist_sqlite(df_curr, wk_k, wk_d, mo_k, mo_d, alerts, df_tours_curr, sdd, db_path=args.sqlite, run_ts=run_ts)
 
