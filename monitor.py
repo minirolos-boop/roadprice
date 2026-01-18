@@ -3,6 +3,7 @@
 # + Récupération des TOURS (départs par date) et comparaison mêmes départs (tour_id identique)
 # + Extraction du MoneyPot (min/max + texte brut) via data.travel.moneyPot.description
 # + Prix total (price_eur + money_pot_med_eur) partout, y compris Same_Date_Diff
+# + Détection "Private Room Free" et "Shared Bed" (Lits partagés)
 
 import os
 import re
@@ -355,11 +356,22 @@ def fetch_tours_for_slug(slug: str) -> list[dict]:
 def normalize_tours(travels: list[dict], max_workers: int = 12) -> pd.DataFrame:
     """
     Récupère /travels/{slug}/tours en parallèle.
+    Enrichi avec :
+    - Private Room Free (Booking Pillars)
+    - Shared Bed detection (Scanning 'whatsIncluded')
+    - Correction MaxPax
     """
     slugs = [t.get("slug") for t in travels if t.get("slug")]
-    slugs = list(dict.fromkeys(slugs))  # uniques en préservant l'ordre
+    slugs = list(dict.fromkeys(slugs))  # uniques
 
     rows = []
+
+    # Mots-clés pour détection lits partagés (minuscule)
+    BED_KEYWORDS = [
+        "lits doubles queen size à partager",
+        "chambre quadruple (2 lits doubles)",
+        "(lits queen-size)"
+    ]
 
     def _fetch(slug: str):
         try:
@@ -395,6 +407,21 @@ def normalize_tours(travels: list[dict], max_workers: int = 12) -> pd.DataFrame:
             url_dest    = f"https://www.weroad.fr/destinations/{slug}"
             url_precise = f"{url_dest}/{tour_id}" if tour_id else url_dest
 
+            # --- DÉTECTION LITS PARTAGÉS ---
+            shared_bed = 0
+            whats_included = tour.get("whatsIncluded") or []
+            for item in whats_included:
+                desc = item.get("description")
+                if isinstance(desc, str):
+                    desc_lower = desc.lower()
+                    if any(k.lower() in desc_lower for k in BED_KEYWORDS):
+                        shared_bed = 1
+                        break
+            # -------------------------------
+
+            # Info groupe (correction: fallback sur expectedGroupSizeCount)
+            max_pax = g(tour, ["maxPax"]) or g(tour, ["groupInfo", "expectedGroupSizeCount"])
+
             rows.append(
                 {
                     "tour_id": tour_id,
@@ -410,11 +437,14 @@ def normalize_tours(travels: list[dict], max_workers: int = 12) -> pd.DataFrame:
                     "discount_pct": disc_pct,
                     "sales_status": g(tour, ["salesStatus"]),
                     "seatsToConfirm": g(tour, ["seatsToConfirm"]),
-                    # === MODIFICATIONS ICI (Correction MaxPax + Ajout Chambre Privée) ===
-                    "maxPax": g(tour, ["maxPax"]) or g(tour, ["groupInfo", "expectedGroupSizeCount"]),
+                    
+                    "maxPax": max_pax,
                     "weroadersCount": g(tour, ["groupInfo", "weroadersCount"]),
+                    
+                    # NOUVEAUX CHAMPS
                     "private_room_free": g(tour, ["bookingPillars", "privateRoomForFree"]),
-                    # ====================================================================
+                    "shared_bed": shared_bed,
+                    
                     "url": url_dest,
                     "url_precise": url_precise,
                 }
@@ -714,7 +744,7 @@ def ensure_all_tables(conn: sqlite3.Connection):
     );
     """)
     # tours
-    # === MODIFICATION ICI: AJOUT COLONNE private_room_free ===
+    # === MODIFICATION ICI: AJOUT COLONNES private_room_free ET shared_bed ===
     conn.executescript("""
     CREATE TABLE IF NOT EXISTS tours (
       run_ts TEXT,
@@ -734,6 +764,7 @@ def ensure_all_tables(conn: sqlite3.Connection):
       maxPax INTEGER,
       weroadersCount INTEGER,
       private_room_free INTEGER,
+      shared_bed INTEGER,
       url TEXT,
       url_precise TEXT
     );
@@ -841,8 +872,11 @@ def persist_sqlite(
         # tours
         tours2 = df_tours.copy()
         tours2["run_ts"] = run_ts
-        # === MODIFICATION ICI: Migration auto colonne ===
-        add_missing_columns(conn, "tours", {"private_room_free": "INTEGER"})
+        # === MODIFICATION ICI: Migration auto colonnes ===
+        add_missing_columns(conn, "tours", {
+            "private_room_free": "INTEGER", 
+            "shared_bed": "INTEGER"
+        })
         # ================================================
         tours2.to_sql("tours", conn, if_exists="append", index=False)
 
@@ -903,7 +937,7 @@ def main():
             "tour_id","slug","title","destination_label","country_name",
             "starting_date","ending_date","price_eur","base_price_eur",
             "discount_value_eur","discount_pct","sales_status","seatsToConfirm",
-            "maxPax","weroadersCount","private_room_free","url","url_precise"
+            "maxPax","weroadersCount","private_room_free","shared_bed","url","url_precise"
         ])
     else:
         df_tours_curr = normalize_tours(travels, max_workers=args.workers)
