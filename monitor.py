@@ -96,7 +96,7 @@ def _get_json(url: str, params: Optional[Dict[str, Any]] = None,
 _MONEYPOT_NUM_RE = re.compile(
     r"""
     (?P<a>\d{1,3}(?:[ . \u00A0]\d{3})*(?:[,.]\d+)?)     # premier nombre (1 200, 1.200, 200,50)
-    (?:\s*(?:-|–|à|a|to|en|aux|and|et)\s*               # séparateur de plage éventuel
+    (?:\s*(?:-|–|à|a|to|en|aux|and|et)\s* # séparateur de plage éventuel
        (?P<b>\d{1,3}(?:[ . \u00A0]\d{3})*(?:[,.]\d+)?)
     )?
     \s*(?:€|eur(?:o|os)?)                               # € / euro(s)
@@ -410,8 +410,11 @@ def normalize_tours(travels: list[dict], max_workers: int = 12) -> pd.DataFrame:
                     "discount_pct": disc_pct,
                     "sales_status": g(tour, ["salesStatus"]),
                     "seatsToConfirm": g(tour, ["seatsToConfirm"]),
-                    "maxPax": g(tour, ["maxPax"]),
+                    # === MODIFICATIONS ICI (Correction MaxPax + Ajout Chambre Privée) ===
+                    "maxPax": g(tour, ["maxPax"]) or g(tour, ["groupInfo", "expectedGroupSizeCount"]),
                     "weroadersCount": g(tour, ["groupInfo", "weroadersCount"]),
+                    "private_room_free": g(tour, ["bookingPillars", "privateRoomForFree"]),
+                    # ====================================================================
                     "url": url_dest,
                     "url_precise": url_precise,
                 }
@@ -711,6 +714,7 @@ def ensure_all_tables(conn: sqlite3.Connection):
     );
     """)
     # tours
+    # === MODIFICATION ICI: AJOUT COLONNE private_room_free ===
     conn.executescript("""
     CREATE TABLE IF NOT EXISTS tours (
       run_ts TEXT,
@@ -729,10 +733,13 @@ def ensure_all_tables(conn: sqlite3.Connection):
       seatsToConfirm INTEGER,
       maxPax INTEGER,
       weroadersCount INTEGER,
+      private_room_free INTEGER,
       url TEXT,
       url_precise TEXT
     );
     """)
+    # =========================================================
+
     # same_date_diff (+ total_price prev/curr + money pot slug)
     conn.executescript("""
     CREATE TABLE IF NOT EXISTS same_date_diff (
@@ -834,6 +841,9 @@ def persist_sqlite(
         # tours
         tours2 = df_tours.copy()
         tours2["run_ts"] = run_ts
+        # === MODIFICATION ICI: Migration auto colonne ===
+        add_missing_columns(conn, "tours", {"private_room_free": "INTEGER"})
+        # ================================================
         tours2.to_sql("tours", conn, if_exists="append", index=False)
 
         # same_date_diff
@@ -893,7 +903,7 @@ def main():
             "tour_id","slug","title","destination_label","country_name",
             "starting_date","ending_date","price_eur","base_price_eur",
             "discount_value_eur","discount_pct","sales_status","seatsToConfirm",
-            "maxPax","weroadersCount","url","url_precise"
+            "maxPax","weroadersCount","private_room_free","url","url_precise"
         ])
     else:
         df_tours_curr = normalize_tours(travels, max_workers=args.workers)
